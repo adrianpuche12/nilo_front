@@ -16,8 +16,7 @@ const Register = () => {
             email,
             password,
             name,
-            phone,
-       
+            phone,       
         };
 
         try {
