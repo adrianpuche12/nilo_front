@@ -1,120 +1,220 @@
+// src/Components/Roles.js
 import React, { useState } from 'react';
-import { Button, TextField, Typography, Container, Grid } from '@mui/material';
-import axios from 'axios';
+import {
+  Button,
+  TextField,
+  Typography,
+  Card,
+  CardContent,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@mui/material';
 
 const Roles = () => {
-    const [roleId, setRoleId] = useState('');
-    const [roleName, setRoleName] = useState('');
-    const [roleDescription, setRoleDescription] = useState('');
-    const [role, setRole] = useState(null);
-    const [error, setError] = useState(null);
+  const [roleId, setRoleId] = useState('');
+  const [role, setRole] = useState(null);
+  const [roles, setRoles] = useState([
+    { id: 1, name: 'Admin', description: 'Administrator role' },
+    { id: 2, name: 'User', description: 'Regular user role' },
+  ]);
+  const [newRoleName, setNewRoleName] = useState('');
+  const [newRoleDescription, setNewRoleDescription] = useState('');
+  const [editRole, setEditRole] = useState(null);
+  const [error, setError] = useState(null);
 
-    // Obtener el rol por ID
-    const fetchRole = async (event) => {
-        event.preventDefault();
+  // Simulación de búsqueda de rol
+  const fetchRole = () => {
+    const foundRole = roles.find((r) => r.id === Number(roleId));
+    if (foundRole) {
+      setRole(foundRole);
+      setError(null);
+    } else {
+      setError('Role not found');
+      setRole(null);
+    }
+  };
 
-        try {
-            const response = await axios.get(`http://localhost:8080/api/roles/${roleId}`);
-            setRole(response.data);
-            setError(null);
-        } catch (err) {
-            setError('Error fetching role data');
-            setRole(null);
-        }
+  // Simulación de agregar rol
+  const addRole = () => {
+    const newRole = {
+      id: roles.length + 1,
+      name: newRoleName,
+      description: newRoleDescription,
     };
+    setRoles([...roles, newRole]);
+    setNewRoleName('');
+    setNewRoleDescription('');
+  };
 
-    // Agregar un nuevo rol
-    const addRole = async (event) => {
-        event.preventDefault();
+  // Simulación de eliminar rol
+  const deleteRole = (id) => {
+    setRoles(roles.filter((role) => role.id !== id));
+  };
 
-        const newRoleData = {
-            name: roleName,
-            description: roleDescription,
-        };
+  // Iniciar la edición del rol
+  const startEditRole = (role) => {
+    setEditRole(role);
+  };
 
-        try {
-            const response = await axios.post('http://localhost:8080/api/roles', newRoleData, {
-                headers: { 'Content-Type': 'application/json' },
-            });
+  // Guardar cambios del rol
+  const saveEditRole = () => {
+    setRoles(roles.map((r) => (r.id === editRole.id ? editRole : r)));
+    setEditRole(null);
+  };
 
-            console.log('Role creado:', response.data);
-            alert('Role creado con éxito');
-            setRole(null);
-            setRoleName('');
-            setRoleDescription('');
-        } catch (error) {
-            console.error('Error al crear el rol:', error);
-            alert('Error al crear el rol');
-        }
-    };
+  return (
+    <Card sx={{ maxWidth: 800, margin: '20px auto', padding: '20px' }}>
+      <CardContent>
+        <Typography variant="h5" component="div" gutterBottom>
+          Role Management
+        </Typography>
+        
+        {/* Sección para obtener rol por ID */}
+        <Typography variant="h6" component="div" gutterBottom>
+          Get Role by ID
+        </Typography>
+        <TextField
+          label="Role ID"
+          variant="outlined"
+          type="number"
+          value={roleId}
+          onChange={(e) => setRoleId(e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+        <Button variant="contained" color="primary" onClick={fetchRole} fullWidth>
+          Fetch Role
+        </Button>
+        {error && <Typography color="error" marginTop="10px">{error}</Typography>}
 
-    return (
-        <Container maxWidth="sm">
-            <Typography variant="h4" gutterBottom>
-                Gestión de Roles
-            </Typography>
-            <form onSubmit={fetchRole}>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="Buscar Rol por ID"
-                            type="number"
-                            fullWidth
-                            value={roleId}
-                            onChange={(e) => setRoleId(e.target.value)}
-                            required
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button type="submit" variant="contained" color="primary" fullWidth>
-                            Buscar Rol
-                        </Button>
-                    </Grid>
-                </Grid>
-            </form>
+        {/* Tabla para mostrar el rol específico si se encuentra */}
+        {role && (
+          <TableContainer component={Paper} style={{ marginTop: '20px' }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell><strong>ID</strong></TableCell>
+                  <TableCell><strong>Name</strong></TableCell>
+                  <TableCell><strong>Description</strong></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell>{role.id}</TableCell>
+                  <TableCell>{role.name}</TableCell>
+                  <TableCell>{role.description}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
 
-            {error && <Typography color="error" marginTop="10px">{error}</Typography>}
-            {role && (
-                <div style={{ marginTop: '20px' }}>
-                    <Typography variant="h6">Detalles del Rol</Typography>
-                    <Typography variant="body1"><strong>ID:</strong> {role.id}</Typography>
-                    <Typography variant="body1"><strong>Nombre:</strong> {role.name}</Typography>
-                    <Typography variant="body1"><strong>Descripción:</strong> {role.description}</Typography>
-                </div>
-            )}
+        {/* Sección para agregar un nuevo rol */}
+        <Typography variant="h6" component="div" gutterBottom style={{ marginTop: '20px' }}>
+          Add New Role
+        </Typography>
+        <TextField
+          label="Role Name"
+          variant="outlined"
+          value={newRoleName}
+          onChange={(e) => setNewRoleName(e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Role Description"
+          variant="outlined"
+          value={newRoleDescription}
+          onChange={(e) => setNewRoleDescription(e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+        <Button variant="contained" color="primary" onClick={addRole} fullWidth>
+          Add Role
+        </Button>
 
-            <Typography variant="h5" gutterBottom style={{ marginTop: '40px' }}>
-                Crear Nuevo Rol
-            </Typography>
-            <form onSubmit={addRole}>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="Nombre del Rol"
-                            fullWidth
-                            value={roleName}
-                            onChange={(e) => setRoleName(e.target.value)}
-                            required
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="Descripción"
-                            fullWidth
-                            value={roleDescription}
-                            onChange={(e) => setRoleDescription(e.target.value)}
-                            required
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button type="submit" variant="contained" color="primary" fullWidth>
-                            Crear Rol
-                        </Button>
-                    </Grid>
-                </Grid>
-            </form>
-        </Container>
-    );
+        {/* Tabla de roles existentes */}
+        <Typography variant="h6" component="div" gutterBottom style={{ marginTop: '20px' }}>
+          Existing Roles
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell><strong>Role ID</strong></TableCell>
+                <TableCell><strong>Name</strong></TableCell>
+                <TableCell><strong>Description</strong></TableCell>
+                <TableCell><strong>Actions</strong></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {roles.map(role => (
+                <TableRow key={role.id}>
+                  <TableCell>{role.id}</TableCell>
+                  <TableCell>{role.name}</TableCell>
+                  <TableCell>{role.description}</TableCell>
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => startEditRole(role)}
+                      sx={{ marginRight: '8px', minWidth: '80px' }}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => deleteRole(role.id)}
+                      sx={{ minWidth: '80px' }}
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        {/* Diálogo de edición de rol */}
+        <Dialog open={!!editRole} onClose={() => setEditRole(null)}>
+          <DialogTitle>Edit Role</DialogTitle>
+          <DialogContent>
+            <TextField
+              label="Role Name"
+              variant="outlined"
+              value={editRole?.name || ''}
+              onChange={(e) => setEditRole({ ...editRole, name: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Role Description"
+              variant="outlined"
+              value={editRole?.description || ''}
+              onChange={(e) => setEditRole({ ...editRole, description: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setEditRole(null)} color="secondary">Cancel</Button>
+            <Button onClick={saveEditRole} color="primary">Save</Button>
+          </DialogActions>
+        </Dialog>
+      </CardContent>
+    </Card>
+  );
 };
 
 export default Roles;
