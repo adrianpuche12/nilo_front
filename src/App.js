@@ -7,6 +7,10 @@ import Home from "./Components/Home";
 import CountryDetail from "./Components/Country/CountryDetail ";
 import Countries from "./Components/Country/Countries";
 import CreateCountry from "./Components/Country/CreateCountry";
+import Activities from "./Components/Activities";
+import Province from "./Components/Province";
+import Itineraries from "./Components/Itineraries";
+
 
 import { Outlet } from "react-router-dom";
 
@@ -24,6 +28,9 @@ function App() {
           <Route path="/users" element={<AllUsers />} />
           <Route path="/country-detail/:id" element={<CountryDetail />} />
           <Route path="/create-country" element={<CreateCountry />} />
+          <Route path="/activities" element={<Activities />} />
+          <Route path="/province" element={<Province />} />
+          <Route path="/itineraries" element={<Itineraries />} />
         </Routes>
       </Router>
 
