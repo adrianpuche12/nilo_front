@@ -1,25 +1,26 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import users from '../../jsons/users';
+import Title from '../Utiles/Title';
 
-const UserDetail = () => {
-  const { userId } = useParams();
-  const user = users.find((u) => u.id === parseInt(userId));
+function UserDetail() {
+  const { id } = useParams();
+  const user = users.find((user) => user.id === parseInt(id, 10));
 
   if (!user) {
-    return <div>User not found</div>;
+    return <h3>Usuario no encontrado</h3>;
   }
 
   return (
     <div>
-      <h2>User Details</h2>
-      <p><strong>ID:</strong> {user.id}</p>
-      <p><strong>Name:</strong> {user.name}</p>
-      <p><strong>Email:</strong> {user.email}</p>
-      <p><strong>Phone:</strong> {user.phone}</p>
-      <p><strong>Roles:</strong> {user.roles.length > 0 ? user.roles.join(', ') : 'No roles'}</p>
+      <Title text="Usuarios" />
+      <p>ID: {user.id}</p>
+      <p>Nombre: {user.name}</p>
+      <p>Email: {user.email}</p>
+      <p>Teléfono: {user.phone}</p>
+      <p>Roles: {user.roles.join(', ') || 'Sin roles'}</p>
     </div>
   );
-};
+}
 
 export default UserDetail;
