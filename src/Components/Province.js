@@ -1,47 +1,64 @@
-import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Grid, IconButton } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Grid, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL;
+const API_TOKEN = process.env.REACT_APP_API_TOKEN;
+
+const axiosConfig = {
+  headers: {
+    Authorization: `Bearer ${API_TOKEN}`
+  }
+};
 
 const Province = () => {
-  // Datos hardcodeados
-  const initialProvinces = [
-    {
-      id: 1,
-      name: "Santa Fe",
-      description: "Provincia del litoral argentino",
-      country: {
-        id: 1,
-        name: "Argentina",
-        description: "País de América del Sur"
-      }
-    },
-    {
-      id: 2,
-      name: "Córdoba",
-      description: "Provincia del centro de Argentina",
-      country: {
-        id: 1,
-        name: "Argentina",
-        description: "País de América del Sur"
-      }
-    }
-  ];
-
   // Estados
-  const [provinces, setProvinces] = useState(initialProvinces);
+  const [provinces, setProvinces] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [currentProvince, setCurrentProvince] = useState({
     name: '',
     description: '',
-    country: {
-      id: 1,
-      name: "Argentina",
-      description: "País de América del Sur"
-    }
+    country: countries.length > 0 ? countries[0] : null,
   });
+
+
+   // Traer provincias y países
+  useEffect(() => {
+    fetchProvinces();
+    fetchCountries();
+  }, []);
+
+
+   // Función para obtener provincias
+  const fetchProvinces = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${API_URL}/provinces`, axiosConfig);
+      setProvinces(response.data);
+      setError(null);
+    } catch (err) {
+      setError('Error al cargar las provincias: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+   // Función para obtener países
+  const fetchCountries = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/countries`, axiosConfig);
+      setCountries(response.data);
+    } catch (err) {
+      setError('Error al cargar los países: ' + err.message);
+    }
+  };
 
   // Manejadores para el diálogo
   const handleOpen = () => {
@@ -50,11 +67,7 @@ const Province = () => {
     setCurrentProvince({
       name: '',
       description: '',
-      country: {
-        id: 1,
-        name: "Argentina",
-        description: "País de América del Sur"
-      }
+      country: countries.length > 0 ? countries[0] : null,
     });
   };
 
@@ -66,42 +79,62 @@ const Province = () => {
   // Manejador para cambios en el formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCurrentProvince(prev => ({
+    setCurrentProvince((prev) => ({
       ...prev,
-      [name]: value
+      [name]: name === 'country' ? countries.find((c) => c.id === value) : value,
     }));
   };
 
-  // Crear nueva provincia
-  const handleCreate = () => {
-    const maxId = Math.max(...provinces.map(province => province.id), 0);
-    const newProvince = {
-      id: maxId + 1,
-      ...currentProvince
-    };
-    setProvinces([...provinces, newProvince]);
-    handleClose();
+    // Crear nueva provincia 
+  const handleCreate = async () => {
+    try {
+      await axios.post(`${API_URL}/provinces`, currentProvince, axiosConfig);
+      await fetchProvinces();
+      handleClose();
+    } catch (err) {
+      setError('Error al crear la provincia: ' + err.message);
+    }
   };
 
   // Funciones de editar, actualizar y eliminar
   const handleEdit = (province) => {
-    setCurrentProvince(province);
+    setCurrentProvince({
+      ...province,
+      country: province.country,
+    });
     setEditMode(true);
     setOpen(true);
   };
 
-  const handleUpdate = () => {
-    setProvinces(provinces.map(province => 
-      province.id === currentProvince.id ? currentProvince : province
-    ));
-    handleClose();
-  };
-
-  const handleDelete = (id) => {
-    if (window.confirm('¿Está seguro de que desea eliminar esta provincia?')) {
-      setProvinces(provinces.filter(province => province.id !== id));
+  const handleUpdate = async () => {
+    try {
+      const { country, ...updateData } = currentProvince;
+      await axios.put(`${API_URL}/provinces/${currentProvince.id}`, updateData, axiosConfig);
+      await fetchProvinces();
+      handleClose();
+    } catch (err) {
+      setError('Error al actualizar la provincia: ' + err.message);
     }
   };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('¿Está seguro de que desea eliminar esta provincia?')) {
+      try {
+        await axios.delete(`${API_URL}/provinces/${id}`, axiosConfig);
+        await fetchProvinces();
+      } catch (err) {
+        setError('Error al eliminar la provincia: ' + err.message);
+      }
+    }
+  };
+
+  // Función para obtener el nombre del país
+  const getCountryName = (country) => {
+    return country?.name || 'País no encontrado';
+  };
+
+  if (loading) return <Typography>Cargando provincias...</Typography>;
+  if (error) return <Typography color="error">{error}</Typography>;
 
   return (
     <div style={{ padding: '20px' }}>
@@ -140,7 +173,7 @@ const Province = () => {
                 <TableCell>{province.id}</TableCell>
                 <TableCell>{province.name}</TableCell>
                 <TableCell>{province.description}</TableCell>
-                <TableCell>{province.country.name}</TableCell>
+                <TableCell>{getCountryName(province.country)}</TableCell>
                 <TableCell>
                   <IconButton 
                     color="primary" 
@@ -190,11 +223,20 @@ const Province = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                name="country"
+                select
                 label="País"
                 fullWidth
-                value={currentProvince.country.name}
-                disabled
-              />
+                value={currentProvince.country?.id}
+                onChange={handleChange}
+                disabled={editMode}
+              >
+                {countries.map((country) => (
+                  <MenuItem key={country.id} value={country.id}> 
+                    {country.name}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
           </Grid>
         </DialogContent>
