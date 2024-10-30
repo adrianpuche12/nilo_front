@@ -208,9 +208,9 @@ const Activities = () => {
           </Typography>
         </Grid>
         <Grid item>
-          <Button 
-            variant="contained" 
-            color="primary" 
+          <Button
+            variant="contained"
+            color="primary"
             onClick={handleOpen}
             startIcon={<AddIcon />}
             sx={{ mr: 2 }}
@@ -247,14 +247,14 @@ const Activities = () => {
                 <TableCell>{activity.type}</TableCell>
                 <TableCell>{getCityName(activity.cityId)}</TableCell>
                 <TableCell>
-                  <IconButton 
-                    color="primary" 
+                  <IconButton
+                    color="primary"
                     onClick={() => handleEdit(activity)}
                   >
                     <EditIcon />
                   </IconButton>
-                  <IconButton 
-                    color="error" 
+                  <IconButton
+                    color="error"
                     onClick={() => handleDelete(activity.id)}
                   >
                     <DeleteIcon />
@@ -318,9 +318,9 @@ const Activities = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
-          <Button 
-            onClick={editMode ? handleUpdate : handleCreate} 
-            variant="contained" 
+          <Button
+            onClick={editMode ? handleUpdate : handleCreate}
+            variant="contained"
             color="primary"
           >
             {editMode ? 'Actualizar' : 'Crear'}
@@ -329,8 +329,8 @@ const Activities = () => {
       </Dialog>
 
       {/* Diálogo para crear lista de actividades */}
-      <Dialog 
-        open={batchOpen} 
+      <Dialog
+        open={batchOpen}
         onClose={handleBatchClose}
         maxWidth="md"
         fullWidth
@@ -419,7 +419,7 @@ const Activities = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleBatchClose}>Cancelar</Button>
-          <Button 
+          <Button
             onClick={handleSaveBatch}
             variant="contained"
             color="primary"
