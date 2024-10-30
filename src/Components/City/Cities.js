@@ -1,11 +1,8 @@
-// src/Components/Cities.js
 import React, { useState } from 'react';
 import {
   Button,
   TextField,
   Typography,
-  Card,
-  CardContent,
   Table,
   TableBody,
   TableCell,
@@ -17,226 +14,324 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
+  Grid,
 } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 
 const Cities = () => {
-  const [cityId, setCityId] = useState('');
-  const [city, setCity] = useState(null);
-  const [cities, setCities] = useState([
-    { id: 1, name: 'New York', description: 'The Big Apple', province: { id: 1, name: 'New York State' } },
-    { id: 2, name: 'Los Angeles', description: 'City of Angels', province: { id: 2, name: 'California' } },
-  ]);
-  const [newCityName, setNewCityName] = useState('');
-  const [newCityDescription, setNewCityDescription] = useState('');
-  const [newProvinceId, setNewProvinceId] = useState('');
-  const [editCity, setEditCity] = useState(null);
-  const [error, setError] = useState(null);
+  const initialCities = [
+    { id: 1, name: 'New York', description: 'The Big Apple', provinceId: 1 },
+    { id: 2, name: 'Los Angeles', description: 'City of Angels', provinceId: 2 },
+  ];
 
-  // Simulación de búsqueda de ciudad
-  const fetchCity = () => {
-    const foundCity = cities.find((c) => c.id === Number(cityId));
-    if (foundCity) {
-      setCity(foundCity);
-      setError(null);
-    } else {
-      setError('City not found');
-      setCity(null);
+  const [cities, setCities] = useState(initialCities);
+  const [open, setOpen] = useState(false);
+  const [batchOpen, setBatchOpen] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [currentCity, setCurrentCity] = useState({ name: '', description: '', provinceId: '' });
+  const [batchCities, setBatchCities] = useState([]);
+  const [tempCity, setTempCity] = useState({ name: '', description: '', provinceId: '' });
+  const [confirmDeleteCityId, setConfirmDeleteCityId] = useState(null);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+    setEditMode(false);
+    setCurrentCity({ name: '', description: '', provinceId: '' });
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setEditMode(false);
+  };
+
+  const handleBatchOpen = () => {
+    setBatchOpen(true);
+    setBatchCities([]);
+    setTempCity({ name: '', description: '', provinceId: '' });
+  };
+
+  const handleBatchClose = () => {
+    setBatchOpen(false);
+    setBatchCities([]);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setCurrentCity((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleTempChange = (e) => {
+    const { name, value } = e.target;
+    setTempCity((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddToBatch = () => {
+    if (tempCity.name && tempCity.description && tempCity.provinceId) {
+      setBatchCities([...batchCities, { ...tempCity }]);
+      setTempCity({ name: '', description: '', provinceId: '' });
     }
   };
 
-  // Simulación de agregar ciudad
-  const addCity = () => {
-    const newCity = {
-      id: cities.length + 1,
-      name: newCityName,
-      description: newCityDescription,
-      province: { id: Number(newProvinceId), name: `Province ${newProvinceId}` },
-    };
+  const handleRemoveFromBatch = (index) => {
+    setBatchCities(batchCities.filter((_, i) => i !== index));
+  };
+
+  const handleSaveBatch = () => {
+    const maxId = Math.max(...cities.map((city) => city.id), 0);
+    const newCities = batchCities.map((city, index) => ({
+      ...city,
+      id: maxId + index + 1,
+    }));
+    setCities([...cities, ...newCities]);
+    handleBatchClose();
+  };
+
+  const handleCreate = () => {
+    if (!currentCity.name || !currentCity.description || !currentCity.provinceId) {
+      alert("Por favor, completa todos los campos antes de agregar la ciudad.");
+      return;
+    }
+
+    const maxId = Math.max(...cities.map((city) => city.id), 0);
+    const newCity = { id: maxId + 1, ...currentCity };
     setCities([...cities, newCity]);
-    setNewCityName('');
-    setNewCityDescription('');
-    setNewProvinceId('');
+    handleClose();
   };
 
-  // Simulación de eliminar ciudad
-  const deleteCity = (id) => {
-    setCities(cities.filter((city) => city.id !== id));
+  const handleEdit = (city) => {
+    setCurrentCity(city);
+    setEditMode(true);
+    setOpen(true);
   };
 
-  // Iniciar la edición de la ciudad
-  const startEditCity = (city) => {
-    setEditCity(city);
+  const handleUpdate = () => {
+    setCities(cities.map((city) => (city.id === currentCity.id ? currentCity : city)));
+    handleClose();
   };
 
-  // Guardar cambios de la ciudad
-  const saveEditCity = () => {
-    setCities(cities.map((c) => (c.id === editCity.id ? editCity : c)));
-    setEditCity(null);
+  const confirmDeleteCity = (id) => {
+    setConfirmDeleteCityId(id);
+    setConfirmDeleteOpen(true);
+  };
+
+  const handleDeleteConfirmClose = () => {
+    setConfirmDeleteOpen(false);
+    setConfirmDeleteCityId(null);
+  };
+
+  const deleteCity = () => {
+    setCities(cities.filter((city) => city.id !== confirmDeleteCityId));
+    handleDeleteConfirmClose();
   };
 
   return (
-    <Card sx={{ maxWidth: 800, margin: '20px auto', padding: '20px' }}>
-      <CardContent>
-        <Typography variant="h5" component="div" gutterBottom>
-          City Management (Simulated)
-        </Typography>
+    <div style={{ padding: '20px' }}>
+      <Grid container justifyContent="space-between" alignItems="center" marginBottom={2}>
+        <Grid item>
+          <Typography variant="h4" gutterBottom>
+            Gestión de Ciudades
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleOpen}
+            startIcon={<AddIcon />}
+            sx={{ mr: 2 }}
+          >
+            Nueva Ciudad
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleBatchOpen}
+            startIcon={<PlaylistAddIcon />}
+          >
+            Crear lista de ciudades
+          </Button>
+        </Grid>
+      </Grid>
 
-        {/* Sección para obtener ciudad por ID */}
-        <Typography variant="h6" component="div" gutterBottom>
-          Get City by ID
-        </Typography>
-        <TextField
-          label="City ID"
-          variant="outlined"
-          type="number"
-          value={cityId}
-          onChange={(e) => setCityId(e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-        <Button variant="contained" color="primary" onClick={fetchCity} fullWidth>
-          Fetch City
-        </Button>
-        {error && <Typography color="error" marginTop="10px">{error}</Typography>}
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>Nombre</TableCell>
+              <TableCell>Descripción</TableCell>
+              <TableCell>ID Provincia</TableCell>
+              <TableCell>Acciones</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {cities.map((city) => (
+              <TableRow key={city.id}>
+                <TableCell>{city.id}</TableCell>
+                <TableCell>{city.name}</TableCell>
+                <TableCell>{city.description}</TableCell>
+                <TableCell>{city.provinceId}</TableCell>
+                <TableCell>
+                  <IconButton color="primary" onClick={() => handleEdit(city)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton color="error" onClick={() => confirmDeleteCity(city.id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
-        {/* Tabla para mostrar el City específico si se encuentra */}
-        {city && (
-          <TableContainer component={Paper} style={{ marginTop: '20px' }}>
+      {/* Diálogo de confirmación para eliminar ciudad */}
+      <Dialog open={confirmDeleteOpen} onClose={handleDeleteConfirmClose}>
+        <DialogTitle>Confirmar Eliminación</DialogTitle>
+        <DialogContent>
+          <Typography>¿Estás seguro de que deseas eliminar esta ciudad?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteConfirmClose} color="primary">
+            Cancelar
+          </Button>
+          <Button onClick={deleteCity} color="error">
+            Eliminar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Diálogo crear/editar ciudad */}
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>{editMode ? 'Editar Ciudad' : 'Nueva Ciudad'}</DialogTitle>
+        <DialogContent>
+          <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid item xs={12}>
+              <TextField
+                name="name"
+                label="Nombre"
+                fullWidth
+                value={currentCity.name}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                name="description"
+                label="Descripción"
+                fullWidth
+                value={currentCity.description}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                name="provinceId"
+                label="ID Provincia"
+                type="number"
+                fullWidth
+                value={currentCity.provinceId}
+                onChange={handleChange}
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancelar</Button>
+          <Button onClick={editMode ? handleUpdate : handleCreate} variant="contained" color="primary">
+            {editMode ? 'Actualizar' : 'Crear'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Diálogo para crear lista de ciudades */}
+      <Dialog open={batchOpen} onClose={handleBatchClose} maxWidth="md" fullWidth>
+        <DialogTitle>Nuevas Ciudades</DialogTitle>
+        <DialogContent>
+          <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                name="name"
+                label="Nombre"
+                fullWidth
+                value={tempCity.name}
+                onChange={handleTempChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                name="description"
+                label="Descripción"
+                fullWidth
+                value={tempCity.description}
+                onChange={handleTempChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                name="provinceId"
+                label="ID Provincia"
+                type="number"
+                fullWidth
+                value={tempCity.provinceId}
+                onChange={handleTempChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleAddToBatch}
+                startIcon={<AddIcon />}
+                fullWidth
+              >
+                Añadir Ciudad
+              </Button>
+            </Grid>
+          </Grid>
+          <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+            Ciudades en la Lista ({batchCities.length})
+          </Typography>
+          <TableContainer component={Paper} sx={{ mt: 2 }}>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell><strong>ID</strong></TableCell>
-                  <TableCell><strong>Name</strong></TableCell>
-                  <TableCell><strong>Description</strong></TableCell>
-                  <TableCell><strong>Province ID</strong></TableCell>
+                  <TableCell>Nombre</TableCell>
+                  <TableCell>Descripción</TableCell>
+                  <TableCell>ID Provincia</TableCell>
+                  <TableCell>Acciones</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                <TableRow>
-                  <TableCell>{city.id}</TableCell>
-                  <TableCell>{city.name}</TableCell>
-                  <TableCell>{city.description}</TableCell>
-                  <TableCell>{city.province.id}</TableCell>
-                </TableRow>
+                {batchCities.map((city, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{city.name}</TableCell>
+                    <TableCell>{city.description}</TableCell>
+                    <TableCell>{city.provinceId}</TableCell>
+                    <TableCell>
+                      <IconButton color="error" onClick={() => handleRemoveFromBatch(index)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>
-        )}
-
-        {/* Sección para agregar una nueva ciudad */}
-        <Typography variant="h6" component="div" gutterBottom style={{ marginTop: '20px' }}>
-          Add New City
-        </Typography>
-        <TextField
-          label="City Name"
-          variant="outlined"
-          value={newCityName}
-          onChange={(e) => setNewCityName(e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Description"
-          variant="outlined"
-          value={newCityDescription}
-          onChange={(e) => setNewCityDescription(e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Province ID"
-          variant="outlined"
-          value={newProvinceId}
-          onChange={(e) => setNewProvinceId(e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-        <Button variant="contained" color="primary" onClick={addCity} fullWidth>
-          Add City
-        </Button>
-
-        {/* Tabla de ciudades existentes */}
-        <Typography variant="h6" component="div" gutterBottom style={{ marginTop: '20px' }}>
-          Existing Cities
-        </Typography>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell><strong>City ID</strong></TableCell>
-                <TableCell><strong>Name</strong></TableCell>
-                <TableCell><strong>Description</strong></TableCell>
-                <TableCell><strong>Province ID</strong></TableCell>
-                <TableCell><strong>Actions</strong></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {cities.map(city => (
-                <TableRow key={city.id}>
-                  <TableCell>{city.id}</TableCell>
-                  <TableCell>{city.name}</TableCell>
-                  <TableCell>{city.description}</TableCell>
-                  <TableCell>{city.province.id}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => startEditCity(city)}
-                      sx={{ marginRight: '8px', minWidth: '80px' }}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => deleteCity(city.id)}
-                      sx={{ minWidth: '80px' }}
-                    >
-                      Delete
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-
-        {/* Diálogo de edición de ciudad */}
-        <Dialog open={!!editCity} onClose={() => setEditCity(null)}>
-          <DialogTitle>Edit City</DialogTitle>
-          <DialogContent>
-            <TextField
-              label="City Name"
-              variant="outlined"
-              value={editCity?.name || ''}
-              onChange={(e) => setEditCity({ ...editCity, name: e.target.value })}
-              fullWidth
-              margin="normal"
-            />
-            <TextField
-              label="Description"
-              variant="outlined"
-              value={editCity?.description || ''}
-              onChange={(e) => setEditCity({ ...editCity, description: e.target.value })}
-              fullWidth
-              margin="normal"
-            />
-            <TextField
-              label="Province ID"
-              variant="outlined"
-              value={editCity?.province.id || ''}
-              onChange={(e) => setEditCity({ ...editCity, province: { id: Number(e.target.value) } })}
-              fullWidth
-              margin="normal"
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setEditCity(null)} color="secondary">Cancel</Button>
-            <Button onClick={saveEditCity} color="primary">Save</Button>
-          </DialogActions>
-        </Dialog>
-      </CardContent>
-    </Card>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleBatchClose}>Cancelar</Button>
+          <Button onClick={handleSaveBatch} variant="contained" color="primary">
+            Guardar
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
   );
 };
 
