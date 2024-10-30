@@ -29,14 +29,14 @@ const Province = () => {
   });
 
 
-   // Traer provincias y países
+  // Traer provincias y países
   useEffect(() => {
     fetchProvinces();
     fetchCountries();
   }, []);
 
 
-   // Función para obtener provincias
+  // Función para obtener provincias
   const fetchProvinces = async () => {
     setLoading(true);
     try {
@@ -50,7 +50,7 @@ const Province = () => {
     }
   };
 
-   // Función para obtener países
+  // Función para obtener países
   const fetchCountries = async () => {
     try {
       const response = await axios.get(`${API_URL}/countries`, axiosConfig);
@@ -85,7 +85,7 @@ const Province = () => {
     }));
   };
 
-    // Crear nueva provincia 
+  // Crear nueva provincia 
   const handleCreate = async () => {
     try {
       await axios.post(`${API_URL}/provinces`, currentProvince, axiosConfig);
@@ -145,9 +145,9 @@ const Province = () => {
           </Typography>
         </Grid>
         <Grid item>
-          <Button 
-            variant="contained" 
-            color="primary" 
+          <Button
+            variant="contained"
+            color="primary"
             onClick={handleOpen}
             startIcon={<AddIcon />}
           >
@@ -175,14 +175,14 @@ const Province = () => {
                 <TableCell>{province.description}</TableCell>
                 <TableCell>{getCountryName(province.country)}</TableCell>
                 <TableCell>
-                  <IconButton 
-                    color="primary" 
+                  <IconButton
+                    color="primary"
                     onClick={() => handleEdit(province)}
                   >
                     <EditIcon />
                   </IconButton>
-                  <IconButton 
-                    color="error" 
+                  <IconButton
+                    color="error"
                     onClick={() => handleDelete(province.id)}
                   >
                     <DeleteIcon />
@@ -232,7 +232,7 @@ const Province = () => {
                 disabled={editMode}
               >
                 {countries.map((country) => (
-                  <MenuItem key={country.id} value={country.id}> 
+                  <MenuItem key={country.id} value={country.id}>
                     {country.name}
                   </MenuItem>
                 ))}
@@ -242,9 +242,9 @@ const Province = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
-          <Button 
-            onClick={editMode ? handleUpdate : handleCreate} 
-            variant="contained" 
+          <Button
+            onClick={editMode ? handleUpdate : handleCreate}
+            variant="contained"
             color="primary"
           >
             {editMode ? 'Actualizar' : 'Crear'}

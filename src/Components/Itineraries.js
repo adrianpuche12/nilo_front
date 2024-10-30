@@ -1,61 +1,84 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Grid, IconButton, Select, MenuItem, FormControl, InputLabel, List, ListItem, ListItemText } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL;
+const API_TOKEN = process.env.REACT_APP_API_TOKEN;
+
+const axiosConfig = {
+    headers: {
+        Authorization: `Bearer ${API_TOKEN}`
+    }
+};
 
 const Itineraries = () => {
-    // Datos hardcodeados
-    const initialCities = [
-        { id: 1, name: "Buenos Aires" },
-        { id: 2, name: "Rosario" },
-        { id: 3, name: "Córdoba" }
-    ];
-
-    const initialActivities = [
-        { id: 1, name: "City Tour", type: "TOURISTIC", cityId: 1 },
-        { id: 2, name: "Visita museo", type: "GENERAL", cityId: 1 },
-        { id: 3, name: "Parana Tour", type: "TOURISTIC", cityId: 2 },
-        { id: 4, name: "Caminata por el centro", type: "GENERAL", cityId: 2 },
-        { id: 5, name: "Paseo por las montañas", type: "TOURISTIC", cityId: 3 }
-    ];
-
-    const initialItineraries = [
-        {
-            id: 1,
-            name: "Buenos Aires Tour",
-            description: "Explorar la ciudad en un día",
-            cityId: 1,
-            activities: [{ id: 1 }, { id: 2 }]
-        },
-        {
-            id: 2,
-            name: "Rosario Tour",
-            description: "Lo mejor de rosario",
-            cityId: 2,
-            activities: [{ id: 3 }, { id: 4 }]
-        }
-    ];
-
     // Estados
-    const [itineraries, setItineraries] = useState(initialItineraries);
+    const [itineraries, setItineraries] = useState([]);
+    const [activities, setActivities] = useState([]);
+    const [cities, setCities] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
     const [open, setOpen] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [currentItinerary, setCurrentItinerary] = useState({
         name: '',
         description: '',
-        cityId: '',
+        cityId: null,
         activities: []
     });
 
-    // Manejadores para el diálogo
+    // Cargar itinerarios, actividades y ciudades
+    useEffect(() => {
+        fetchItineraries();
+        fetchActivities();
+        fetchCities();
+    }, []);
+
+    // Función para obtener itinerarios
+    const fetchItineraries = async () => {
+        setLoading(true);
+        try {
+            const response = await axios.get(`${API_URL}/itineraries`, axiosConfig);
+            setItineraries(response.data);
+            setError(null);
+        } catch (err) {
+            setError('Error al cargar los itinerarios: ' + err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Función para obtener actividades
+    const fetchActivities = async () => {
+        try {
+            const response = await axios.get(`${API_URL}/activities`, axiosConfig);
+            setActivities(response.data);
+        } catch (err) {
+            setError('Error al cargar las actividades: ' + err.message);
+        }
+    };
+
+    // Función para obtener ciudades
+    const fetchCities = async () => {
+        try {
+            const response = await axios.get(`${API_URL}/cities`, axiosConfig);
+            setCities(response.data);
+        } catch (err) {
+            setError('Error al cargar las ciudades: ' + err.message);
+        }
+    };
+
+    // Manejadores para el diálogo individual
     const handleOpen = () => {
         setOpen(true);
         setEditMode(false);
         setCurrentItinerary({
             name: '',
             description: '',
-            cityId: '',
+            cityId: null,
             activities: []
         });
     };
@@ -65,69 +88,43 @@ const Itineraries = () => {
         setEditMode(false);
     };
 
-    // Obtener actividades disponibles para una ciudad
-    const getActivitiesForCity = (cityId) => {
-        return initialActivities.filter(activity => activity.cityId === cityId);
-    };
-
-    // Obtener nombres de actividades para mostrar en la tabla
-    const getActivityNames = (activityIds) => {
-        return activityIds
-            .map(act => initialActivities.find(a => a.id === act.id)?.name)
-            .filter(Boolean)
-            .join(', ');
-    };
-
-    // Obtener nombre de ciudad
-    const getCityName = (cityId) => {
-        return initialCities.find(city => city.id === cityId)?.name || '';
-    };
-
-    // Manejador para cambios en el formulario
+    // Manejadores de cambios en el formulario de itinerario
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setCurrentItinerary(prev => {
-            // Si cambiamos la ciudad, resetear las actividades seleccionadas
-            if (name === 'cityId') {
-                return {
-                    ...prev,
-                    [name]: Number(value),
-                    activities: []
-                };
-            }
-            return {
-                ...prev,
-                [name]: value
-            };
-        });
-    };
-
-    // Manejador para selección de actividades
-    const handleActivityChange = (e) => {
-        const activityId = Number(e.target.value);
-        setCurrentItinerary(prev => ({
+        setCurrentItinerary((prev) => ({
             ...prev,
-            activities: [...prev.activities, { id: activityId }]
+            [name]: name === 'cityId' ? value : value,
+            activities: name === 'cityId' ? [] : prev.activities
         }));
     };
 
-    // Remover actividad del itinerario actual
-    const handleRemoveActivity = (activityId) => {
+    const handleActivityChange = (e) => {
+        const activityId = Number(e.target.value);
+        const activity = activities.find(a => a.id === activityId);
+        if (!currentItinerary.activities.some(a => a.id === activityId)) {
+            setCurrentItinerary(prev => ({
+                ...prev,
+                activities: [...prev.activities, activity]
+            }));
+        }
+    };
+
+    const handleRemoveActivity = (activity) => {
         setCurrentItinerary(prev => ({
             ...prev,
-            activities: prev.activities.filter(act => act.id !== activityId)
+            activities: prev.activities.filter(a => a.id !== activity.id)
         }));
     };
 
     // Crear nuevo itinerario
-    const handleCreate = () => {
-        const maxId = Math.max(...itineraries.map(itinerary => itinerary.id), 0);
-        const newItinerary = {
-            id: maxId + 1,
-            ...currentItinerary
-        };
-        setItineraries([...itineraries, newItinerary]);
-        handleClose();
+    const handleCreate = async () => {
+        try {
+            await axios.post(`${API_URL}/itineraries`, currentItinerary, axiosConfig);
+            await fetchItineraries();
+            handleClose();
+        } catch (err) {
+            setError('Error al crear itinerario: ' + err.message);
+        }
     };
 
     // Funciones de editar, actualizar y eliminar
@@ -137,18 +134,40 @@ const Itineraries = () => {
         setOpen(true);
     };
 
-    const handleUpdate = () => {
-        setItineraries(itineraries.map(itinerary =>
-            itinerary.id === currentItinerary.id ? currentItinerary : itinerary
-        ));
-        handleClose();
-    };
-
-    const handleDelete = (id) => {
-        if (window.confirm('¿Está seguro de que desea eliminar este itinerario?')) {
-            setItineraries(itineraries.filter(itinerary => itinerary.id !== id));
+    const handleUpdate = async () => {
+        try {
+            await axios.put(`${API_URL}/itineraries/${currentItinerary.id}`, currentItinerary, axiosConfig);
+            await fetchItineraries();
+            handleClose();
+        } catch (err) {
+            setError('Error al actualizar itinerario: ' + err.message);
         }
     };
+
+    const handleDelete = async (id) => {
+        if (window.confirm('¿Está seguro de que desea eliminar este itinerario?')) {
+            try {
+                await axios.delete(`${API_URL}/itineraries/${id}`, axiosConfig);
+                await fetchItineraries();
+            } catch (err) {
+                setError('Error al eliminar itinerario: ' + err.message);
+            }
+        }
+    };
+
+    // Función para obtener el nombre de la ciudad
+    const getCityName = (cityId) => {
+        const city = cities.find(c => c.id === cityId);
+        return city ? city.name : 'Ciudad no encontrada';
+    };
+
+    // Función para obtener el nombre de la actividad
+    const getActivityName = (activity) => {
+        return activity ? activity.name : 'Actividad no encontrada';
+    };
+
+    if (loading) return <Typography>Cargando itinerarios...</Typography>;
+    if (error) return <Typography color="error">{error}</Typography>;
 
     return (
         <div style={{ padding: '20px' }}>
@@ -189,7 +208,9 @@ const Itineraries = () => {
                                 <TableCell>{itinerary.name}</TableCell>
                                 <TableCell>{itinerary.description}</TableCell>
                                 <TableCell>{getCityName(itinerary.cityId)}</TableCell>
-                                <TableCell>{getActivityNames(itinerary.activities)}</TableCell>
+                                <TableCell>
+                                    {itinerary.activities.map(activityId => getActivityName(activityId)).join(', ')}
+                                </TableCell>
                                 <TableCell>
                                     <IconButton
                                         color="primary"
@@ -242,11 +263,12 @@ const Itineraries = () => {
                                 <InputLabel>Ciudad</InputLabel>
                                 <Select
                                     name="cityId"
-                                    value={currentItinerary.cityId}
+                                    value={currentItinerary.cityId || ''}
                                     onChange={handleChange}
                                     label="Ciudad"
                                 >
-                                    {initialCities.map((city) => (
+                                    <MenuItem value="">Seleccione una ciudad</MenuItem>
+                                    {cities.map((city) => (
                                         <MenuItem key={city.id} value={city.id}>
                                             {city.name}
                                         </MenuItem>
@@ -265,11 +287,11 @@ const Itineraries = () => {
                                             onChange={handleActivityChange}
                                             label="Agregar Actividad"
                                         >
-                                            {getActivitiesForCity(currentItinerary.cityId).map((activity) => (
+                                            <MenuItem value="">Seleccione una actividad</MenuItem>
+                                            {activities.filter(a => a.cityId === currentItinerary.cityId && !currentItinerary.activities.some(ca => ca.id === a.id)).map((activity) => (
                                                 <MenuItem
                                                     key={activity.id}
                                                     value={activity.id}
-                                                    disabled={currentItinerary.activities.some(a => a.id === activity.id)}
                                                 >
                                                     {activity.name}
                                                 </MenuItem>
@@ -283,24 +305,18 @@ const Itineraries = () => {
                                         Actividades Seleccionadas:
                                     </Typography>
                                     <List>
-                                        {currentItinerary.activities.map((activity) => {
-                                            const activityDetails = initialActivities.find(a => a.id === activity.id);
-                                            return (
-                                                <ListItem key={activity.id}>
-                                                    <ListItemText
-                                                        primary={activityDetails?.name}
-                                                        secondary={`Tipo: ${activityDetails?.type}`}
-                                                    />
-                                                    <IconButton
-                                                        edge="end"
-                                                        color="error"
-                                                        onClick={() => handleRemoveActivity(activity.id)}
-                                                    >
-                                                        <DeleteIcon />
-                                                    </IconButton>
-                                                </ListItem>
-                                            );
-                                        })}
+                                        {currentItinerary.activities.map((activity) => (
+                                            <ListItem key={activity.id}>
+                                                <ListItemText primary={activity.name} />
+                                                <IconButton
+                                                    edge="end"
+                                                    color="error"
+                                                    onClick={() => handleRemoveActivity(activity)}
+                                                >
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </ListItem>
+                                        ))}
                                     </List>
                                 </Grid>
                             </>
