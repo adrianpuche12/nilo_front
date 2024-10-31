@@ -16,7 +16,6 @@ import {
   DialogTitle,
   IconButton,
   Grid,
-  MenuItem,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -34,7 +33,7 @@ const axiosConfig = {
 
 const TripCities = () => {
   const [tripCities, setTripCities] = useState([]);
-  const [cities, setCities] = useState([]); // Puedes agregar esta línea para manejar ciudades
+  const [cities, setCities] = useState([]); //para manejar ciudades
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
