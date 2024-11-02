@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Card, CardContent, Tabs, Tab, Box, useTheme } from '@mui/material';
-import Activities from './Activities';
-import Itineraries from './Itineraries';
+import ActivitiesList from './Activities/ActivitiesList';
+import ItinerariesList from './Itineraries/ItinerariesList';
 import Title from './Utiles/Title';
 
 function TabPanel(props) {
@@ -94,10 +94,10 @@ function Home() {
           backgroundColor: '#ffffff'
         }}>
           <TabPanel value={value} index={0}>
-            <Activities />
+            <ActivitiesList />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <Itineraries />
+            <ItinerariesList />
           </TabPanel>
         </CardContent>
       </Card>

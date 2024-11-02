@@ -7,9 +7,9 @@ import Home from "./Components/Home";
 import CountryDetail from "./Components/Country/CountryDetail ";
 import Countries from "./Components/Country/Countries";
 import CreateCountry from "./Components/Country/CreateCountry";
-import Activities from "./Components/Activities";
+import Activities from "./Components/Activities/Activities";
 import Province from "./Components/Province";
-import Itineraries from "./Components/Itineraries";
+import Itineraries from "./Components/Itineraries/Itineraries";
 
 
 import { Outlet } from "react-router-dom";
