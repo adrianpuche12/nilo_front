@@ -7,11 +7,11 @@ function Subtitulo_1({ text, color, margin, align, variant }) {
 
   return (
     <Typography
-      variant={variant || 'h6'}
-      color={color || theme.palette.text.primary}
+      variant={variant}
+      color={color}
       sx={{
-        margin: margin || theme.spacing(2, 0),
-        textAlign: align || 'left',
+        margin,
+        textAlign: align,
         fontSize: {
           xs: '1.25rem',  // Tamaño para pantallas pequeñas
           sm: '1.5rem',    // Tamaño para pantallas medianas
@@ -27,10 +27,17 @@ function Subtitulo_1({ text, color, margin, align, variant }) {
 
 Subtitulo_1.propTypes = {
   text: PropTypes.string.isRequired,     // Contenido del subtítulo
-  color: PropTypes.string,               // Color opcional del texto
-  margin: PropTypes.string,              // Margen opcional
-  align: PropTypes.string,               // Alineación opcional (left, center, right)
-  variant: PropTypes.string,             // Variante de Typography (opcional)
+  color: PropTypes.string,               // Color del texto
+  margin: PropTypes.string,              // Margen
+  align: PropTypes.string,               // Alineación (left, center, right)
+  variant: PropTypes.string,             // Variante de Typography
+};
+
+Subtitulo_1.defaultProps = {
+  color: 'text.primary',       // Color predeterminado del tema
+  margin: '16px 0',            // Margen predeterminado
+  align: 'left',               // Alineación predeterminada
+  variant: 'h6',               // Variante predeterminada
 };
 
 export default Subtitulo_1;
