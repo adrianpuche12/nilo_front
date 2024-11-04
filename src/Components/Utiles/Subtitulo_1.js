@@ -1,29 +1,24 @@
 import React from 'react';
-import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
+import { Typography, useTheme } from '@mui/material';
 
-function Subtitulo_1({
-  text,
-  color = 'textPrimary',
-  align = 'left',
-  fontSize = '1.25rem', 
-  fontWeight = '600', 
-  sx = {}, // Estilos adicionales
-  ariaLabel = '',
-}) {
+function Subtitulo_1({ text, color, margin, align, variant }) {
+  const theme = useTheme();
+
   return (
     <Typography
-      variant="h6"
-      color={color}
-      align={align}
+      variant={variant || 'h6'}
+      color={color || theme.palette.text.primary}
       sx={{
-        fontSize,       
-        fontWeight,      
-        lineHeight: 1.5, 
-        letterSpacing: '0.5px', 
-        ...sx,           // Estilos adicionales personalizados
+        margin: margin || theme.spacing(2, 0),
+        textAlign: align || 'left',
+        fontSize: {
+          xs: '1.25rem',  // Tamaño para pantallas pequeñas
+          sm: '1.5rem',    // Tamaño para pantallas medianas
+          md: '1.75rem',   // Tamaño para pantallas grandes
+        },
+        fontWeight: theme.typography.fontWeightMedium,
       }}
-      aria-label={ariaLabel || text} 
     >
       {text}
     </Typography>
@@ -31,13 +26,11 @@ function Subtitulo_1({
 }
 
 Subtitulo_1.propTypes = {
-  text: PropTypes.string.isRequired,    // Texto del subtítulo, obligatorio
-  color: PropTypes.string,              
-  align: PropTypes.oneOf(['inherit', 'left', 'center', 'right', 'justify']), // Alineación
-  fontSize: PropTypes.oneOfType([PropTypes.string, PropTypes.number]), 
-  fontWeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]), 
-  sx: PropTypes.object,                 
-  ariaLabel: PropTypes.string,          
+  text: PropTypes.string.isRequired,     // Contenido del subtítulo
+  color: PropTypes.string,               // Color opcional del texto
+  margin: PropTypes.string,              // Margen opcional
+  align: PropTypes.string,               // Alineación opcional (left, center, right)
+  variant: PropTypes.string,             // Variante de Typography (opcional)
 };
 
 export default Subtitulo_1;
