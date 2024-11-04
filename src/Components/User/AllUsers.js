@@ -2,6 +2,11 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import users from '../../jsons/users';
 import Title from '../Utiles/Title';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardActionArea from '@mui/material/CardActionArea';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 function AllUsers() {
   const navigate = useNavigate();
@@ -11,22 +16,38 @@ function AllUsers() {
   };
 
   return (
-    <div>
-      <Title text="Usuarios"/>
-      {users.map((user) => (
-        <div
-          key={user.id}
-          onClick={() => handleUserClick(user.id)}
-          style={{ cursor: 'pointer', margin: '10px', padding: '10px', border: '1px solid #ccc' }}
-        >
-          <p>Nombre: {user.name}</p>
-          <p>Email: {user.email}</p>
-          <p>telefono: {user.phone}</p>
-          <p>role: {user.roles}</p>
-        </div>
-      ))}
-    </div>
+    <Box sx={{ padding: 2 }}>
+      <Title text="Usuarios" />
+      <Box display="flex" flexWrap="wrap" gap={2}>
+        {users.map((user) => (
+          <Card
+            key={user.id}
+            variant="outlined"
+            sx={{ width: 300, cursor: 'pointer' }}
+            onClick={() => handleUserClick(user.id)}
+          >
+            <CardActionArea>
+              <CardContent>
+                <Typography variant="h6" component="div">
+                  Nombre: {user.name}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Email: {user.email}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Teléfono: {user.phone}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Rol: {user.roles}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        ))}
+      </Box>
+    </Box>
   );
 }
 
 export default AllUsers;
+
