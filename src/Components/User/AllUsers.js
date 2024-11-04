@@ -16,19 +16,33 @@ function AllUsers() {
   };
 
   return (
-    <Box sx={{ padding: 2 }}>
+    <Box sx={{ padding: 4 }}>
       <Title text="Usuarios" />
-      <Box display="flex" flexWrap="wrap" gap={2}>
+      <Box 
+        display="flex" 
+        flexWrap="wrap" 
+        gap={2} 
+        justifyContent="center"
+      >
         {users.map((user) => (
           <Card
             key={user.id}
             variant="outlined"
-            sx={{ width: 300, cursor: 'pointer' }}
+            sx={{
+              width: 300,
+              cursor: 'pointer',
+              boxShadow: 3,
+              transition: 'transform 0.2s, box-shadow 0.2s',
+              '&:hover': {
+                transform: 'scale(1.05)',
+                boxShadow: 6,
+              },
+            }}
             onClick={() => handleUserClick(user.id)}
           >
             <CardActionArea>
               <CardContent>
-                <Typography variant="h6" component="div">
+                <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
                   Nombre: {user.name}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
