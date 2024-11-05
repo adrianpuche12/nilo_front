@@ -12,15 +12,35 @@ function UserDetail() {
   const user = users.find((user) => user.id === parseInt(id, 10));
 
   if (!user) {
-    return <Typography variant="h5" color="error" sx={{ textAlign: 'center', marginTop: 2 }}>Usuario no encontrado</Typography>;
+    return (
+      <Typography 
+        variant="h5" 
+        color="error" 
+        sx={{ textAlign: 'center', marginTop: 2 }}
+      >
+        Usuario no encontrado
+      </Typography>
+    );
   }
 
   return (
-    <Box sx={{ padding: 2 }}>
+    <Box sx={{ padding: 4 }}>
       <Title text="Detalle del Usuario" />
-      <Card variant="outlined" sx={{ maxWidth: 400, margin: '0 auto' }}>
+      <Card
+        variant="outlined"
+        sx={{
+          maxWidth: 400,
+          margin: '0 auto',
+          boxShadow: 3,
+          transition: 'transform 0.2s, box-shadow 0.2s',
+          '&:hover': {
+            transform: 'scale(1.05)',
+            boxShadow: 6,
+          },
+        }}
+      >
         <CardContent>
-          <Typography variant="h6" component="div">
+          <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
             ID: {user.id}
           </Typography>
           <Typography variant="body1" color="textPrimary">
