@@ -1,34 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
 import axios from 'axios';
+import { useAuth } from '../Auth/AuthContext';
 
 const API_URL = process.env.REACT_APP_API_URL;
-const API_TOKEN = process.env.REACT_APP_API_TOKEN;
+
 
 const ActivitiesList = () => {
     // Estados
+    const { accessToken } = useAuth();
     const [activities, setActivities] = useState([]);
     const [cities, setCities] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const axiosConfig = {
+    const getAxiosConfig = () => ({
         headers: {
-            Authorization: `Bearer ${API_TOKEN}`
+            Authorization: `Bearer ${accessToken}`
         }
-    };
+    });
 
     // Traer actividades y ciudades
     useEffect(() => {
-        fetchActivities();
-        fetchCities();
-    }, []);
+        if (accessToken) {
+            fetchActivities();
+            fetchCities();
+        }
+    }, [accessToken]);
 
     // Función para obtener actividades
     const fetchActivities = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${API_URL}/activities`, axiosConfig);
+            const response = await axios.get(`${API_URL}/activities`, getAxiosConfig);
             setActivities(response.data);
             setError(null);
         } catch (err) {
@@ -41,7 +45,7 @@ const ActivitiesList = () => {
     // Función para obtener ciudades
     const fetchCities = async () => {
         try {
-            const response = await axios.get(`${API_URL}/cities`, axiosConfig);
+            const response = await axios.get(`${API_URL}/cities`, getAxiosConfig);
             setCities(response.data);
         } catch (err) {
             setError('Error al cargar las ciudades: ' + err.message);

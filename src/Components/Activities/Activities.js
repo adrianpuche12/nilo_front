@@ -5,12 +5,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import axios from 'axios';
+import { useAuth } from '../Auth/AuthContext';
 
 const API_URL = process.env.REACT_APP_API_URL;
-const API_TOKEN = process.env.REACT_APP_API_TOKEN;
 
 const Activities = () => {
   // Estados
+  const { accessToken } = useAuth();
   const [activities, setActivities] = useState([]);
   const [cities, setCities] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -32,23 +33,25 @@ const Activities = () => {
 
   const activityTypes = ["TOURISTIC", "GENERAL"];
 
-  const axiosConfig = {
+  const getAxiosConfig = () => ({
     headers: {
-      Authorization: `Bearer ${API_TOKEN}`
+      Authorization: `Bearer ${accessToken}`
     }
-  };
+  });
 
   // Traer actividades y ciudades
   useEffect(() => {
-    fetchActivities();
-    fetchCities();
-  }, []);
+    if (accessToken) {
+      fetchActivities();
+      fetchCities();
+    }
+  }, [accessToken]);
 
   // Función para obtener actividades
   const fetchActivities = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/activities`, axiosConfig);
+      const response = await axios.get(`${API_URL}/activities`, getAxiosConfig);
       setActivities(response.data);
       setError(null);
     } catch (err) {
@@ -61,7 +64,7 @@ const Activities = () => {
   // Función para obtener ciudades
   const fetchCities = async () => {
     try {
-      const response = await axios.get(`${API_URL}/cities`, axiosConfig);
+      const response = await axios.get(`${API_URL}/cities`, getAxiosConfig);
       setCities(response.data);
     } catch (err) {
       setError('Error al cargar las ciudades: ' + err.message);
@@ -141,7 +144,7 @@ const Activities = () => {
     try {
       await Promise.all(
         batchActivities.map(activity =>
-          axios.post(`${API_URL}/activities`, activity, axiosConfig)
+          axios.post(`${API_URL}/activities`, activity, getAxiosConfig)
         )
       );
       await fetchActivities();
@@ -154,7 +157,7 @@ const Activities = () => {
   // Crear nueva actividad individual
   const handleCreate = async () => {
     try {
-      await axios.post(`${API_URL}/activities`, currentActivity, axiosConfig);
+      await axios.post(`${API_URL}/activities`, currentActivity, getAxiosConfig);
       await fetchActivities();
       handleClose();
     } catch (err) {
@@ -171,7 +174,7 @@ const Activities = () => {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`${API_URL}/activities/${currentActivity.id}`, currentActivity, axiosConfig);
+      await axios.put(`${API_URL}/activities/${currentActivity.id}`, currentActivity, getAxiosConfig);
       await fetchActivities();
       handleClose();
     } catch (err) {
@@ -182,7 +185,7 @@ const Activities = () => {
   const handleDelete = async (id) => {
     if (window.confirm('¿Está seguro de que desea eliminar esta actividad?')) {
       try {
-        await axios.delete(`${API_URL}/activities/${id}`, axiosConfig);
+        await axios.delete(`${API_URL}/activities/${id}`, getAxiosConfig);
         await fetchActivities();
       } catch (err) {
         setError('Error al eliminar la actividad: ' + err.message);

@@ -4,18 +4,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
+import { useAuth } from '../Auth/AuthContext';
 
 const API_URL = process.env.REACT_APP_API_URL;
-const API_TOKEN = process.env.REACT_APP_API_TOKEN;
-
-const axiosConfig = {
-    headers: {
-        Authorization: `Bearer ${API_TOKEN}`
-    }
-};
 
 const Itineraries = () => {
     // Estados
+    const { accessToken } = useAuth();
     const [itineraries, setItineraries] = useState([]);
     const [activities, setActivities] = useState([]);
     const [cities, setCities] = useState([]);
@@ -30,18 +25,26 @@ const Itineraries = () => {
         activities: []
     });
 
+    const getAxiosConfig = () => ({
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    });
+
     // Cargar itinerarios, actividades y ciudades
     useEffect(() => {
-        fetchItineraries();
-        fetchActivities();
-        fetchCities();
-    }, []);
+        if (accessToken) {
+            fetchItineraries();
+            fetchActivities();
+            fetchCities();
+        }
+    }, [accessToken]);
 
     // Función para obtener itinerarios
     const fetchItineraries = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${API_URL}/itineraries`, axiosConfig);
+            const response = await axios.get(`${API_URL}/itineraries`, getAxiosConfig);
             setItineraries(response.data);
             setError(null);
         } catch (err) {
@@ -54,7 +57,7 @@ const Itineraries = () => {
     // Función para obtener actividades
     const fetchActivities = async () => {
         try {
-            const response = await axios.get(`${API_URL}/activities`, axiosConfig);
+            const response = await axios.get(`${API_URL}/activities`, getAxiosConfig);
             setActivities(response.data);
         } catch (err) {
             setError('Error al cargar las actividades: ' + err.message);
@@ -64,7 +67,7 @@ const Itineraries = () => {
     // Función para obtener ciudades
     const fetchCities = async () => {
         try {
-            const response = await axios.get(`${API_URL}/cities`, axiosConfig);
+            const response = await axios.get(`${API_URL}/cities`, getAxiosConfig);
             setCities(response.data);
         } catch (err) {
             setError('Error al cargar las ciudades: ' + err.message);
@@ -119,7 +122,7 @@ const Itineraries = () => {
     // Crear nuevo itinerario
     const handleCreate = async () => {
         try {
-            await axios.post(`${API_URL}/itineraries`, currentItinerary, axiosConfig);
+            await axios.post(`${API_URL}/itineraries`, currentItinerary, getAxiosConfig);
             await fetchItineraries();
             handleClose();
         } catch (err) {
@@ -136,7 +139,7 @@ const Itineraries = () => {
 
     const handleUpdate = async () => {
         try {
-            await axios.put(`${API_URL}/itineraries/${currentItinerary.id}`, currentItinerary, axiosConfig);
+            await axios.put(`${API_URL}/itineraries/${currentItinerary.id}`, currentItinerary, getAxiosConfig);
             await fetchItineraries();
             handleClose();
         } catch (err) {
@@ -147,7 +150,7 @@ const Itineraries = () => {
     const handleDelete = async (id) => {
         if (window.confirm('¿Está seguro de que desea eliminar este itinerario?')) {
             try {
-                await axios.delete(`${API_URL}/itineraries/${id}`, axiosConfig);
+                await axios.delete(`${API_URL}/itineraries/${id}`, getAxiosConfig);
                 await fetchItineraries();
             } catch (err) {
                 setError('Error al eliminar itinerario: ' + err.message);

@@ -1,34 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
 import axios from 'axios';
+import { useAuth } from '../Auth/AuthContext';
 
 const API_URL = process.env.REACT_APP_API_URL;
-const API_TOKEN = process.env.REACT_APP_API_TOKEN;
 
 const ItinerariesList = () => {
     // Estados
+    const { accessToken } = useAuth();
     const [itineraries, setItineraries] = useState([]);
     const [cities, setCities] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const axiosConfig = {
+    const getAxiosConfig = () => ({
         headers: {
-            Authorization: `Bearer ${API_TOKEN}`
+            Authorization: `Bearer ${accessToken}`
         }
-    };
+    });
 
     // Cargar itinerarios y ciudades
     useEffect(() => {
-        fetchItineraries();
-        fetchCities();
-    }, []);
+        if (accessToken) {
+            fetchItineraries();
+            fetchCities();
+        }
+    }, [accessToken]);
 
     // Función para obtener itinerarios
     const fetchItineraries = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${API_URL}/itineraries`, axiosConfig);
+            const response = await axios.get(`${API_URL}/itineraries`, getAxiosConfig);
             setItineraries(response.data);
             setError(null);
         } catch (err) {
@@ -41,7 +44,7 @@ const ItinerariesList = () => {
     // Función para obtener ciudades
     const fetchCities = async () => {
         try {
-            const response = await axios.get(`${API_URL}/cities`, axiosConfig);
+            const response = await axios.get(`${API_URL}/cities`, getAxiosConfig);
             setCities(response.data);
         } catch (err) {
             setError('Error al cargar las ciudades: ' + err.message);

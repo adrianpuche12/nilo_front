@@ -4,20 +4,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
+import { useAuth } from './Auth/AuthContext';
 
 // Variables de entorno para URL y token
 const API_URL = process.env.REACT_APP_API_URL;
-const API_TOKEN = process.env.REACT_APP_API_TOKEN;
-
-// Configuración de Axios con token de autorización
-const axiosConfig = {
-  headers: {
-    Authorization: `Bearer ${API_TOKEN}`
-  }
-};
 
 const Cities = () => {
   // Estados
+  const { accessToken } = useAuth();
   const [cities, setCities] = useState([]);
   const [provinces, setProvinces] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -30,17 +24,25 @@ const Cities = () => {
     province: provinces.length > 0 ? provinces[0] : null,
   });
 
+  const getAxiosConfig = () => ({
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  });
+
   // Cargar ciudades y provincias al montar el componente
   useEffect(() => {
-    fetchCities();
-    fetchProvinces();
-  }, []);
+    if (accessToken) {
+      fetchCities();
+      fetchProvinces();
+    }
+  }, [accessToken]);
 
   // Trae la lista de ciudades del backend
   const fetchCities = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/cities`, axiosConfig);
+      const response = await axios.get(`${API_URL}/cities`, getAxiosConfig);
       setCities(response.data);
       setError(null);
     } catch (err) {
@@ -53,7 +55,7 @@ const Cities = () => {
   // Trae la lista de provincias del backend
   const fetchProvinces = async () => {
     try {
-      const response = await axios.get(`${API_URL}/provinces`, axiosConfig);
+      const response = await axios.get(`${API_URL}/provinces`, getAxiosConfig);
       setProvinces(response.data);
     } catch (err) {
       setError('Error al cargar las provincias: ' + err.message);
@@ -89,7 +91,7 @@ const Cities = () => {
   // Crear una nueva ciudad
   const handleCreate = async () => {
     try {
-      await axios.post(`${API_URL}/cities`, currentCity, axiosConfig);
+      await axios.post(`${API_URL}/cities`, currentCity, getAxiosConfig);
       await fetchCities();
       handleClose();
     } catch (err) {
@@ -111,7 +113,7 @@ const Cities = () => {
   const handleUpdate = async () => {
     try {
       const { province, ...updateData } = currentCity;
-      await axios.put(`${API_URL}/cities/${currentCity.id}`, updateData, axiosConfig);
+      await axios.put(`${API_URL}/cities/${currentCity.id}`, updateData, getAxiosConfig);
       await fetchCities();
       handleClose();
     } catch (err) {
@@ -123,7 +125,7 @@ const Cities = () => {
   const handleDelete = async (id) => {
     if (window.confirm('¿Está seguro de que desea eliminar esta ciudad?')) {
       try {
-        await axios.delete(`${API_URL}/cities/${id}`, axiosConfig);
+        await axios.delete(`${API_URL}/cities/${id}`, getAxiosConfig);
         await fetchCities();
       } catch (err) {
         setError('Error al eliminar la ciudad: ' + err.message);
@@ -148,9 +150,9 @@ const Cities = () => {
           </Typography>
         </Grid>
         <Grid item>
-          <Button 
-            variant="contained" 
-            color="primary" 
+          <Button
+            variant="contained"
+            color="primary"
             onClick={handleOpen}
             startIcon={<AddIcon />}
           >
@@ -178,14 +180,14 @@ const Cities = () => {
                 <TableCell>{city.description}</TableCell>
                 <TableCell>{getProvinceName(city.province)}</TableCell>
                 <TableCell>
-                  <IconButton 
-                    color="primary" 
+                  <IconButton
+                    color="primary"
                     onClick={() => handleEdit(city)}
                   >
                     <EditIcon />
                   </IconButton>
-                  <IconButton 
-                    color="error" 
+                  <IconButton
+                    color="error"
                     onClick={() => handleDelete(city.id)}
                   >
                     <DeleteIcon />
@@ -235,7 +237,7 @@ const Cities = () => {
                 disabled={editMode}
               >
                 {provinces.map((province) => (
-                  <MenuItem key={province.id} value={province.id}> 
+                  <MenuItem key={province.id} value={province.id}>
                     {province.name}
                   </MenuItem>
                 ))}
@@ -245,9 +247,9 @@ const Cities = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
-          <Button 
-            onClick={editMode ? handleUpdate : handleCreate} 
-            variant="contained" 
+          <Button
+            onClick={editMode ? handleUpdate : handleCreate}
+            variant="contained"
             color="primary"
           >
             {editMode ? 'Actualizar' : 'Crear'}

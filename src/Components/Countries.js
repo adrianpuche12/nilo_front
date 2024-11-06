@@ -1,27 +1,22 @@
 // src/Components/Countries.js
 
 import React, { useState, useEffect } from 'react';
-import { 
-    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, 
-    Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, 
-    TextField, MenuItem, Grid, IconButton 
+import {
+    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
+    Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions,
+    TextField, MenuItem, Grid, IconButton
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
+import { useAuth } from './Auth/AuthContext';
 
 const API_URL = process.env.REACT_APP_API_URL; // URL de la API
-const API_TOKEN = process.env.REACT_APP_API_TOKEN; // Token de autorización
-
-const axiosConfig = {
-    headers: {
-        Authorization: `Bearer ${API_TOKEN}`
-    }
-};
 
 const Countries = () => {
     // Estados
+    const { accessToken } = useAuth();
     const [countries, setCountries] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -33,16 +28,24 @@ const Countries = () => {
         region: ''
     });
 
+    const getAxiosConfig = () => ({
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    });
+
     // Obtener países al montar el componente
     useEffect(() => {
-        fetchCountries();
-    }, []);
+        if (accessToken) {
+            fetchCountries();
+        }
+    }, [accessToken]);
 
     // Función para obtener países
     const fetchCountries = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${API_URL}/countries`, axiosConfig);
+            const response = await axios.get(`${API_URL}/countries`, getAxiosConfig);
             setCountries(response.data);
             setError(null);
         } catch (err) {
@@ -76,7 +79,7 @@ const Countries = () => {
     // Crear nuevo país
     const handleCreate = async () => {
         try {
-            await axios.post(`${API_URL}/countries`, currentCountry, axiosConfig);
+            await axios.post(`${API_URL}/countries`, currentCountry, getAxiosConfig);
             await fetchCountries();
             handleClose();
         } catch (err) {
@@ -93,7 +96,7 @@ const Countries = () => {
 
     const handleUpdate = async () => {
         try {
-            await axios.put(`${API_URL}/countries/${currentCountry.id}`, currentCountry, axiosConfig);
+            await axios.put(`${API_URL}/countries/${currentCountry.id}`, currentCountry, getAxiosConfig);
             await fetchCountries();
             handleClose();
         } catch (err) {
@@ -104,7 +107,7 @@ const Countries = () => {
     const handleDelete = async (id) => {
         if (window.confirm('¿Está seguro de que desea eliminar este país?')) {
             try {
-                await axios.delete(`${API_URL}/countries/${id}`, axiosConfig);
+                await axios.delete(`${API_URL}/countries/${id}`, getAxiosConfig);
                 await fetchCountries();
             } catch (err) {
                 setError('Error al eliminar el país: ' + err.message);
@@ -124,9 +127,9 @@ const Countries = () => {
                     </Typography>
                 </Grid>
                 <Grid item>
-                    <Button 
-                        variant="contained" 
-                        color="primary" 
+                    <Button
+                        variant="contained"
+                        color="primary"
                         onClick={handleOpen}
                         startIcon={<AddIcon />}
                     >
@@ -154,14 +157,14 @@ const Countries = () => {
                                 <TableCell>{country.population}</TableCell>
                                 <TableCell>{country.region}</TableCell>
                                 <TableCell>
-                                    <IconButton 
-                                        color="primary" 
+                                    <IconButton
+                                        color="primary"
                                         onClick={() => handleEdit(country)}
                                     >
                                         <EditIcon />
                                     </IconButton>
-                                    <IconButton 
-                                        color="error" 
+                                    <IconButton
+                                        color="error"
                                         onClick={() => handleDelete(country.id)}
                                     >
                                         <DeleteIcon />
@@ -210,9 +213,9 @@ const Countries = () => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancelar</Button>
-                    <Button 
-                        onClick={editMode ? handleUpdate : handleCreate} 
-                        variant="contained" 
+                    <Button
+                        onClick={editMode ? handleUpdate : handleCreate}
+                        variant="contained"
                         color="primary"
                     >
                         {editMode ? 'Actualizar' : 'Crear'}
