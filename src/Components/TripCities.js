@@ -21,17 +21,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
+import { useAuth } from './Auth/AuthContext';
 
 const API_URL = process.env.REACT_APP_API_URL;
-const API_TOKEN = process.env.REACT_APP_API_TOKEN;
-
-const axiosConfig = {
-  headers: {
-    Authorization: `Bearer ${API_TOKEN}`
-  }
-};
 
 const TripCities = () => {
+  const { accessToken } = useAuth();
   const [tripCities, setTripCities] = useState([]);
   const [cities, setCities] = useState([]); //para manejar ciudades
   const [loading, setLoading] = useState(false);
@@ -45,17 +40,25 @@ const TripCities = () => {
     order: ''
   });
 
+  const getAxiosConfig = () => ({
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  });
+
   // Traer TripCities y Ciudades
   useEffect(() => {
+    if(accessToken){
     fetchTripCities();
     fetchCities(); // Llamada para obtener ciudades
-  }, []);
+    }
+  }, [accessToken]);
 
   // Función para obtener TripCities
   const fetchTripCities = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/tripCities`, axiosConfig);
+      const response = await axios.get(`${API_URL}/tripCities`, getAxiosConfig);
       setTripCities(response.data);
       setError(null);
     } catch (err) {
@@ -68,7 +71,7 @@ const TripCities = () => {
   // Función para obtener Ciudades
   const fetchCities = async () => {
     try {
-      const response = await axios.get(`${API_URL}/cities`, axiosConfig);
+      const response = await axios.get(`${API_URL}/cities`, getAxiosConfig);
       setCities(response.data);
     } catch (err) {
       setError('Error al cargar las ciudades: ' + err.message);
@@ -102,7 +105,7 @@ const TripCities = () => {
   const handleCreate = async () => {
     try {
       const newTripCity = { ...currentTripCity }; // Se podría necesitar ajustes en la estructura
-      await axios.post(`${API_URL}/tripCities`, newTripCity, axiosConfig);
+      await axios.post(`${API_URL}/tripCities`, newTripCity, getAxiosConfig);
       await fetchTripCities();
       handleClose();
     } catch (err) {
@@ -119,7 +122,7 @@ const TripCities = () => {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`${API_URL}/tripCities/${currentTripCity.id}`, currentTripCity, axiosConfig);
+      await axios.put(`${API_URL}/tripCities/${currentTripCity.id}`, currentTripCity, getAxiosConfig);
       await fetchTripCities();
       handleClose();
     } catch (err) {
@@ -130,7 +133,7 @@ const TripCities = () => {
   const handleDelete = async (id) => {
     if (window.confirm('¿Está seguro de que desea eliminar este TripCity?')) {
       try {
-        await axios.delete(`${API_URL}/tripCities/${id}`, axiosConfig);
+        await axios.delete(`${API_URL}/tripCities/${id}`, getAxiosConfig);
         await fetchTripCities();
       } catch (err) {
         setError('Error al eliminar el TripCity: ' + err.message);

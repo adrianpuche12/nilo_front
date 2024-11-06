@@ -4,18 +4,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
+import { useAuth } from './Auth/AuthContext';
 
 const API_URL = process.env.REACT_APP_API_URL;
-const API_TOKEN = process.env.REACT_APP_API_TOKEN;
-
-const axiosConfig = {
-  headers: {
-    Authorization: `Bearer ${API_TOKEN}`
-  }
-};
 
 const Province = () => {
   // Estados
+  const { accessToken } = useAuth();
   const [provinces, setProvinces] = useState([]);
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -28,19 +23,26 @@ const Province = () => {
     country: countries.length > 0 ? countries[0] : null,
   });
 
+  const getAxiosConfig = () => ({
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  });
 
   // Traer provincias y países
   useEffect(() => {
-    fetchProvinces();
-    fetchCountries();
-  }, []);
+    if (accessToken) {
+      fetchProvinces();
+      fetchCountries();
+    }
+  }, [accessToken]);
 
 
   // Función para obtener provincias
   const fetchProvinces = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/provinces`, axiosConfig);
+      const response = await axios.get(`${API_URL}/provinces`, getAxiosConfig());
       setProvinces(response.data);
       setError(null);
     } catch (err) {
@@ -53,7 +55,7 @@ const Province = () => {
   // Función para obtener países
   const fetchCountries = async () => {
     try {
-      const response = await axios.get(`${API_URL}/countries`, axiosConfig);
+      const response = await axios.get(`${API_URL}/countries`, getAxiosConfig());
       setCountries(response.data);
     } catch (err) {
       setError('Error al cargar los países: ' + err.message);
@@ -88,7 +90,7 @@ const Province = () => {
   // Crear nueva provincia 
   const handleCreate = async () => {
     try {
-      await axios.post(`${API_URL}/provinces`, currentProvince, axiosConfig);
+      await axios.post(`${API_URL}/provinces`, currentProvince, getAxiosConfig());
       await fetchProvinces();
       handleClose();
     } catch (err) {
@@ -109,7 +111,7 @@ const Province = () => {
   const handleUpdate = async () => {
     try {
       const { country, ...updateData } = currentProvince;
-      await axios.put(`${API_URL}/provinces/${currentProvince.id}`, updateData, axiosConfig);
+      await axios.put(`${API_URL}/provinces/${currentProvince.id}`, updateData, getAxiosConfig());
       await fetchProvinces();
       handleClose();
     } catch (err) {
@@ -120,7 +122,7 @@ const Province = () => {
   const handleDelete = async (id) => {
     if (window.confirm('¿Está seguro de que desea eliminar esta provincia?')) {
       try {
-        await axios.delete(`${API_URL}/provinces/${id}`, axiosConfig);
+        await axios.delete(`${API_URL}/provinces/${id}`, getAxiosConfig());
         await fetchProvinces();
       } catch (err) {
         setError('Error al eliminar la provincia: ' + err.message);
