@@ -6,8 +6,8 @@ import React from 'react';
 import { Card, CardContent, CardMedia, Typography, Button } from '@mui/material';
 
 const CardItem = ({ title, image, description, actionLabel }) => (
-  <Card sx={{ maxWidth: 420, margin: 9 }}>
-    <CardMedia component="img" height="180" image={image} alt={title} />
+  <Card sx={{ maxWidth: 420, margin: 2 }}> {/* Ancho ajustado a 420 */}
+    <CardMedia component="img" height="140" image={image} alt={title} />
     <CardContent>
       <Typography variant="h5" component="div">
         {title}

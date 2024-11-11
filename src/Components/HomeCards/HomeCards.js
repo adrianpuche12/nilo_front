@@ -11,7 +11,7 @@ import { cardsData } from './CardsData';
 const HomeCards = () => (
   <Swiper
     modules={[Navigation, Pagination]}
-    spaceBetween={20}
+    spaceBetween={1}
     slidesPerView={1} // Ajusta el número de tarjetas visibles según el tamaño de la pantalla
     navigation // Habilita los botones de navegación
     pagination={{ clickable: true }} // Habilita la paginación
