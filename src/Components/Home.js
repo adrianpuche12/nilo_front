@@ -6,6 +6,8 @@ import { useAuth } from './Auth/AuthContext';
 import ActivitiesList from './Activities/ActivitiesList';
 import ItinerariesList from './Itineraries/ItinerariesList';
 import Title from './Utiles/Title';
+import HomeCards from './HomeCards/HomeCards';
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -70,6 +72,9 @@ function Home() {
 
       <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
         <Title text="Componente Home" />
+
+        {/* Aquí se agrega el componente HomeCards */}
+        <HomeCards />
 
         <Card variant="outlined">
           <Box sx={{
