@@ -6,6 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
+import Navbar from '../NavBar';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -199,239 +200,239 @@ const Activities = () => {
     return city ? city.name : 'Ciudad no encontrada';
   };
 
-  if (loading) return <Typography>Cargando actividades...</Typography>;
-  if (error) return <Typography color="error">{error}</Typography>;
-
   return (
-    <div style={{ padding: '20px' }}>
-      <Grid container justifyContent="space-between" alignItems="center" marginBottom={2}>
-        <Grid item>
-          <Typography variant="h4" gutterBottom>
-            Gestión de Actividades
-          </Typography>
+    <div>
+      <Navbar />
+      <div style={{ padding: '20px' }}>
+        <Grid container justifyContent="space-between" alignItems="center" marginBottom={2}>
+          <Grid item>
+            <Typography variant="h4" gutterBottom>
+              Gestión de Actividades
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleOpen}
+              startIcon={<AddIcon />}
+              sx={{ mr: 2 }}
+            >
+              Nueva Actividad
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleBatchOpen}
+              startIcon={<PlaylistAddIcon />}
+            >
+              Crear lista de actividades
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleOpen}
-            startIcon={<AddIcon />}
-            sx={{ mr: 2 }}
-          >
-            Nueva Actividad
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={handleBatchOpen}
-            startIcon={<PlaylistAddIcon />}
-          >
-            Crear lista de actividades
-          </Button>
-        </Grid>
-      </Grid>
 
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Nombre</TableCell>
-              <TableCell>Tipo</TableCell>
-              <TableCell>Ciudad</TableCell>
-              <TableCell>Acciones</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {activities.map((activity) => (
-              <TableRow key={activity.id}>
-                <TableCell>{activity.id}</TableCell>
-                <TableCell>{activity.name}</TableCell>
-                <TableCell>{activity.type}</TableCell>
-                <TableCell>{getCityName(activity.cityId)}</TableCell>
-                <TableCell>
-                  <IconButton
-                    color="primary"
-                    onClick={() => handleEdit(activity)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    color="error"
-                    onClick={() => handleDelete(activity.id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>Nombre</TableCell>
+                <TableCell>Tipo</TableCell>
+                <TableCell>Ciudad</TableCell>
+                <TableCell>Acciones</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {activities.map((activity) => (
+                <TableRow key={activity.id}>
+                  <TableCell>{activity.id}</TableCell>
+                  <TableCell>{activity.name}</TableCell>
+                  <TableCell>{activity.type}</TableCell>
+                  <TableCell>{getCityName(activity.cityId)}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      color="primary"
+                      onClick={() => handleEdit(activity)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      color="error"
+                      onClick={() => handleDelete(activity.id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-      {/* Diálogo crear/editar actividad individual */}
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>
-          {editMode ? 'Editar Actividad' : 'Nueva Actividad'}
-        </DialogTitle>
-        <DialogContent>
-          <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={12}>
-              <TextField
-                name="name"
-                label="Nombre"
-                fullWidth
-                value={currentActivity.name}
-                onChange={handleChange}
-              />
+        {/* Diálogo crear/editar actividad individual */}
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>
+            {editMode ? 'Editar Actividad' : 'Nueva Actividad'}
+          </DialogTitle>
+          <DialogContent>
+            <Grid container spacing={2} sx={{ mt: 1 }}>
+              <Grid item xs={12}>
+                <TextField
+                  name="name"
+                  label="Nombre"
+                  fullWidth
+                  value={currentActivity.name}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="type"
+                  select
+                  label="Tipo"
+                  fullWidth
+                  value={currentActivity.type}
+                  onChange={handleChange}
+                >
+                  {activityTypes.map((type) => (
+                    <MenuItem key={type} value={type}>
+                      {type}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="cityId"
+                  select
+                  label="Ciudad"
+                  fullWidth
+                  value={currentActivity.cityId}
+                  onChange={handleChange}
+                >
+                  {cities.map((city) => (
+                    <MenuItem key={city.id} value={city.id}>
+                      {city.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="type"
-                select
-                label="Tipo"
-                fullWidth
-                value={currentActivity.type}
-                onChange={handleChange}
-              >
-                {activityTypes.map((type) => (
-                  <MenuItem key={type} value={type}>
-                    {type}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="cityId"
-                select
-                label="Ciudad"
-                fullWidth
-                value={currentActivity.cityId}
-                onChange={handleChange}
-              >
-                {cities.map((city) => (
-                  <MenuItem key={city.id} value={city.id}>
-                    {city.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-          </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancelar</Button>
-          <Button
-            onClick={editMode ? handleUpdate : handleCreate}
-            variant="contained"
-            color="primary"
-          >
-            {editMode ? 'Actualizar' : 'Crear'}
-          </Button>
-        </DialogActions>
-      </Dialog>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancelar</Button>
+            <Button
+              onClick={editMode ? handleUpdate : handleCreate}
+              variant="contained"
+              color="primary"
+            >
+              {editMode ? 'Actualizar' : 'Crear'}
+            </Button>
+          </DialogActions>
+        </Dialog>
 
-      {/* Diálogo para crear lista de actividades */}
-      <Dialog
-        open={batchOpen}
-        onClose={handleBatchClose}
-        maxWidth="md"
-        fullWidth
-      >
-        <DialogTitle>Nuevas Actividades</DialogTitle>
-        <DialogContent>
-          <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                name="name"
-                label="Nombre"
-                fullWidth
-                value={tempActivity.name}
-                onChange={handleTempChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                name="type"
-                select
-                label="Tipo"
-                fullWidth
-                value={tempActivity.type}
-                onChange={handleTempChange}
-              >
-                {activityTypes.map((type) => (
-                  <MenuItem key={type} value={type}>
-                    {type}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                name="cityId"
-                select
-                label="Ciudad"
-                fullWidth
-                value={tempActivity.cityId}
-                onChange={handleTempChange}
-              >
-                {cities.map((city) => (
-                  <MenuItem key={city.id} value={city.id}>
-                    {city.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleAddToBatch}
-                startIcon={<AddIcon />}
-                fullWidth
-              >
-                Añadir a la lista
-              </Button>
-            </Grid>
+        {/* Diálogo para crear lista de actividades */}
+        <Dialog
+          open={batchOpen}
+          onClose={handleBatchClose}
+          maxWidth="md"
+          fullWidth
+        >
+          <DialogTitle>Nuevas Actividades</DialogTitle>
+          <DialogContent>
+            <Grid container spacing={2} sx={{ mt: 1 }}>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  name="name"
+                  label="Nombre"
+                  fullWidth
+                  value={tempActivity.name}
+                  onChange={handleTempChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  name="type"
+                  select
+                  label="Tipo"
+                  fullWidth
+                  value={tempActivity.type}
+                  onChange={handleTempChange}
+                >
+                  {activityTypes.map((type) => (
+                    <MenuItem key={type} value={type}>
+                      {type}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  name="cityId"
+                  select
+                  label="Ciudad"
+                  fullWidth
+                  value={tempActivity.cityId}
+                  onChange={handleTempChange}
+                >
+                  {cities.map((city) => (
+                    <MenuItem key={city.id} value={city.id}>
+                      {city.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleAddToBatch}
+                  startIcon={<AddIcon />}
+                  fullWidth
+                >
+                  Añadir a la lista
+                </Button>
+              </Grid>
 
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                Actividades en la Lista ({batchActivities.length})
-              </Typography>
-              <List>
-                {batchActivities.map((activity, index) => (
-                  <ListItem key={index} divider>
-                    <ListItemText
-                      primary={activity.name}
-                      secondary={`Tipo: ${activity.type}, Ciudad: ${getCityName(activity.cityId)}`}
-                    />
-                    <ListItemSecondaryAction>
-                      <IconButton
-                        edge="end"
-                        color="error"
-                        onClick={() => handleRemoveFromBatch(index)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))}
-              </List>
+              <Grid item xs={12}>
+                <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+                  Actividades en la Lista ({batchActivities.length})
+                </Typography>
+                <List>
+                  {batchActivities.map((activity, index) => (
+                    <ListItem key={index} divider>
+                      <ListItemText
+                        primary={activity.name}
+                        secondary={`Tipo: ${activity.type}, Ciudad: ${getCityName(activity.cityId)}`}
+                      />
+                      <ListItemSecondaryAction>
+                        <IconButton
+                          edge="end"
+                          color="error"
+                          onClick={() => handleRemoveFromBatch(index)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  ))}
+                </List>
+              </Grid>
             </Grid>
-          </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleBatchClose}>Cancelar</Button>
-          <Button
-            onClick={handleSaveBatch}
-            variant="contained"
-            color="primary"
-            disabled={batchActivities.length === 0}
-          >
-            Guardar actividades
-          </Button>
-        </DialogActions>
-      </Dialog>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleBatchClose}>Cancelar</Button>
+            <Button
+              onClick={handleSaveBatch}
+              variant="contained"
+              color="primary"
+              disabled={batchActivities.length === 0}
+            >
+              Guardar actividades
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </div>
   );
 };

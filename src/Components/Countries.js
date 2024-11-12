@@ -1,5 +1,3 @@
-// src/Components/Countries.js
-
 import React, { useState, useEffect } from 'react';
 import {
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
@@ -11,6 +9,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
 import { useAuth } from './Auth/AuthContext';
+import Navbar from './NavBar';
 
 const API_URL = process.env.REACT_APP_API_URL; // URL de la API
 
@@ -115,113 +114,113 @@ const Countries = () => {
         }
     };
 
-    if (loading) return <Typography>Cargando países...</Typography>;
-    if (error) return <Typography color="error">{error}</Typography>;
-
     return (
-        <div style={{ padding: '20px' }}>
-            <Grid container justifyContent="space-between" alignItems="center" marginBottom={2}>
-                <Grid item>
-                    <Typography variant="h4" gutterBottom>
-                        Gestión de Países
-                    </Typography>
-                </Grid>
-                <Grid item>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleOpen}
-                        startIcon={<AddIcon />}
-                    >
-                        Nuevo País
-                    </Button>
-                </Grid>
-            </Grid>
-
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>ID</TableCell>
-                            <TableCell>Nombre</TableCell>
-                            <TableCell>Población</TableCell>
-                            <TableCell>Región</TableCell>
-                            <TableCell>Acciones</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {countries.map((country) => (
-                            <TableRow key={country.id}>
-                                <TableCell>{country.id}</TableCell>
-                                <TableCell>{country.name}</TableCell>
-                                <TableCell>{country.population}</TableCell>
-                                <TableCell>{country.region}</TableCell>
-                                <TableCell>
-                                    <IconButton
-                                        color="primary"
-                                        onClick={() => handleEdit(country)}
-                                    >
-                                        <EditIcon />
-                                    </IconButton>
-                                    <IconButton
-                                        color="error"
-                                        onClick={() => handleDelete(country.id)}
-                                    >
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-
-            {/* Diálogo crear/editar país */}
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>{editMode ? 'Editar País' : 'Nuevo País'}</DialogTitle>
-                <DialogContent>
-                    <Grid container spacing={2} sx={{ mt: 1 }}>
-                        <Grid item xs={12}>
-                            <TextField
-                                name="name"
-                                label="Nombre"
-                                fullWidth
-                                value={currentCountry.name}
-                                onChange={handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                name="population"
-                                label="Población"
-                                type="number"
-                                fullWidth
-                                value={currentCountry.population}
-                                onChange={handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                name="region"
-                                label="Región"
-                                fullWidth
-                                value={currentCountry.region}
-                                onChange={handleChange}
-                            />
-                        </Grid>
+        <div>
+            <Navbar />
+            <div style={{ padding: '20px' }}>
+                <Grid container justifyContent="space-between" alignItems="center" marginBottom={2}>
+                    <Grid item>
+                        <Typography variant="h4" gutterBottom>
+                            Gestión de Países
+                        </Typography>
                     </Grid>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Cancelar</Button>
-                    <Button
-                        onClick={editMode ? handleUpdate : handleCreate}
-                        variant="contained"
-                        color="primary"
-                    >
-                        {editMode ? 'Actualizar' : 'Crear'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                    <Grid item>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleOpen}
+                            startIcon={<AddIcon />}
+                        >
+                            Nuevo País
+                        </Button>
+                    </Grid>
+                </Grid>
+
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>ID</TableCell>
+                                <TableCell>Nombre</TableCell>
+                                <TableCell>Población</TableCell>
+                                <TableCell>Región</TableCell>
+                                <TableCell>Acciones</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {countries.map((country) => (
+                                <TableRow key={country.id}>
+                                    <TableCell>{country.id}</TableCell>
+                                    <TableCell>{country.name}</TableCell>
+                                    <TableCell>{country.population}</TableCell>
+                                    <TableCell>{country.region}</TableCell>
+                                    <TableCell>
+                                        <IconButton
+                                            color="primary"
+                                            onClick={() => handleEdit(country)}
+                                        >
+                                            <EditIcon />
+                                        </IconButton>
+                                        <IconButton
+                                            color="error"
+                                            onClick={() => handleDelete(country.id)}
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+
+                {/* Diálogo crear/editar país */}
+                <Dialog open={open} onClose={handleClose}>
+                    <DialogTitle>{editMode ? 'Editar País' : 'Nuevo País'}</DialogTitle>
+                    <DialogContent>
+                        <Grid container spacing={2} sx={{ mt: 1 }}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    name="name"
+                                    label="Nombre"
+                                    fullWidth
+                                    value={currentCountry.name}
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    name="population"
+                                    label="Población"
+                                    type="number"
+                                    fullWidth
+                                    value={currentCountry.population}
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    name="region"
+                                    label="Región"
+                                    fullWidth
+                                    value={currentCountry.region}
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                        </Grid>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Cancelar</Button>
+                        <Button
+                            onClick={editMode ? handleUpdate : handleCreate}
+                            variant="contained"
+                            color="primary"
+                        >
+                            {editMode ? 'Actualizar' : 'Crear'}
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
         </div>
     );
 };

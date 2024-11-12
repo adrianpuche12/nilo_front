@@ -7,6 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import CardActionArea from '@mui/material/CardActionArea';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Navbar from '../NavBar';
 
 function AllUsers() {
   const navigate = useNavigate();
@@ -16,50 +17,53 @@ function AllUsers() {
   };
 
   return (
-    <Box sx={{ padding: 4 }}>
-      <Title text="Usuarios" />
-      <Box 
-        display="flex" 
-        flexWrap="wrap" 
-        gap={2} 
-        justifyContent="center"
-      >
-        {users.map((user) => (
-          <Card
-            key={user.id}
-            variant="outlined"
-            sx={{
-              width: 300,
-              cursor: 'pointer',
-              boxShadow: 3,
-              transition: 'transform 0.2s, box-shadow 0.2s',
-              '&:hover': {
-                transform: 'scale(1.05)',
-                boxShadow: 6,
-              },
-            }}
-            onClick={() => handleUserClick(user.id)}
-          >
-            <CardActionArea>
-              <CardContent>
-                <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-                  Nombre: {user.name}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Email: {user.email}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Teléfono: {user.phone}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Rol: {user.roles}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        ))}
+    <div>
+      <Navbar />
+      <Box sx={{ padding: 4 }}>
+        <Title text="Usuarios" />
+        <Box
+          display="flex"
+          flexWrap="wrap"
+          gap={2}
+          justifyContent="center"
+        >
+          {users.map((user) => (
+            <Card
+              key={user.id}
+              variant="outlined"
+              sx={{
+                width: 300,
+                cursor: 'pointer',
+                boxShadow: 3,
+                transition: 'transform 0.2s, box-shadow 0.2s',
+                '&:hover': {
+                  transform: 'scale(1.05)',
+                  boxShadow: 6,
+                },
+              }}
+              onClick={() => handleUserClick(user.id)}
+            >
+              <CardActionArea>
+                <CardContent>
+                  <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
+                    Nombre: {user.name}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Email: {user.email}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Teléfono: {user.phone}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Rol: {user.roles}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          ))}
+        </Box>
       </Box>
-    </Box>
+    </div>
   );
 }
 

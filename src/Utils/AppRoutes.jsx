@@ -15,6 +15,7 @@ import Itineraries from '../Components/Itineraries/Itineraries';
 import Login from '../Components/Login';
 import Cities from '../Components/cities';
 import Countries from '../Components/Countries';
+import UserProfile from '../Components/User/UserProfile'
 //import TripCities from '../Components/TripCities';
 
 const AppRoutes = () => {
@@ -27,6 +28,7 @@ const AppRoutes = () => {
         <Route path="/user/:id" element={<ProtectedRoute><UserDetail /></ProtectedRoute>} />
         <Route path="/countries" element={<ProtectedRoute><Countries /></ProtectedRoute>} />
         <Route path="/users" element={<ProtectedRoute><AllUsers /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
         {/*{<Route path="/country-detail/:id" element={<ProtectedRoute><CountryDetail /></ProtectedRoute>} />}
         <Route path="/create-country" element={<ProtectedRoute><CreateCountry /></ProtectedRoute>} /> */}
         <Route path="/activities" element={<ProtectedRoute><Activities /></ProtectedRoute>} />
