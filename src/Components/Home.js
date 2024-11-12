@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, Container, Card, CardContent, Tabs, Tab, Box, useTheme } from '@mui/material';
-import { LogOut } from 'lucide-react';
+import { Container, Card, CardContent, Tabs, Tab, Box, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './Auth/AuthContext';
 import ActivitiesList from './Activities/ActivitiesList';
 import ItinerariesList from './Itineraries/ItinerariesList';
 import Title from './Utiles/Title';
+import HomeCards from './HomeCards/HomeCards';
+import Navbar from './NavBar';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -44,32 +45,12 @@ function Home() {
 
   return (
     <>
-      <AppBar position="static" color="transparent" elevation={0}>
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <Typography variant="h6" color="inherit">
-            Dashboard
-          </Typography>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleLogout}
-            startIcon={<LogOut size={20} />}
-            sx={{
-              textTransform: 'none',
-              fontWeight: 500,
-              '&:hover': {
-                backgroundColor: theme.palette.primary.main,
-                color: 'white',
-              }
-            }}
-          >
-            Cerrar sesión
-          </Button>
-        </Toolbar>
-      </AppBar>
-
+      <Navbar />
       <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
         <Title text="Componente Home" />
+
+        {/* Aquí se agrega el componente HomeCards */}
+        <HomeCards />
 
         <Card variant="outlined">
           <Box sx={{

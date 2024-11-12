@@ -5,6 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
 import { useAuth } from './Auth/AuthContext';
+import Navbar from './NavBar';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -135,124 +136,124 @@ const Province = () => {
     return country?.name || 'País no encontrado';
   };
 
-  if (loading) return <Typography>Cargando provincias...</Typography>;
-  if (error) return <Typography color="error">{error}</Typography>;
-
   return (
-    <div style={{ padding: '20px' }}>
-      <Grid container justifyContent="space-between" alignItems="center" marginBottom={2}>
-        <Grid item>
-          <Typography variant="h4" gutterBottom>
-            Gestión de Provincias
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleOpen}
-            startIcon={<AddIcon />}
-          >
-            Nueva Provincia
-          </Button>
-        </Grid>
-      </Grid>
-
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Nombre</TableCell>
-              <TableCell>Descripción</TableCell>
-              <TableCell>País</TableCell>
-              <TableCell>Acciones</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {provinces.map((province) => (
-              <TableRow key={province.id}>
-                <TableCell>{province.id}</TableCell>
-                <TableCell>{province.name}</TableCell>
-                <TableCell>{province.description}</TableCell>
-                <TableCell>{getCountryName(province.country)}</TableCell>
-                <TableCell>
-                  <IconButton
-                    color="primary"
-                    onClick={() => handleEdit(province)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    color="error"
-                    onClick={() => handleDelete(province.id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      {/* Diálogo crear/editar provincia */}
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>
-          {editMode ? 'Editar Provincia' : 'Nueva Provincia'}
-        </DialogTitle>
-        <DialogContent>
-          <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={12}>
-              <TextField
-                name="name"
-                label="Nombre"
-                fullWidth
-                value={currentProvince.name}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="description"
-                label="Descripción"
-                fullWidth
-                multiline
-                rows={3}
-                value={currentProvince.description}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="country"
-                select
-                label="País"
-                fullWidth
-                value={currentProvince.country?.id}
-                onChange={handleChange}
-                disabled={editMode}
-              >
-                {countries.map((country) => (
-                  <MenuItem key={country.id} value={country.id}>
-                    {country.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
+    <div>
+      <Navbar />
+      <div style={{ padding: '20px' }}>
+        <Grid container justifyContent="space-between" alignItems="center" marginBottom={2}>
+          <Grid item>
+            <Typography variant="h4" gutterBottom>
+              Gestión de Provincias
+            </Typography>
           </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancelar</Button>
-          <Button
-            onClick={editMode ? handleUpdate : handleCreate}
-            variant="contained"
-            color="primary"
-          >
-            {editMode ? 'Actualizar' : 'Crear'}
-          </Button>
-        </DialogActions>
-      </Dialog>
+          <Grid item>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleOpen}
+              startIcon={<AddIcon />}
+            >
+              Nueva Provincia
+            </Button>
+          </Grid>
+        </Grid>
+
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>Nombre</TableCell>
+                <TableCell>Descripción</TableCell>
+                <TableCell>País</TableCell>
+                <TableCell>Acciones</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {provinces.map((province) => (
+                <TableRow key={province.id}>
+                  <TableCell>{province.id}</TableCell>
+                  <TableCell>{province.name}</TableCell>
+                  <TableCell>{province.description}</TableCell>
+                  <TableCell>{getCountryName(province.country)}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      color="primary"
+                      onClick={() => handleEdit(province)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      color="error"
+                      onClick={() => handleDelete(province.id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        {/* Diálogo crear/editar provincia */}
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>
+            {editMode ? 'Editar Provincia' : 'Nueva Provincia'}
+          </DialogTitle>
+          <DialogContent>
+            <Grid container spacing={2} sx={{ mt: 1 }}>
+              <Grid item xs={12}>
+                <TextField
+                  name="name"
+                  label="Nombre"
+                  fullWidth
+                  value={currentProvince.name}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="description"
+                  label="Descripción"
+                  fullWidth
+                  multiline
+                  rows={3}
+                  value={currentProvince.description}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="country"
+                  select
+                  label="País"
+                  fullWidth
+                  value={currentProvince.country?.id}
+                  onChange={handleChange}
+                  disabled={editMode}
+                >
+                  {countries.map((country) => (
+                    <MenuItem key={country.id} value={country.id}>
+                      {country.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancelar</Button>
+            <Button
+              onClick={editMode ? handleUpdate : handleCreate}
+              variant="contained"
+              color="primary"
+            >
+              {editMode ? 'Actualizar' : 'Crear'}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </div>
   );
 };

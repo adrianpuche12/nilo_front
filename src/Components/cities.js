@@ -5,6 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
 import { useAuth } from './Auth/AuthContext';
+import Navbar from './NavBar';
 
 // Variables de entorno para URL y token
 const API_URL = process.env.REACT_APP_API_URL;
@@ -138,124 +139,124 @@ const Cities = () => {
     return province?.name || 'Provincia no encontrada';
   };
 
-  if (loading) return <Typography>Cargando ciudades...</Typography>;
-  if (error) return <Typography color="error">{error}</Typography>;
-
   return (
-    <div style={{ padding: '20px' }}>
-      <Grid container justifyContent="space-between" alignItems="center" marginBottom={2}>
-        <Grid item>
-          <Typography variant="h4" gutterBottom>
-            Gestión de Ciudades
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleOpen}
-            startIcon={<AddIcon />}
-          >
-            Nueva Ciudad
-          </Button>
-        </Grid>
-      </Grid>
-
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Nombre</TableCell>
-              <TableCell>Descripción</TableCell>
-              <TableCell>Provincia</TableCell>
-              <TableCell>Acciones</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {cities.map((city) => (
-              <TableRow key={city.id}>
-                <TableCell>{city.id}</TableCell>
-                <TableCell>{city.name}</TableCell>
-                <TableCell>{city.description}</TableCell>
-                <TableCell>{getProvinceName(city.province)}</TableCell>
-                <TableCell>
-                  <IconButton
-                    color="primary"
-                    onClick={() => handleEdit(city)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    color="error"
-                    onClick={() => handleDelete(city.id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      {/* Diálogo para crear/editar ciudad */}
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>
-          {editMode ? 'Editar Ciudad' : 'Nueva Ciudad'}
-        </DialogTitle>
-        <DialogContent>
-          <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={12}>
-              <TextField
-                name="name"
-                label="Nombre"
-                fullWidth
-                value={currentCity.name}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="description"
-                label="Descripción"
-                fullWidth
-                multiline
-                rows={3}
-                value={currentCity.description}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="province"
-                select
-                label="Provincia"
-                fullWidth
-                value={currentCity.province?.id}
-                onChange={handleChange}
-                disabled={editMode}
-              >
-                {provinces.map((province) => (
-                  <MenuItem key={province.id} value={province.id}>
-                    {province.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
+    <div>
+      <Navbar />
+      <div style={{ padding: '20px' }}>
+        <Grid container justifyContent="space-between" alignItems="center" marginBottom={2}>
+          <Grid item>
+            <Typography variant="h4" gutterBottom>
+              Gestión de Ciudades
+            </Typography>
           </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancelar</Button>
-          <Button
-            onClick={editMode ? handleUpdate : handleCreate}
-            variant="contained"
-            color="primary"
-          >
-            {editMode ? 'Actualizar' : 'Crear'}
-          </Button>
-        </DialogActions>
-      </Dialog>
+          <Grid item>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleOpen}
+              startIcon={<AddIcon />}
+            >
+              Nueva Ciudad
+            </Button>
+          </Grid>
+        </Grid>
+
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>Nombre</TableCell>
+                <TableCell>Descripción</TableCell>
+                <TableCell>Provincia</TableCell>
+                <TableCell>Acciones</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {cities.map((city) => (
+                <TableRow key={city.id}>
+                  <TableCell>{city.id}</TableCell>
+                  <TableCell>{city.name}</TableCell>
+                  <TableCell>{city.description}</TableCell>
+                  <TableCell>{getProvinceName(city.province)}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      color="primary"
+                      onClick={() => handleEdit(city)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      color="error"
+                      onClick={() => handleDelete(city.id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        {/* Diálogo para crear/editar ciudad */}
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>
+            {editMode ? 'Editar Ciudad' : 'Nueva Ciudad'}
+          </DialogTitle>
+          <DialogContent>
+            <Grid container spacing={2} sx={{ mt: 1 }}>
+              <Grid item xs={12}>
+                <TextField
+                  name="name"
+                  label="Nombre"
+                  fullWidth
+                  value={currentCity.name}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="description"
+                  label="Descripción"
+                  fullWidth
+                  multiline
+                  rows={3}
+                  value={currentCity.description}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="province"
+                  select
+                  label="Provincia"
+                  fullWidth
+                  value={currentCity.province?.id}
+                  onChange={handleChange}
+                  disabled={editMode}
+                >
+                  {provinces.map((province) => (
+                    <MenuItem key={province.id} value={province.id}>
+                      {province.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancelar</Button>
+            <Button
+              onClick={editMode ? handleUpdate : handleCreate}
+              variant="contained"
+              color="primary"
+            >
+              {editMode ? 'Actualizar' : 'Crear'}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </div>
   );
 };

@@ -5,6 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
+import Navbar from '../NavBar';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -169,175 +170,175 @@ const Itineraries = () => {
         return activity ? activity.name : 'Actividad no encontrada';
     };
 
-    if (loading) return <Typography>Cargando itinerarios...</Typography>;
-    if (error) return <Typography color="error">{error}</Typography>;
-
     return (
-        <div style={{ padding: '20px' }}>
-            <Grid container justifyContent="space-between" alignItems="center" marginBottom={2}>
-                <Grid item>
-                    <Typography variant="h4" gutterBottom>
-                        Gestión de Itinerarios
-                    </Typography>
-                </Grid>
-                <Grid item>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleOpen}
-                        startIcon={<AddIcon />}
-                    >
-                        Nuevo Itinerario
-                    </Button>
-                </Grid>
-            </Grid>
-
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>ID</TableCell>
-                            <TableCell>Nombre</TableCell>
-                            <TableCell>Descripción</TableCell>
-                            <TableCell>Ciudad</TableCell>
-                            <TableCell>Actividades</TableCell>
-                            <TableCell>Acciones</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {itineraries.map((itinerary) => (
-                            <TableRow key={itinerary.id}>
-                                <TableCell>{itinerary.id}</TableCell>
-                                <TableCell>{itinerary.name}</TableCell>
-                                <TableCell>{itinerary.description}</TableCell>
-                                <TableCell>{getCityName(itinerary.cityId)}</TableCell>
-                                <TableCell>
-                                    {itinerary.activities.map(activityId => getActivityName(activityId)).join(', ')}
-                                </TableCell>
-                                <TableCell>
-                                    <IconButton
-                                        color="primary"
-                                        onClick={() => handleEdit(itinerary)}
-                                    >
-                                        <EditIcon />
-                                    </IconButton>
-                                    <IconButton
-                                        color="error"
-                                        onClick={() => handleDelete(itinerary.id)}
-                                    >
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-
-            {/* Diálogo crear/editar itinerario */}
-            <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-                <DialogTitle>
-                    {editMode ? 'Editar Itinerario' : 'Nuevo Itinerario'}
-                </DialogTitle>
-                <DialogContent>
-                    <Grid container spacing={2} sx={{ mt: 1 }}>
-                        <Grid item xs={12}>
-                            <TextField
-                                name="name"
-                                label="Nombre"
-                                fullWidth
-                                value={currentItinerary.name}
-                                onChange={handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                name="description"
-                                label="Descripción"
-                                fullWidth
-                                multiline
-                                rows={3}
-                                value={currentItinerary.description}
-                                onChange={handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <FormControl fullWidth>
-                                <InputLabel>Ciudad</InputLabel>
-                                <Select
-                                    name="cityId"
-                                    value={currentItinerary.cityId || ''}
-                                    onChange={handleChange}
-                                    label="Ciudad"
-                                >
-                                    <MenuItem value="">Seleccione una ciudad</MenuItem>
-                                    {cities.map((city) => (
-                                        <MenuItem key={city.id} value={city.id}>
-                                            {city.name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-
-                        {currentItinerary.cityId && (
-                            <>
-                                <Grid item xs={12}>
-                                    <FormControl fullWidth>
-                                        <InputLabel>Agregar Actividad</InputLabel>
-                                        <Select
-                                            value=""
-                                            onChange={handleActivityChange}
-                                            label="Agregar Actividad"
-                                        >
-                                            <MenuItem value="">Seleccione una actividad</MenuItem>
-                                            {activities.filter(a => a.cityId === currentItinerary.cityId && !currentItinerary.activities.some(ca => ca.id === a.id)).map((activity) => (
-                                                <MenuItem
-                                                    key={activity.id}
-                                                    value={activity.id}
-                                                >
-                                                    {activity.name}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-
-                                <Grid item xs={12}>
-                                    <Typography variant="subtitle1" gutterBottom>
-                                        Actividades Seleccionadas:
-                                    </Typography>
-                                    <List>
-                                        {currentItinerary.activities.map((activity) => (
-                                            <ListItem key={activity.id}>
-                                                <ListItemText primary={activity.name} />
-                                                <IconButton
-                                                    edge="end"
-                                                    color="error"
-                                                    onClick={() => handleRemoveActivity(activity)}
-                                                >
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                            </ListItem>
-                                        ))}
-                                    </List>
-                                </Grid>
-                            </>
-                        )}
+        <div>
+            <Navbar />
+            <div style={{ padding: '20px' }}>
+                <Grid container justifyContent="space-between" alignItems="center" marginBottom={2}>
+                    <Grid item>
+                        <Typography variant="h4" gutterBottom>
+                            Gestión de Itinerarios
+                        </Typography>
                     </Grid>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Cancelar</Button>
-                    <Button
-                        onClick={editMode ? handleUpdate : handleCreate}
-                        variant="contained"
-                        color="primary"
-                        disabled={!currentItinerary.name || !currentItinerary.cityId || currentItinerary.activities.length === 0}
-                    >
-                        {editMode ? 'Actualizar' : 'Crear'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                    <Grid item>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleOpen}
+                            startIcon={<AddIcon />}
+                        >
+                            Nuevo Itinerario
+                        </Button>
+                    </Grid>
+                </Grid>
+
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>ID</TableCell>
+                                <TableCell>Nombre</TableCell>
+                                <TableCell>Descripción</TableCell>
+                                <TableCell>Ciudad</TableCell>
+                                <TableCell>Actividades</TableCell>
+                                <TableCell>Acciones</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {itineraries.map((itinerary) => (
+                                <TableRow key={itinerary.id}>
+                                    <TableCell>{itinerary.id}</TableCell>
+                                    <TableCell>{itinerary.name}</TableCell>
+                                    <TableCell>{itinerary.description}</TableCell>
+                                    <TableCell>{getCityName(itinerary.cityId)}</TableCell>
+                                    <TableCell>
+                                        {itinerary.activities.map(activityId => getActivityName(activityId)).join(', ')}
+                                    </TableCell>
+                                    <TableCell>
+                                        <IconButton
+                                            color="primary"
+                                            onClick={() => handleEdit(itinerary)}
+                                        >
+                                            <EditIcon />
+                                        </IconButton>
+                                        <IconButton
+                                            color="error"
+                                            onClick={() => handleDelete(itinerary.id)}
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+
+                {/* Diálogo crear/editar itinerario */}
+                <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+                    <DialogTitle>
+                        {editMode ? 'Editar Itinerario' : 'Nuevo Itinerario'}
+                    </DialogTitle>
+                    <DialogContent>
+                        <Grid container spacing={2} sx={{ mt: 1 }}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    name="name"
+                                    label="Nombre"
+                                    fullWidth
+                                    value={currentItinerary.name}
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    name="description"
+                                    label="Descripción"
+                                    fullWidth
+                                    multiline
+                                    rows={3}
+                                    value={currentItinerary.description}
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <FormControl fullWidth>
+                                    <InputLabel>Ciudad</InputLabel>
+                                    <Select
+                                        name="cityId"
+                                        value={currentItinerary.cityId || ''}
+                                        onChange={handleChange}
+                                        label="Ciudad"
+                                    >
+                                        <MenuItem value="">Seleccione una ciudad</MenuItem>
+                                        {cities.map((city) => (
+                                            <MenuItem key={city.id} value={city.id}>
+                                                {city.name}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+
+                            {currentItinerary.cityId && (
+                                <>
+                                    <Grid item xs={12}>
+                                        <FormControl fullWidth>
+                                            <InputLabel>Agregar Actividad</InputLabel>
+                                            <Select
+                                                value=""
+                                                onChange={handleActivityChange}
+                                                label="Agregar Actividad"
+                                            >
+                                                <MenuItem value="">Seleccione una actividad</MenuItem>
+                                                {activities.filter(a => a.cityId === currentItinerary.cityId && !currentItinerary.activities.some(ca => ca.id === a.id)).map((activity) => (
+                                                    <MenuItem
+                                                        key={activity.id}
+                                                        value={activity.id}
+                                                    >
+                                                        {activity.name}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+
+                                    <Grid item xs={12}>
+                                        <Typography variant="subtitle1" gutterBottom>
+                                            Actividades Seleccionadas:
+                                        </Typography>
+                                        <List>
+                                            {currentItinerary.activities.map((activity) => (
+                                                <ListItem key={activity.id}>
+                                                    <ListItemText primary={activity.name} />
+                                                    <IconButton
+                                                        edge="end"
+                                                        color="error"
+                                                        onClick={() => handleRemoveActivity(activity)}
+                                                    >
+                                                        <DeleteIcon />
+                                                    </IconButton>
+                                                </ListItem>
+                                            ))}
+                                        </List>
+                                    </Grid>
+                                </>
+                            )}
+                        </Grid>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Cancelar</Button>
+                        <Button
+                            onClick={editMode ? handleUpdate : handleCreate}
+                            variant="contained"
+                            color="primary"
+                            disabled={!currentItinerary.name || !currentItinerary.cityId || currentItinerary.activities.length === 0}
+                        >
+                            {editMode ? 'Actualizar' : 'Crear'}
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
         </div>
     );
 };
