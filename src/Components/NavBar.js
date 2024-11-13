@@ -1,6 +1,6 @@
-import React from 'react';
-import { AppBar, Toolbar, Button, Box, IconButton, useTheme } from '@mui/material';
-import { LogOut, User } from 'lucide-react';
+import React, { useState } from 'react';
+import { AppBar, Toolbar, Button, Box, IconButton, useTheme, Drawer, List, ListItem, ListItemText, useMediaQuery } from '@mui/material';
+import { LogOut, User, Menu } from 'lucide-react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import { useAuth } from './Auth/AuthContext';
 
@@ -8,25 +8,100 @@ const Navbar = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
 
+  const navLinks = [
+    { to: "/dashboard", label: "Dashboard" },
+    { to: "/countries", label: "Countries" },
+    { to: "/users", label: "Users" },
+    { to: "/activities", label: "Activities" },
+    { to: "/province", label: "Province" },
+    { to: "/itineraries", label: "Itineraries" },
+    { to: "/cities", label: "Cities" },
+  ];
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const drawer = (
+    <List>
+      {navLinks.map((link) => (
+        <ListItem key={link.to} onClick={() => setMobileOpen(false)}>
+          <Button
+            component={NavLink}
+            to={link.to}
+            color="inherit"
+            fullWidth
+            sx={{ justifyContent: 'flex-start' }}
+          >
+            <ListItemText primary={link.label} />
+          </Button>
+        </ListItem>
+      ))}
+      <ListItem>
+        <Button
+          component={NavLink}
+          to="/profile"
+          color="inherit"
+          fullWidth
+          sx={{ justifyContent: 'flex-start' }}
+          startIcon={<User />}
+        >
+          Profile
+        </Button>
+      </ListItem>
+      <ListItem>
+        <Button
+          color="inherit"
+          fullWidth
+          onClick={handleLogout}
+          sx={{ justifyContent: 'flex-start' }}
+          startIcon={<LogOut />}
+        >
+          Logout
+        </Button>
+      </ListItem>
+    </List>
+  );
+
   return (
     <AppBar position="static" color="primary">
       <Toolbar>
-        <Box display="flex" alignItems="center" flexGrow={1}>
-          <NavigationLink to="/dashboard">Dashboard</NavigationLink>
-          <NavigationLink to="/countries">Countries</NavigationLink>
-          <NavigationLink to="/users">Users</NavigationLink>
-          <NavigationLink to="/activities">Activities</NavigationLink>
-          <NavigationLink to="/province">Province</NavigationLink>
-          <NavigationLink to="/itineraries">Itineraries</NavigationLink>
-          <NavigationLink to="/cities">Cities</NavigationLink>
+        {isMobile && (
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2 }}
+          >
+            <Menu />
+          </IconButton>
+        )}
+        
+        <Box 
+          display={{ xs: 'none', md: 'flex' }} 
+          alignItems="center" 
+          flexGrow={1}
+        >
+          {navLinks.map((link) => (
+            <NavigationLink key={link.to} to={link.to}>
+              {link.label}
+            </NavigationLink>
+          ))}
         </Box>
-        <Box display="flex" alignItems="center">
+
+        <Box 
+          display={{ xs: 'none', md: 'flex' }} 
+          alignItems="center"
+        >
           <IconButton color="inherit" component={NavLink} to="/profile">
             <User />
           </IconButton>
@@ -35,6 +110,25 @@ const Navbar = () => {
           </IconButton>
         </Box>
       </Toolbar>
+
+      <Drawer
+        variant="temporary"
+        anchor="left"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true, 
+        }}
+        sx={{
+          display: { xs: 'block', md: 'none' },
+          '& .MuiDrawer-paper': { 
+            boxSizing: 'border-box', 
+            width: 240 
+          },
+        }}
+      >
+        {drawer}
+      </Drawer>
     </AppBar>
   );
 };
@@ -42,7 +136,12 @@ const Navbar = () => {
 const NavigationLink = ({ to, children }) => {
   const theme = useTheme();
   return (
-    <Button component={NavLink} to={to} color="inherit" sx={{ marginRight: theme.spacing(2) }}>
+    <Button 
+      component={NavLink} 
+      to={to} 
+      color="inherit" 
+      sx={{ marginRight: theme.spacing(2) }}
+    >
       {children}
     </Button>
   );

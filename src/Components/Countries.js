@@ -10,6 +10,7 @@ import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
 import { useAuth } from './Auth/AuthContext';
 import Navbar from './NavBar';
+import Footer from './Footer';
 
 const API_URL = process.env.REACT_APP_API_URL; // URL de la API
 
@@ -221,6 +222,7 @@ const Countries = () => {
                     </DialogActions>
                 </Dialog>
             </div>
+            <Footer />
         </div>
     );
 };
