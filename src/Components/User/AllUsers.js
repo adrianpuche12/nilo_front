@@ -8,6 +8,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Navbar from '../NavBar';
+import Footer from '../Footer';
 
 function AllUsers() {
   const navigate = useNavigate();
@@ -63,6 +64,7 @@ function AllUsers() {
           ))}
         </Box>
       </Box>
+      <Footer />
     </div>
   );
 }

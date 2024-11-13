@@ -7,6 +7,7 @@ import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
 import Navbar from '../NavBar';
+import Footer from '../Footer';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -433,6 +434,7 @@ const Activities = () => {
           </DialogActions>
         </Dialog>
       </div>
+      <Footer />
     </div>
   );
 };
