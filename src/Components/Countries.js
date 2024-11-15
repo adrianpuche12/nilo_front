@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
     Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions,
-    TextField, MenuItem, Grid, IconButton
+    TextField, Grid, IconButton, Box
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -15,7 +15,6 @@ import Footer from './Footer';
 const API_URL = process.env.REACT_APP_API_URL; // URL de la API
 
 const Countries = () => {
-    // Estados
     const { accessToken } = useAuth();
     const [countries, setCountries] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -34,18 +33,14 @@ const Countries = () => {
         }
     });
 
-    // Obtener países al montar el componente
     useEffect(() => {
-        if (accessToken) {
-            fetchCountries();
-        }
+        if (accessToken) fetchCountries();
     }, [accessToken]);
 
-    // Función para obtener países
     const fetchCountries = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${API_URL}/countries`, getAxiosConfig);
+            const response = await axios.get(`${API_URL}/countries`, getAxiosConfig());
             setCountries(response.data);
             setError(null);
         } catch (err) {
@@ -55,7 +50,6 @@ const Countries = () => {
         }
     };
 
-    // Abrir diálogo para crear/editar
     const handleOpen = () => {
         setOpen(true);
         setEditMode(false);
@@ -67,27 +61,21 @@ const Countries = () => {
         setEditMode(false);
     };
 
-    // Cambios en el formulario
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setCurrentCountry(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        setCurrentCountry(prev => ({ ...prev, [name]: value }));
     };
 
-    // Crear nuevo país
     const handleCreate = async () => {
         try {
-            await axios.post(`${API_URL}/countries`, currentCountry, getAxiosConfig);
-            await fetchCountries();
+            await axios.post(`${API_URL}/countries`, currentCountry, getAxiosConfig());
+            fetchCountries();
             handleClose();
         } catch (err) {
             setError('Error al crear el país: ' + err.message);
         }
     };
 
-    // Editar, actualizar y eliminar país
     const handleEdit = (country) => {
         setCurrentCountry(country);
         setEditMode(true);
@@ -96,8 +84,8 @@ const Countries = () => {
 
     const handleUpdate = async () => {
         try {
-            await axios.put(`${API_URL}/countries/${currentCountry.id}`, currentCountry, getAxiosConfig);
-            await fetchCountries();
+            await axios.put(`${API_URL}/countries/${currentCountry.id}`, currentCountry, getAxiosConfig());
+            fetchCountries();
             handleClose();
         } catch (err) {
             setError('Error al actualizar el país: ' + err.message);
@@ -107,8 +95,8 @@ const Countries = () => {
     const handleDelete = async (id) => {
         if (window.confirm('¿Está seguro de que desea eliminar este país?')) {
             try {
-                await axios.delete(`${API_URL}/countries/${id}`, getAxiosConfig);
-                await fetchCountries();
+                await axios.delete(`${API_URL}/countries/${id}`, getAxiosConfig());
+                fetchCountries();
             } catch (err) {
                 setError('Error al eliminar el país: ' + err.message);
             }
@@ -118,7 +106,7 @@ const Countries = () => {
     return (
         <div>
             <Navbar />
-            <div style={{ padding: '20px' }}>
+            <Box sx={{ padding: 2, overflowX: 'hidden', maxWidth: '100%' }}>
                 <Grid container justifyContent="space-between" alignItems="center" marginBottom={2}>
                     <Grid item>
                         <Typography variant="h4" gutterBottom>
@@ -137,8 +125,8 @@ const Countries = () => {
                     </Grid>
                 </Grid>
 
-                <TableContainer component={Paper}>
-                    <Table>
+                <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
+                    <Table sx={{ minWidth: { xs: 300, sm: 650 } }}>
                         <TableHead>
                             <TableRow>
                                 <TableCell>ID</TableCell>
@@ -175,7 +163,6 @@ const Countries = () => {
                     </Table>
                 </TableContainer>
 
-                {/* Diálogo crear/editar país */}
                 <Dialog open={open} onClose={handleClose}>
                     <DialogTitle>{editMode ? 'Editar País' : 'Nuevo País'}</DialogTitle>
                     <DialogContent>
@@ -221,7 +208,7 @@ const Countries = () => {
                         </Button>
                     </DialogActions>
                 </Dialog>
-            </div>
+            </Box>
             <Footer />
         </div>
     );
