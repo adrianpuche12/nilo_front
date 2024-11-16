@@ -5,10 +5,10 @@ import { useAuth } from '../Auth/AuthContext';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-const ItinerariesCard = () => {
+const ActivitiesCard = () => {
     // Estados
     const { accessToken } = useAuth();
-    const [itineraries, setItineraries] = useState([]);
+    const [activities, setActivities] = useState([]);
     const [cities, setCities] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -17,21 +17,21 @@ const ItinerariesCard = () => {
         headers: {
             Authorization: `Bearer ${accessToken}`
         }
-    }), [accessToken]); // Ahora `accessToken` es una dependencia
+    }), [accessToken]);  // Ahora, getAxiosConfig tiene `accessToken` como dependencia.
 
-    // Función para obtener itinerarios con useCallback
-    const fetchItineraries = useCallback(async () => {
+    // Función para obtener actividades con useCallback
+    const fetchActivities = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${API_URL}/itineraries`, getAxiosConfig());
-            setItineraries(response.data);
+            const response = await axios.get(`${API_URL}/activities`, getAxiosConfig());
+            setActivities(response.data);
             setError(null);
         } catch (err) {
-            setError('Error al cargar los itinerarios: ' + err.message);
+            setError('Error al cargar las actividades: ' + err.message);
         } finally {
             setLoading(false);
         }
-    }, [getAxiosConfig]);
+    }, [getAxiosConfig]);  // Ahora `getAxiosConfig` es una dependencia
 
     // Función para obtener ciudades con useCallback
     const fetchCities = useCallback(async () => {
@@ -41,15 +41,15 @@ const ItinerariesCard = () => {
         } catch (err) {
             setError('Error al cargar las ciudades: ' + err.message);
         }
-    }, [getAxiosConfig]);
+    }, [getAxiosConfig]);  // Ahora `getAxiosConfig` es una dependencia
 
-    // Traer itinerarios y ciudades
+    // Traer actividades y ciudades
     useEffect(() => {
         if (accessToken) {
-            fetchItineraries();
+            fetchActivities();
             fetchCities();
         }
-    }, [accessToken, fetchItineraries, fetchCities]);
+    }, [accessToken, fetchActivities, fetchCities]);
 
     // Función para obtener el nombre de la ciudad
     const getCityName = (cityId) => {
@@ -57,13 +57,13 @@ const ItinerariesCard = () => {
         return city ? city.name : ''; // Solo retornamos el nombre de la ciudad
     };
 
-    if (loading) return <Typography>Cargando itinerarios...</Typography>;
+    if (loading) return <Typography>Cargando actividades...</Typography>;
     if (error) return <Typography color="error">{error}</Typography>;
 
     return (
         <Grid container spacing={2} justifyContent="center">
-            {itineraries.map((itinerary) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={itinerary.id}>
+            {activities.map((activity) => (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={activity.id}>
                     <Card
                         sx={{
                             maxWidth: 240,  // Tamaño base para las tarjetas
@@ -81,17 +81,14 @@ const ItinerariesCard = () => {
                         <CardContent>
                             <Box sx={{ textAlign: 'center' }}>
                                 <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
-                                    {itinerary.name}
+                                    {activity.name}
                                 </Typography>
                                 <Divider sx={{ my: 1 }} />
                                 <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
-                                    {getCityName(itinerary.cityId)} {/* Solo mostramos el nombre de la ciudad */}
-                                </Typography>
-                                <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
-                                    {itinerary.description} {/* Descripción del itinerario */}
+                                    {getCityName(activity.cityId)} {/* Solo mostramos el nombre de la ciudad */}
                                 </Typography>
                                 <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
-                                    {itinerary.activities.map(activity => activity.name).join(', ')} {/* Actividades */}
+                                    {activity.type} {/* Solo mostramos el valor del tipo de actividad */}
                                 </Typography>
                                 <Button
                                     variant="contained"
@@ -116,4 +113,4 @@ const ItinerariesCard = () => {
     );
 };
 
-export default ItinerariesCard;
+export default ActivitiesCard;

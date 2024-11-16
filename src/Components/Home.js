@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Container, Card, CardContent, Tabs, Tab, Box, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './Auth/AuthContext';
-import ActivitiesList from './Activities/ActivitiesList';
+import ActivitiesList from './Activities/ActivitiesCard';
 import ItinerariesList from './Itineraries/ItinerariesList';
 import Title from './Utiles/Title';
 import HomeCards from './HomeCards/HomeCards';
