@@ -3,7 +3,7 @@ import { Container, Card, CardContent, Tabs, Tab, Box, useTheme } from '@mui/mat
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './Auth/AuthContext';
 import ActivitiesList from './Activities/ActivitiesCard';
-import ItinerariesList from './Itineraries/ItinerariesList';
+import ItinerariesList from './Itineraries/ItinerariesCard';
 import Title from './Utiles/Title';
 import HomeCards from './HomeCards/HomeCards';
 import Navbar from './NavBar';

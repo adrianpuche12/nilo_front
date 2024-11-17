@@ -1,5 +1,5 @@
-// src/Utiles/Theme/darkTheme.js
 import { createTheme } from '@mui/material/styles';
+import { GlobalStyles } from '@mui/material';
 
 const darkTheme = createTheme({
   palette: {
@@ -15,10 +15,10 @@ const darkTheme = createTheme({
       paper: '#1e1e1e', // Gris ligeramente más claro para tarjetas y paneles
     },
     text: {
-      primary: '#e0e0e0', // Gris claro para el texto principal
-      secondary: '#bdbdbd', // Gris medio para el texto secundario
+      primary: '#ffffff', // blanco para el texto principal
+      secondary: '#ffffff', // blanco para el texto secundario
     },
-  },  
+  },
   components: {
     MuiAppBar: {
       styleOverrides: {
@@ -26,7 +26,7 @@ const darkTheme = createTheme({
           backgroundColor: '#212121', // Fondo oscuro para AppBar
         },
       },
-    },    
+    },
     MuiPaper: {
       styleOverrides: {
         root: {
@@ -48,4 +48,15 @@ const darkTheme = createTheme({
   },
 });
 
-export default darkTheme;
+const darkGlobalStyles = (
+  <GlobalStyles
+    styles={{
+      body: {
+        backgroundColor: '#121212', // Fondo oscuro para el body        
+        color: '#e0e0e0', // Color de texto en modo oscuro
+      },
+    }}
+  />
+);
+
+export { darkTheme, darkGlobalStyles };
