@@ -12,11 +12,11 @@ const darkTheme = createTheme({
     },
     background: {
       default: '#121212', // Gris oscuro para fondo general
-      paper: '#1e1e1e', // Gris ligeramente más claro para tarjetas y paneles
+      paper: '#424242', // Gris más claro para tarjetas y paneles
     },
     text: {
-      primary: '#ffffff', // blanco para el texto principal
-      secondary: '#ffffff', // blanco para el texto secundario
+      primary: '#e0e0e0', // Gris claro para el texto principal
+      secondary: '#bdbdbd', // Gris tenue para texto secundario
     },
   },
   components: {
@@ -30,17 +30,25 @@ const darkTheme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          backgroundColor: '#1e1e1e', // Fondo para tarjetas
-          color: '#e0e0e0', // Texto de las tarjetas
+          backgroundColor: '#424242', // Fondo gris claro dinámico para tarjetas
+          color: '#e0e0e0', // Texto claro en las tarjetas
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#424242', // Fondo gris para las tarjetas
+          color: '#e0e0e0', // Texto claro en las tarjetas
         },
       },
     },
     MuiTab: {
       styleOverrides: {
         root: {
-          color: '#e0e0e0', // Color del texto de las pestañas
+          color: '#bdbdbd', // Color de texto no seleccionado
           '&.Mui-selected': {
-            color: '#90caf9', // Color azul claro para la pestaña seleccionada
+            color: '#90caf9', // Azul claro para pestaña seleccionada
           },
         },
       },
@@ -52,8 +60,11 @@ const darkGlobalStyles = (
   <GlobalStyles
     styles={{
       body: {
-        backgroundColor: '#121212', // Fondo oscuro para el body        
-        color: '#e0e0e0', // Color de texto en modo oscuro
+        backgroundColor: '#121212', // Fondo general del body
+        color: '#e0e0e0', // Color de texto en el modo oscuro
+      },
+      '.MuiCard-root': {
+        backgroundColor: '#424242', // Fondo para todas las tarjetas
       },
     }}
   />

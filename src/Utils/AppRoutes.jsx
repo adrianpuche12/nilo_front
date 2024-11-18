@@ -35,7 +35,7 @@ const AppRoutes = () => {
         <Route path="/province" element={<ProtectedRoute><Province /></ProtectedRoute>} />
         <Route path="/itineraries" element={<ProtectedRoute><Itineraries /></ProtectedRoute>} />
         <Route path="/cities" element={<ProtectedRoute><Cities /></ProtectedRoute>} />
-        {/*<Route path="/trip-cities" element={<ProtectedRoute><TripCities /></ProtectedRoute>} />*/}
+        {/*<Route path="/trip-cities" element={<ProtectedRoute><TripCities /></ProtectedRoute>} />*/}        
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AuthProvider>
