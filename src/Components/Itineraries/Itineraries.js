@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Grid, IconButton, Select, MenuItem, FormControl, InputLabel, List, ListItem, ListItemText } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Grid, IconButton, 
+  useTheme, useMediaQuery, Card, CardContent, Stack, Box, Radio, List, ListItem, ListItemText, FormControl, InputLabel, Select } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
@@ -10,8 +11,102 @@ import Footer from '../Footer';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
+// Vista móvil en tarjetas
+const MobileView = ({ itineraries, selectedItinerary, handleSelectionChange, getCityName, getActivityName }) => (
+    <Grid container spacing={3}>
+        {itineraries.map((itinerary) => (
+            <Grid item xs={12} key={itinerary.id}>
+                <Card
+                    sx={{
+                        height: '100%',
+                        cursor: 'pointer',
+                        border: selectedItinerary === itinerary.id ? 2 : 0,
+                        borderColor: 'primary.main'
+                    }}
+                    onClick={() => handleSelectionChange(itinerary.id)}
+                >
+                    <CardContent>
+                        <Stack direction="row" alignItems="center" spacing={2} mb={2}>
+                            <Radio
+                                checked={selectedItinerary === itinerary.id}
+                                onChange={() => handleSelectionChange(itinerary.id)}
+                            />
+                            <Typography variant="h6" component="div">
+                                {itinerary.name}
+                            </Typography>
+                        </Stack>
+
+                        <Box sx={{ pl: 4 }}>
+                            <Typography color="text.secondary" gutterBottom>
+                                <strong>ID:</strong> {itinerary.id}
+                            </Typography>
+                            <Typography color="text.secondary" gutterBottom>
+                                <strong>Descripción:</strong> {itinerary.description}
+                            </Typography>
+                            <Typography color="text.secondary" gutterBottom>
+                                <strong>Ciudad:</strong> {getCityName(itinerary.cityId)}
+                            </Typography>
+                            <Typography color="text.secondary">
+                                <strong>Actividades:</strong>
+                                <List dense>
+                                    {itinerary.activities.map(activity => (
+                                        <ListItem key={activity.id}>
+                                            <ListItemText primary={getActivityName(activity)} />
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </Typography>
+                        </Box>
+                    </CardContent>
+                </Card>
+            </Grid>
+        ))}
+    </Grid>
+);
+
+// Vista desktop en tabla
+const DesktopView = ({ itineraries, handleEdit, handleDelete, getCityName, getActivityName }) => (
+    <TableContainer component={Paper}>
+        <Table>
+            <TableHead>
+                <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Nombre</TableCell>
+                    <TableCell>Descripción</TableCell>
+                    <TableCell>Ciudad</TableCell>
+                    <TableCell>Actividades</TableCell>
+                    <TableCell>Acciones</TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {itineraries.map((itinerary) => (
+                    <TableRow key={itinerary.id}>
+                        <TableCell>{itinerary.id}</TableCell>
+                        <TableCell>{itinerary.name}</TableCell>
+                        <TableCell>{itinerary.description}</TableCell>
+                        <TableCell>{getCityName(itinerary.cityId)}</TableCell>
+                        <TableCell>
+                            {itinerary.activities.map(activity => getActivityName(activity)).join(', ')}
+                        </TableCell>
+                        <TableCell>
+                            <IconButton color="primary" onClick={() => handleEdit(itinerary)}>
+                                <EditIcon />
+                            </IconButton>
+                            <IconButton color="error" onClick={() => handleDelete(itinerary.id)}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
+    </TableContainer>
+);
+
 const Itineraries = () => {
-    // Estados
+    //Estados
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const { accessToken } = useAuth();
     const [itineraries, setItineraries] = useState([]);
     const [activities, setActivities] = useState([]);
@@ -20,6 +115,7 @@ const Itineraries = () => {
     const [error, setError] = useState(null);
     const [open, setOpen] = useState(false);
     const [editMode, setEditMode] = useState(false);
+    const [selectedItinerary, setSelectedItinerary] = useState(null);
     const [currentItinerary, setCurrentItinerary] = useState({
         name: '',
         description: '',
@@ -160,6 +256,32 @@ const Itineraries = () => {
         }
     };
 
+    //Manejador para seleccionar objeto
+    const handleSelectionChange = (itineraryId) => {
+        if (selectedItinerary === itineraryId) {
+            setSelectedItinerary(null);
+        } else {
+            setSelectedItinerary(itineraryId);
+        }
+    };
+
+    //Editar seleccionado
+    const handleEditSelected = () => {
+        if (selectedItinerary) {
+            const itinerary = itineraries.find(i => i.id === selectedItinerary);
+            if (itinerary) {
+                handleEdit(itinerary);
+            }
+        }
+    };
+
+    //Borrar seleccionado
+    const handleDeleteSelected = () => {
+        if (selectedItinerary) {
+            handleDelete(selectedItinerary);
+        }
+    };
+
     // Función para obtener el nombre de la ciudad
     const getCityName = (cityId) => {
         const city = cities.find(c => c.id === cityId);
@@ -174,66 +296,101 @@ const Itineraries = () => {
     return (
         <div>
             <Navbar />
-            <div style={{ padding: '20px' }}>
-                <Grid container justifyContent="space-between" alignItems="center" marginBottom={2}>
-                    <Grid item>
-                        <Typography variant="h4" gutterBottom>
-                            Gestión de Itinerarios
-                        </Typography>
+            <Box sx={{ padding: '20px' }}>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        {isMobile ? (
+                            // Vista mobile del encabezado
+                            <Stack spacing={2}>
+                                <Typography variant="h4">
+                                    Gestión de Itinerarios
+                                </Typography>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleOpen}
+                                    startIcon={<AddIcon />}
+                                    fullWidth
+                                >
+                                    Nuevo Itinerario
+                                </Button>
+                            </Stack>
+                        ) : (
+                            // Vista desktop del encabezado
+                            <Stack direction="row" justifyContent="space-between" alignItems="center">
+                                <Typography variant="h4">
+                                    Gestión de Itinerarios
+                                </Typography>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleOpen}
+                                    startIcon={<AddIcon />}
+                                >
+                                    Nuevo Itinerario
+                                </Button>
+                            </Stack>
+                        )}
                     </Grid>
-                    <Grid item>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleOpen}
-                            startIcon={<AddIcon />}
-                        >
-                            Nuevo Itinerario
-                        </Button>
+
+                    {/* Botones de acción para mobile */}
+                    {isMobile && (
+                        <Grid item xs={12}>
+                            <Stack
+                                direction="row"
+                                spacing={2}
+                                sx={{
+                                    borderTop: 1,
+                                    borderBottom: 1,
+                                    borderColor: 'divider',
+                                    py: 2,
+                                    mb: 2
+                                }}
+                            >
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleEditSelected}
+                                    disabled={!selectedItinerary}
+                                    startIcon={<EditIcon />}
+                                    fullWidth
+                                >
+                                    Editar
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    color="error"
+                                    onClick={handleDeleteSelected}
+                                    disabled={!selectedItinerary}
+                                    startIcon={<DeleteIcon />}
+                                    fullWidth
+                                >
+                                    Eliminar
+                                </Button>
+                            </Stack>
+                        </Grid>
+                    )}
+
+                    <Grid item xs={12}>
+                        {isMobile ? (
+                            <MobileView
+                                itineraries={itineraries}
+                                selectedItinerary={selectedItinerary}
+                                handleSelectionChange={handleSelectionChange}
+                                getCityName={getCityName}
+                                getActivityName={getActivityName}
+                            />
+                        ) : (
+                            <DesktopView
+                                itineraries={itineraries}
+                                handleEdit={handleEdit}
+                                handleDelete={handleDelete}
+                                getCityName={getCityName}
+                                getActivityName={getActivityName}
+                            />
+                        )}
                     </Grid>
                 </Grid>
-
-                <TableContainer component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>ID</TableCell>
-                                <TableCell>Nombre</TableCell>
-                                <TableCell>Descripción</TableCell>
-                                <TableCell>Ciudad</TableCell>
-                                <TableCell>Actividades</TableCell>
-                                <TableCell>Acciones</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {itineraries.map((itinerary) => (
-                                <TableRow key={itinerary.id}>
-                                    <TableCell>{itinerary.id}</TableCell>
-                                    <TableCell>{itinerary.name}</TableCell>
-                                    <TableCell>{itinerary.description}</TableCell>
-                                    <TableCell>{getCityName(itinerary.cityId)}</TableCell>
-                                    <TableCell>
-                                        {itinerary.activities.map(activityId => getActivityName(activityId)).join(', ')}
-                                    </TableCell>
-                                    <TableCell>
-                                        <IconButton
-                                            color="primary"
-                                            onClick={() => handleEdit(itinerary)}
-                                        >
-                                            <EditIcon />
-                                        </IconButton>
-                                        <IconButton
-                                            color="error"
-                                            onClick={() => handleDelete(itinerary.id)}
-                                        >
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
 
                 {/* Diálogo crear/editar itinerario */}
                 <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
@@ -339,7 +496,7 @@ const Itineraries = () => {
                         </Button>
                     </DialogActions>
                 </Dialog>
-            </div>
+            </Box>
             <Footer />
         </div>
     );
