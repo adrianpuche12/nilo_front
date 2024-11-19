@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, Typography, Grid, Button, Box, Divider, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
-import ItineraryDetailCard from '../Itineraries/ItineraryDetailCard';  // Asegúrate de que la ruta sea correcta
+import ItineraryDetailCard from '../Itineraries/ItineraryDetailCard';  
 
 const API_URL = process.env.REACT_APP_API_URL;
 

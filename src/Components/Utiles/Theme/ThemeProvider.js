@@ -6,8 +6,8 @@ import { darkTheme, darkGlobalStyles } from './darkTheme';
 export const ThemeContext = createContext();
 
 const ThemeProvider = ({ children }) => {
-  // Siempre arranca con el tema claro
-  const [themeMode, setThemeMode] = useState('light'); // Arranca con 'light'
+  // lightTheme por defecto
+  const [themeMode, setThemeMode] = useState('light'); 
 
   useEffect(() => {
     // Si no hay tema en localStorage, guarda 'light' como predeterminado
