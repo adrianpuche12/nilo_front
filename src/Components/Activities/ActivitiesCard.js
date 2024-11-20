@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, Typography, Grid, Button, Box, Divider, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Card, CardContent, Typography, Grid, Button, Box, Divider, Dialog, DialogActions, DialogContent, DialogTitle, Pagination } from '@mui/material';
 import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
-import ActivityDetailCard from './ActivityDetailCard';  // Importamos el ActivityDetailCard
+import ActivityDetailCard from './ActivityDetailCard'; 
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -14,6 +14,10 @@ const ActivitiesCard = () => {
   const [error, setError] = useState(null);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [openModal, setOpenModal] = useState(false); // Para controlar el estado del modal
+
+  // Estados para la paginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6; // Número de actividades por página
 
   const getAxiosConfig = useCallback(() => ({
     headers: {
@@ -57,11 +61,20 @@ const ActivitiesCard = () => {
 
   const handleViewMore = (activity) => {
     setSelectedActivity(activity);
-    setOpenModal(true);  // Abrir el modal con el detalle de la actividad
+    setOpenModal(true); // Abrir el modal con el detalle de la actividad
   };
 
   const handleCloseModal = () => {
-    setOpenModal(false);  // Cerrar el modal
+    setOpenModal(false); // Cerrar el modal
+  };
+
+  // Paginación: obtener las actividades de la página actual
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentActivities = activities.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
   };
 
   if (loading) return <Typography>Cargando actividades...</Typography>;
@@ -70,9 +83,9 @@ const ActivitiesCard = () => {
   return (
     <div>
       <Grid container spacing={2} justifyContent="center">
-        {activities.map((activity) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={activity.id}>
-            <Card sx={{ maxWidth: 240, borderRadius: 3, boxShadow: 2 }}>
+        {currentActivities.map((activity) => (
+          <Grid item xs={10} sm={8} md={4} lg={4} key={activity.id}>
+            <Card sx={{ maxWidth: 400, borderRadius: 3, boxShadow: 2 }}>
               <CardContent>
                 <Box sx={{ textAlign: 'center' }}>
                   <Typography variant="h6">{activity.name}</Typography>
@@ -97,19 +110,22 @@ const ActivitiesCard = () => {
         ))}
       </Grid>
 
-      <Dialog
-        open={openModal}
-        onClose={handleCloseModal}
-        fullWidth
-        maxWidth="sm" // Ajustamos el tamaño del modal para pantallas medianas o pequeñas
-        sx={{
-            '& .MuiDialogContent-root': {
-            padding: { xs: '8px', sm: '16px' }, // Ajustamos el padding en pantallas pequeñas y medianas
-            },
-        }}
-      >
+      {/* Paginación */}
+      <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
+        <Pagination
+          count={Math.ceil(activities.length / itemsPerPage)} // Total de páginas
+          page={currentPage} // Página actual
+          onChange={handlePageChange} // Función de cambio
+          color="primary"
+          siblingCount={0}
+          boundaryCount={1}
+        />
+      </Box>
+
+      {/* Modal para detalle */}
+      <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="sm">
         <DialogTitle>Detalle de la Actividad</DialogTitle>
-        <DialogContent sx={{ maxWidth: { xs: 320, sm: 400, md: 600 } }}>
+        <DialogContent>
           {selectedActivity && <ActivityDetailCard activity={selectedActivity} />}
         </DialogContent>
         <DialogActions>
