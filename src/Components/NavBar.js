@@ -1,8 +1,24 @@
-import React, { useState } from 'react';
-import { AppBar, Toolbar, Button, Box, IconButton, useTheme, Drawer, List, ListItem, ListItemText, useMediaQuery } from '@mui/material';
+import React, { useState, useContext } from 'react';
+import {
+  Button,
+  AppBar,
+  Toolbar,
+  Box,
+  IconButton,
+  useTheme,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  useMediaQuery
+} from '@mui/material';
 import { LogOut, User, Menu } from 'lucide-react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import { useAuth } from './Auth/AuthContext';
+import { ThemeContext } from './Utiles/Theme/ThemeProvider';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import HomeIcon from '@mui/icons-material/Home'; // Importamos el ícono de "Home"
 
 const Navbar = () => {
   const { logout } = useAuth();
@@ -10,6 +26,7 @@ const Navbar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { themeMode, toggleTheme } = useContext(ThemeContext);
 
   const handleLogout = () => {
     logout();
@@ -17,7 +34,6 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    { to: "/dashboard", label: "Dashboard" },
     { to: "/countries", label: "Countries" },
     { to: "/users", label: "Users" },
     { to: "/activities", label: "Activities" },
@@ -98,10 +114,18 @@ const Navbar = () => {
           ))}
         </Box>
 
-        <Box 
-          display={{ xs: 'none', md: 'flex' }} 
-          alignItems="center"
-        >
+        <Box display={{ xs: 'flex', md: 'flex' }} alignItems="center">
+          {/* Ícono de Home visible en dispositivos móviles */}
+          <IconButton color="inherit" component={NavLink} to="/">
+            <HomeIcon />
+          </IconButton>
+
+          {/* Icono de cambio de tema */}
+          <IconButton onClick={toggleTheme} color="inherit">
+            {themeMode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
+          </IconButton>
+
+          {/* Íconos de perfil y logout */}
           <IconButton color="inherit" component={NavLink} to="/profile">
             <User />
           </IconButton>

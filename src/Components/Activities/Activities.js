@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Grid, IconButton, List, ListItem, ListItemText, ListItemSecondaryAction } from '@mui/material';
+import { Grid, Card, CardContent, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Radio, IconButton, List, ListItem, ListItemText,
+  ListItemSecondaryAction, Paper, Box, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, useTheme, useMediaQuery } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
@@ -11,8 +12,94 @@ import Footer from '../Footer';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
+// Vista móvil en tarjetas
+const MobileView = ({ activities, selectedActivity, handleSelectionChange, getCityName }) => (
+  <Grid container spacing={3}>
+    {activities.map((activity) => (
+      <Grid item xs={12} key={activity.id}>
+        <Card
+          sx={{
+            height: '100%',
+            cursor: 'pointer',
+            border: selectedActivity === activity.id ? 2 : 0,
+            borderColor: 'primary.main'
+          }}
+          onClick={() => handleSelectionChange(activity.id)}
+        >
+          <CardContent>
+            <Stack direction="row" alignItems="center" spacing={2} mb={2}>
+              <Radio
+                checked={selectedActivity === activity.id}
+                onChange={() => handleSelectionChange(activity.id)}
+              />
+              <Typography variant="h6" component="div">
+                {activity.name}
+              </Typography>
+            </Stack>
+
+            <Box sx={{ pl: 4 }}>
+              <Typography color="text.secondary" gutterBottom>
+                <strong>ID:</strong> {activity.id}
+              </Typography>
+              <Typography color="text.secondary" gutterBottom>
+                <strong>Tipo:</strong> {activity.type}
+              </Typography>
+              <Typography color="text.secondary">
+                <strong>Ciudad:</strong> {getCityName(activity.cityId)}
+              </Typography>
+            </Box>
+          </CardContent>
+        </Card>
+      </Grid>
+    ))}
+  </Grid>
+);
+
+// Vista desktop en tabla
+const DesktopView = ({ activities, handleEdit, handleDelete, getCityName }) => (
+  <TableContainer component={Paper}>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>ID</TableCell>
+          <TableCell>Nombre</TableCell>
+          <TableCell>Tipo</TableCell>
+          <TableCell>Ciudad</TableCell>
+          <TableCell>Acciones</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {activities.map((activity) => (
+          <TableRow key={activity.id}>
+            <TableCell>{activity.id}</TableCell>
+            <TableCell>{activity.name}</TableCell>
+            <TableCell>{activity.type}</TableCell>
+            <TableCell>{getCityName(activity.cityId)}</TableCell>
+            <TableCell>
+              <IconButton
+                color="primary"
+                onClick={() => handleEdit(activity)}
+              >
+                <EditIcon />
+              </IconButton>
+              <IconButton
+                color="error"
+                onClick={() => handleDelete(activity.id)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer>
+);
+
 const Activities = () => {
-  // Estados
+  //Estados
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { accessToken } = useAuth();
   const [activities, setActivities] = useState([]);
   const [cities, setCities] = useState([]);
@@ -21,6 +108,7 @@ const Activities = () => {
   const [open, setOpen] = useState(false);
   const [batchOpen, setBatchOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState(null);
   const [currentActivity, setCurrentActivity] = useState({
     name: '',
     type: '',
@@ -195,6 +283,32 @@ const Activities = () => {
     }
   };
 
+  //Manejador para seleccionar objeto
+  const handleSelectionChange = (activityId) => {
+    if (selectedActivity === activityId) {
+      setSelectedActivity(null);
+    } else {
+      setSelectedActivity(activityId);
+    }
+  };
+
+  //Editar seleccionado
+  const handleEditSelected = () => {
+    if (selectedActivity) {
+      const activity = activities.find(a => a.id === selectedActivity);
+      if (activity) {
+        handleEdit(activity);
+      }
+    }
+  };
+
+  //Borrar seleccionado
+  const handleDeleteSelected = () => {
+    if (selectedActivity) {
+      handleDelete(selectedActivity);
+    }
+  };
+
   // Función para obtener el nombre de la ciudad
   const getCityName = (cityId) => {
     const city = cities.find(city => city.id === parseInt(cityId));
@@ -204,71 +318,121 @@ const Activities = () => {
   return (
     <div>
       <Navbar />
-      <div style={{ padding: '20px' }}>
-        <Grid container justifyContent="space-between" alignItems="center" marginBottom={2}>
-          <Grid item>
-            <Typography variant="h4" gutterBottom>
-              Gestión de Actividades
-            </Typography>
+      <Box sx={{ padding: '20px' }}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            {isMobile ? (
+              // Vista mobile del encabezado
+              <Stack spacing={2}>
+                <Typography variant="h4">
+                  Gestión de Actividades
+                </Typography>
+                <Stack direction="row" spacing={2} sx={{ width: '100%' }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleOpen}
+                    startIcon={<AddIcon />}
+                    fullWidth
+                  >
+                    Nueva Actividad
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleBatchOpen}
+                    startIcon={<PlaylistAddIcon />}
+                    fullWidth
+                  >
+                    Crear varias actividades
+                  </Button>
+                </Stack>
+              </Stack>
+            ) : (
+              // Vista desktop del encabezado
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Typography variant="h4">
+                  Gestión de Actividades
+                </Typography>
+                <Stack direction="row" spacing={2}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleOpen}
+                    startIcon={<AddIcon />}
+                  >
+                    Nueva Actividad
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleBatchOpen}
+                    startIcon={<PlaylistAddIcon />}
+                  >
+                    Crear varias actividades
+                  </Button>
+                </Stack>
+              </Stack>
+            )}
           </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleOpen}
-              startIcon={<AddIcon />}
-              sx={{ mr: 2 }}
-            >
-              Nueva Actividad
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleBatchOpen}
-              startIcon={<PlaylistAddIcon />}
-            >
-              Crear lista de actividades
-            </Button>
+
+          {/* Botones de acción para mobile */}
+          {isMobile && (
+            <Grid item xs={12}>
+              <Stack
+                direction="row"
+                spacing={2}
+                sx={{
+                  borderTop: 1,
+                  borderBottom: 1,
+                  borderColor: 'divider',
+                  py: 2,
+                  mb: 2
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleEditSelected}
+                  disabled={!selectedActivity}
+                  startIcon={<EditIcon />}
+                  fullWidth
+                >
+                  Editar
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleDeleteSelected}
+                  disabled={!selectedActivity}
+                  startIcon={<DeleteIcon />}
+                  fullWidth
+                >
+                  Eliminar
+                </Button>
+              </Stack>
+            </Grid>
+          )}
+
+          <Grid item xs={12}>
+            {isMobile ? (
+              <MobileView
+                activities={activities}
+                selectedActivity={selectedActivity}
+                handleSelectionChange={handleSelectionChange}
+                getCityName={getCityName}
+              />
+            ) : (
+              <DesktopView
+                activities={activities}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+                getCityName={getCityName}
+              />
+            )}
           </Grid>
         </Grid>
 
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Nombre</TableCell>
-                <TableCell>Tipo</TableCell>
-                <TableCell>Ciudad</TableCell>
-                <TableCell>Acciones</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {activities.map((activity) => (
-                <TableRow key={activity.id}>
-                  <TableCell>{activity.id}</TableCell>
-                  <TableCell>{activity.name}</TableCell>
-                  <TableCell>{activity.type}</TableCell>
-                  <TableCell>{getCityName(activity.cityId)}</TableCell>
-                  <TableCell>
-                    <IconButton
-                      color="primary"
-                      onClick={() => handleEdit(activity)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      color="error"
-                      onClick={() => handleDelete(activity.id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
 
         {/* Diálogo crear/editar actividad individual */}
         <Dialog open={open} onClose={handleClose}>
@@ -433,7 +597,7 @@ const Activities = () => {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </Box>
       <Footer />
     </div>
   );

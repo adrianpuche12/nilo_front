@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Grid, IconButton } from '@mui/material';
+import {
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Grid,
+  IconButton, useTheme, useMediaQuery, Card, CardContent, Stack, Box, Radio
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
@@ -11,8 +14,94 @@ import Footer from './Footer';
 // Variables de entorno para URL y token
 const API_URL = process.env.REACT_APP_API_URL;
 
+// Vista móvil en tarjetas
+const MobileView = ({ cities, selectedCity, handleSelectionChange, getProvinceName }) => (
+  <Grid container spacing={3}>
+    {cities.map((city) => (
+      <Grid item xs={12} key={city.id}>
+        <Card
+          sx={{
+            height: '100%',
+            cursor: 'pointer',
+            border: selectedCity === city.id ? 2 : 0,
+            borderColor: 'primary.main'
+          }}
+          onClick={() => handleSelectionChange(city.id)}
+        >
+          <CardContent>
+            <Stack direction="row" alignItems="center" spacing={2} mb={2}>
+              <Radio
+                checked={selectedCity === city.id}
+                onChange={() => handleSelectionChange(city.id)}
+              />
+              <Typography variant="h6" component="div">
+                {city.name}
+              </Typography>
+            </Stack>
+
+            <Box sx={{ pl: 4 }}>
+              <Typography color="text.secondary" gutterBottom>
+                <strong>ID:</strong> {city.id}
+              </Typography>
+              <Typography color="text.secondary" gutterBottom>
+                <strong>Descripción:</strong> {city.description}
+              </Typography>
+              <Typography color="text.secondary">
+                <strong>Provincia:</strong> {getProvinceName(city.province)}
+              </Typography>
+            </Box>
+          </CardContent>
+        </Card>
+      </Grid>
+    ))}
+  </Grid>
+);
+
+// Vista desktop en tabla
+const DesktopView = ({ cities, handleEdit, handleDelete, getProvinceName }) => (
+  <TableContainer component={Paper}>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>ID</TableCell>
+          <TableCell>Nombre</TableCell>
+          <TableCell>Descripción</TableCell>
+          <TableCell>Provincia</TableCell>
+          <TableCell>Acciones</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {cities.map((city) => (
+          <TableRow key={city.id}>
+            <TableCell>{city.id}</TableCell>
+            <TableCell>{city.name}</TableCell>
+            <TableCell>{city.description}</TableCell>
+            <TableCell>{getProvinceName(city.province)}</TableCell>
+            <TableCell>
+              <IconButton
+                color="primary"
+                onClick={() => handleEdit(city)}
+              >
+                <EditIcon />
+              </IconButton>
+              <IconButton
+                color="error"
+                onClick={() => handleDelete(city.id)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer>
+);
+
 const Cities = () => {
-  // Estados
+  //Estados
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { accessToken } = useAuth();
   const [cities, setCities] = useState([]);
   const [provinces, setProvinces] = useState([]);
@@ -20,6 +109,7 @@ const Cities = () => {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [selectedCity, setSelectedCity] = useState(null);
   const [currentCity, setCurrentCity] = useState({
     name: '',
     description: '',
@@ -135,7 +225,32 @@ const Cities = () => {
     }
   };
 
-  // Obtiene el nombre de la provincia de la ciudad actual
+  //Manejador para seleccionar objeto
+  const handleSelectionChange = (cityId) => {
+    if (selectedCity === cityId) {
+      setSelectedCity(null);
+    } else {
+      setSelectedCity(cityId);
+    }
+  };
+
+  //Editar seleccionado
+  const handleEditSelected = () => {
+    if (selectedCity) {
+      const city = cities.find(c => c.id === selectedCity);
+      if (city) {
+        handleEdit(city);
+      }
+    }
+  };
+
+  //Borrar seleccionado
+  const handleDeleteSelected = () => {
+    if (selectedCity) {
+      handleDelete(selectedCity);
+    }
+  };
+
   const getProvinceName = (province) => {
     return province?.name || 'Provincia no encontrada';
   };
@@ -143,62 +258,99 @@ const Cities = () => {
   return (
     <div>
       <Navbar />
-      <div style={{ padding: '20px' }}>
-        <Grid container justifyContent="space-between" alignItems="center" marginBottom={2}>
-          <Grid item>
-            <Typography variant="h4" gutterBottom>
-              Gestión de Ciudades
-            </Typography>
+      <Box sx={{ padding: '20px' }}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            {isMobile ? (
+              // Vista mobile del encabezado
+              <Stack spacing={2}>
+                <Typography variant="h4">
+                  Gestión de Ciudades
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleOpen}
+                  startIcon={<AddIcon />}
+                  fullWidth
+                >
+                  Nueva Ciudad
+                </Button>
+              </Stack>
+            ) : (
+              // Vista desktop del encabezado
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Typography variant="h4">
+                  Gestión de Ciudades
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleOpen}
+                  startIcon={<AddIcon />}
+                >
+                  Nueva Ciudad
+                </Button>
+              </Stack>
+            )}
           </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleOpen}
-              startIcon={<AddIcon />}
-            >
-              Nueva Ciudad
-            </Button>
+
+          {/* Botones de acción para mobile */}
+          {isMobile && (
+            <Grid item xs={12}>
+              <Stack
+                direction="row"
+                spacing={2}
+                sx={{
+                  borderTop: 1,
+                  borderBottom: 1,
+                  borderColor: 'divider',
+                  py: 2,
+                  mb: 2
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleEditSelected}
+                  disabled={!selectedCity}
+                  startIcon={<EditIcon />}
+                  fullWidth
+                >
+                  Editar
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleDeleteSelected}
+                  disabled={!selectedCity}
+                  startIcon={<DeleteIcon />}
+                  fullWidth
+                >
+                  Eliminar
+                </Button>
+              </Stack>
+            </Grid>
+          )}
+
+          <Grid item xs={12}>
+            {isMobile ? (
+              <MobileView
+                cities={cities}
+                selectedCity={selectedCity}
+                handleSelectionChange={handleSelectionChange}
+                getProvinceName={getProvinceName}
+              />
+            ) : (
+              <DesktopView
+                cities={cities}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+                getProvinceName={getProvinceName}
+              />
+            )}
           </Grid>
         </Grid>
-
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Nombre</TableCell>
-                <TableCell>Descripción</TableCell>
-                <TableCell>Provincia</TableCell>
-                <TableCell>Acciones</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {cities.map((city) => (
-                <TableRow key={city.id}>
-                  <TableCell>{city.id}</TableCell>
-                  <TableCell>{city.name}</TableCell>
-                  <TableCell>{city.description}</TableCell>
-                  <TableCell>{getProvinceName(city.province)}</TableCell>
-                  <TableCell>
-                    <IconButton
-                      color="primary"
-                      onClick={() => handleEdit(city)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      color="error"
-                      onClick={() => handleDelete(city.id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
 
         {/* Diálogo para crear/editar ciudad */}
         <Dialog open={open} onClose={handleClose}>
@@ -257,7 +409,7 @@ const Cities = () => {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </Box>
       <Footer />
     </div>
   );
