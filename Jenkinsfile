@@ -22,7 +22,7 @@ pipeline {
                 node -v
                 npm -v
                 echo 'Instalando dependencias...'
-                sh 'npm install'
+                'npm install'
                 '''
             }
         }
