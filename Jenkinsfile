@@ -39,7 +39,7 @@ pipeline {
             steps {
                 echo 'Creando la imagen Docker...'
                 sh '''
-                docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} -f Dockerfile .
+                docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
                 docker images
                 '''
             }
