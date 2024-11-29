@@ -1,5 +1,5 @@
 pipeline {
-    agent node
+    agent node-alpine
 
     environment {
         REACT_APP_NILO = "mi-react-app"
