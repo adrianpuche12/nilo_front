@@ -19,8 +19,8 @@ pipeline {
         stage('Instalar dependencias') {
             steps {
                  sh '''
-                sudo node -v
-                sudo npm -v
+                node -v
+                npm -v
                 echo 'Instalando dependencias...'
                 sh 'npm install'
                 '''
