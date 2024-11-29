@@ -58,7 +58,7 @@ pipeline {
                 sh '''
                 docker stop ${REACT_APP_NAME} || true
                 docker rm ${REACT_APP_NAME} || true
-                docker run -d --name ${REACT_APP_NAME} -p 80:8000 ${DOCKER_IMAGE}:${DOCKER_TAG}
+                docker run -d --name ${REACT_APP_NAME} -p 9001:80 ${DOCKER_IMAGE}:${DOCKER_TAG}
                 docker ps
                 '''
             }
