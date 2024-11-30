@@ -8,6 +8,8 @@ import axios from 'axios';
 import { useAuth } from './Auth/AuthContext';
 import Navbar from './NavBar';
 import Footer from './Footer';
+import AdminNavbar from './Admin/AdminNavBar';
+import { constNav} from './Utiles/Global';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -247,7 +249,7 @@ const Province = () => {
 
   return (
     <div>
-      <Navbar />
+      {constNav === 1 ? <AdminNavbar /> : <Navbar />}
       <Box sx={{ padding: '20px' }}>
         <Grid container spacing={3}>
           <Grid item xs={12}>

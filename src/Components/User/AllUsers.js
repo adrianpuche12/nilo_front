@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Navbar from '../NavBar';
 import Footer from '../Footer';
+import AdminNavbar from '../Admin/AdminNavBar';
+import { constNav} from '../Utiles/Global';
 
 function AllUsers() {
   const navigate = useNavigate();
@@ -19,7 +21,7 @@ function AllUsers() {
 
   return (
     <div>
-      <Navbar />
+      {constNav === 1 ? <AdminNavbar /> : <Navbar />}
       <Box sx={{ padding: 4 }}>
         <Title text="Usuarios" />
         <Box

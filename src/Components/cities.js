@@ -8,8 +8,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
 import { useAuth } from './Auth/AuthContext';
+import { constNav, setConstNav } from './Utiles/Global'; // Importar la variable global
 import Navbar from './NavBar';
 import Footer from './Footer';
+import AdminNavbar from './Admin/AdminNavBar';
 
 // Variables de entorno para URL y token
 const API_URL = process.env.REACT_APP_API_URL;
@@ -255,9 +257,11 @@ const Cities = () => {
     return province?.name || 'Provincia no encontrada';
   };
 
+
+
   return (
     <div>
-      <Navbar />
+      {constNav === 1 ? <AdminNavbar /> : <Navbar />}
       <Box sx={{ padding: '20px' }}>
         <Grid container spacing={3}>
           <Grid item xs={12}>

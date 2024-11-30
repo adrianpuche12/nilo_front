@@ -8,6 +8,8 @@ import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
 import Navbar from '../NavBar';
 import Footer from '../Footer';
+import { constNav, setConstNav } from '../Utiles/Global';
+import AdminNavbar from '../Admin/AdminNavBar';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -295,7 +297,7 @@ const Itineraries = () => {
 
     return (
         <div>
-            <Navbar />
+            {constNav === 1 ? <AdminNavbar /> : <Navbar />}
             <Box sx={{ padding: '20px' }}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>

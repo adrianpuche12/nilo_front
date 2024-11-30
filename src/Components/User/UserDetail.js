@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // Importar useNavigate
 import users from '../../jsons/users';
 import Title from '../Utiles/Title';
 import Card from '@mui/material/Card';
@@ -8,10 +8,12 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button'; // Importar Button
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 
 function UserDetail() {
   const { id } = useParams();
+  const navigate = useNavigate(); // Instancia de useNavigate
   const user = users.find((user) => user.id === parseInt(id, 10));
 
   const [avatarImage, setAvatarImage] = useState(null);
@@ -26,6 +28,11 @@ function UserDetail() {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  // Función para manejar el cierre del Card
+  const handleClose = () => {
+    navigate('/'); // Redirigir a la página principal o a la ruta deseada
   };
 
   // Si no se encuentra el usuario, mostramos un mensaje de error
@@ -51,11 +58,7 @@ function UserDetail() {
           margin: '0 auto',
           boxShadow: 3,
           borderRadius: 2,
-          transition: 'transform 0.2s, box-shadow 0.2s',
-          '&:hover': {
-            transform: 'scale(1.05)',
-            boxShadow: 6,
-          },
+          paddingBottom: 2, // Añadimos espacio inferior para el botón
         }}
       >
         <CardContent>
@@ -73,15 +76,15 @@ function UserDetail() {
               alt={user.name}
               src={avatarImage || ''}
               sx={{
-                width: 120,  // Aumentamos el tamaño del avatar
-                height: 120, // Aumentamos el tamaño del avatar
-                fontSize: 50, // Aumentamos el tamaño de la inicial
+                width: 120,
+                height: 120,
+                fontSize: 50,
                 backgroundColor: '#1976d2',
-                border: '3px solid white', // Borde blanco alrededor del avatar
+                border: '3px solid white',
                 boxShadow: 3,
               }}
             >
-              {!avatarImage && user.name.charAt(0)} {/* Mostrar inicial si no hay imagen */}
+              {!avatarImage && user.name.charAt(0)}
             </Avatar>
 
             {/* Botón para subir imagen */}
@@ -101,13 +104,13 @@ function UserDetail() {
                   position: 'absolute',
                   bottom: 0,
                   right: 0,
-                  transform: 'translate(25%, 25%)', // Posicionar el icono correctamente
-                  backgroundColor: 'white', // Fondo blanco para el icono
+                  transform: 'translate(25%, 25%)',
+                  backgroundColor: 'white',
                   borderRadius: '50%',
                   padding: 0.5,
                   boxShadow: 2,
                   '&:hover': {
-                    backgroundColor: '#e3f2fd', // Hover en el icono
+                    backgroundColor: '#e3f2fd',
                   },
                 }}
               >
@@ -133,6 +136,23 @@ function UserDetail() {
             Roles: {user.roles.join(', ') || 'Sin roles'}
           </Typography>
         </CardContent>
+
+        {/* Botón Cerrar */}
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', padding: 2 }}>
+          <Button
+            onClick={handleClose}
+            sx={{
+              color: '#1976d2', // Texto en azul
+              fontWeight: 'bold',
+              textTransform: 'none', // Texto sin mayúsculas automáticas
+              '&:hover': {
+                backgroundColor: '#e3f2fd', // Fondo azul claro al pasar el cursor
+              },
+            }}
+          >
+            Cerrar
+          </Button>
+        </Box>
       </Card>
     </Box>
   );

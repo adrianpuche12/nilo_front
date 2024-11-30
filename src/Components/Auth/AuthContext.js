@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 
 export const AuthContext = createContext();
 
@@ -9,6 +9,7 @@ export const AuthProvider = ({ children }) => {
     accessToken: null,
     refreshToken: null,
     expiresIn: null,
+    roles: [],
     loading: true,
     error: null
   });
@@ -25,70 +26,6 @@ export const AuthProvider = ({ children }) => {
       return false;
     }
   };
-
-  // Configurar timer para verificar el token periódicamente
-  useEffect(() => {
-    let refreshTimer;
-
-    const setupRefreshTimer = () => {
-      if (authState.accessToken) {
-        refreshTimer = setInterval(async () => {
-          if (isTokenExpiringSoon(authState.accessToken)) {
-            try {
-              await refreshAccessToken();
-            } catch (error) {
-              console.error('Error al renovar el token:', error);
-              // Si falla la renovación, hacer logout
-              logout();
-            }
-          }
-        }, 300000); // Verificar cada 5 minutos
-      }
-    };
-
-    setupRefreshTimer();
-
-    // Limpiar timer cuando el componente se desmonte
-    return () => {
-      if (refreshTimer) {
-        clearInterval(refreshTimer);
-      }
-    };
-  }, [authState.accessToken]);
-
-  useEffect(() => {
-    const initializeAuth = () => {
-      const accessToken = localStorage.getItem('accessToken');
-      const refreshToken = localStorage.getItem('refreshToken');
-      const expiresIn = localStorage.getItem('expiresIn');
-
-      if (accessToken && refreshToken) {
-        // Verificar si el token actual está expirado
-        if (isTokenExpiringSoon(accessToken)) {
-          // Intentar renovar inmediatamente
-          refreshAccessToken().catch(() => {
-            // Si falla la renovación, limpiar todo
-            logout();
-          });
-        } else {
-          setAxiosAuthHeader(accessToken);
-          setAuthState(prev => ({
-            ...prev,
-            accessToken,
-            refreshToken,
-            expiresIn: parseInt(expiresIn),
-            loading: false
-          }));
-        }
-        
-        setupAxiosInterceptors();
-      } else {
-        setAuthState(prev => ({ ...prev, loading: false }));
-      }
-    };
-
-    initializeAuth();
-  }, []);
 
   const setAxiosAuthHeader = (token) => {
     if (token) {
@@ -143,17 +80,20 @@ export const AuthProvider = ({ children }) => {
       );
 
       const { access_token, refresh_token, expires_in } = response.data;
-      
+
       localStorage.setItem('accessToken', access_token);
       localStorage.setItem('refreshToken', refresh_token);
       localStorage.setItem('expiresIn', expires_in);
+
+      const roles = decodeRoles(access_token);
 
       setAxiosAuthHeader(access_token);
       setAuthState(prev => ({
         ...prev,
         accessToken: access_token,
         refreshToken: refresh_token,
-        expiresIn: expires_in
+        expiresIn: expires_in,
+        roles
       }));
 
       return response.data;
@@ -162,11 +102,56 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const decodeRoles = (token) => {
+    try {
+      const decoded = jwtDecode(token);
+      return decoded.realm_access?.roles || [];
+    } catch (error) {
+      console.error('Error al decodificar roles:', error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const initializeAuth = () => {
+      const accessToken = localStorage.getItem('accessToken');
+      const refreshToken = localStorage.getItem('refreshToken');
+      const expiresIn = localStorage.getItem('expiresIn');
+
+      if (accessToken && refreshToken) {
+        // Verificar si el token actual está expirado
+        if (isTokenExpiringSoon(accessToken)) {
+          // Intentar renovar inmediatamente
+          refreshAccessToken().catch(() => {
+            // Si falla la renovación, limpiar todo
+            logout();
+          });
+        } else {
+          const roles = decodeRoles(accessToken);
+          setAxiosAuthHeader(accessToken);
+          setAuthState(prev => ({
+            ...prev,
+            accessToken,
+            refreshToken,
+            expiresIn: parseInt(expiresIn),
+            roles,
+            loading: false
+          }));
+        }
+
+        setupAxiosInterceptors();
+      } else {
+        setAuthState(prev => ({ ...prev, loading: false }));
+      }
+    };
+
+    initializeAuth();
+  }, []);
 
   const login = async (username, password) => {
     try {
       setAuthState(prev => ({ ...prev, error: null }));
-      
+
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL_KEYCLOAK}/login`,
         new URLSearchParams({
@@ -182,6 +167,8 @@ export const AuthProvider = ({ children }) => {
 
       const { access_token, refresh_token, expires_in } = response.data;
 
+      const roles = decodeRoles(access_token);
+
       // Guardar en localStorage
       localStorage.setItem('accessToken', access_token);
       localStorage.setItem('refreshToken', refresh_token);
@@ -193,7 +180,8 @@ export const AuthProvider = ({ children }) => {
         ...prev,
         accessToken: access_token,
         refreshToken: refresh_token,
-        expiresIn: expires_in
+        expiresIn: expires_in,
+        roles
       }));
 
       return true;
@@ -215,15 +203,17 @@ export const AuthProvider = ({ children }) => {
       accessToken: null,
       refreshToken: null,
       expiresIn: null,
+      roles: [],
       loading: false,
       error: null
     });
   };
 
   return (
-    <AuthContext.Provider 
-      value={{ 
+    <AuthContext.Provider
+      value={{
         accessToken: authState.accessToken,
+        roles: authState.roles,
         loading: authState.loading,
         error: authState.error,
         login,
