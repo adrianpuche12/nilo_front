@@ -6,6 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
+
 function Countries() {
   const navigate = useNavigate();
   const handleCountriesClick = (id) => {

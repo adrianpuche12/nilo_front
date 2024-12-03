@@ -11,10 +11,7 @@ import axios from 'axios';
 import { useAuth } from './Auth/AuthContext';
 import Navbar from './NavBar';
 import Footer from './Footer';
-import AdminNavbar from './Admin/AdminNavBar';
-import { constNav} from './Utiles/Global';
-
-
+import AdminNavbar from './Admin/AdminNavbar';
 
 const API_URL = process.env.REACT_APP_API_URL; // URL de la API
 
@@ -119,9 +116,11 @@ const Countries = () => {
         }
     };
 
+    const { roles } = useAuth();
+
     return (
         <div>
-            {constNav === 1 ? <AdminNavbar /> : <Navbar />}
+            {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
             <div style={{ padding: '20px' }}>
                 <Grid container justifyContent="space-between" alignItems="center" marginBottom={2}>
                     <Grid item>

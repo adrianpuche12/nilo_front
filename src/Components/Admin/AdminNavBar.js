@@ -118,10 +118,11 @@ const AdminNavbar = () => {
           {/* Ícono de Home visible en dispositivos móviles */}
           <IconButton
             color="inherit"
-            onClick={() => navigate('/admin/adminhome')}
+            onClick={() => navigate('/admin/adminhome', { replace: true })}
           >
             <HomeIcon />
           </IconButton>
+
 
           {/* Icono de cambio de tema */}
           <IconButton onClick={toggleTheme} color="inherit">

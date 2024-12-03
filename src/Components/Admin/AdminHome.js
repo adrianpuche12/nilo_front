@@ -5,8 +5,9 @@ import { useAuth } from '../Auth/AuthContext';
 
 import Title from '../Utiles/Title';
 //import HomeCards from './HomeCards/HomeCards';
-import AdminNavbar from './AdminNavBar';
+import AdminNavbar from './AdminNavbar';
 import Footer from '../Footer';
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
