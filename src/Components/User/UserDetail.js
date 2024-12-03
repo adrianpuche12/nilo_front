@@ -32,7 +32,7 @@ function UserDetail() {
 
   // Función para manejar el cierre del Card
   const handleClose = () => {
-    navigate('/'); // Redirigir a la página principal o a la ruta deseada
+    navigate('/users'); // Redirigir a la página principal o a la ruta deseada
   };
 
   // Si no se encuentra el usuario, mostramos un mensaje de error

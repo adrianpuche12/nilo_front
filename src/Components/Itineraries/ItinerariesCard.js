@@ -3,6 +3,7 @@ import { Card, CardContent, Typography, Grid, Button, Box, Divider, Dialog, Dial
 import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
 import ItineraryDetailCard from '../Itineraries/ItineraryDetailCard';
+import Title from '../Utiles/Title';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -124,7 +125,7 @@ const ItinerariesCard = () => {
 
       {/* Modal para detalle */}
       <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="sm">
-        <DialogTitle>Detalle del Itinerario</DialogTitle>
+        <Title text="Detalle del Itinerario" />
         <DialogContent>
           {selectedItinerary && <ItineraryDetailCard itinerary={selectedItinerary} />}
         </DialogContent>

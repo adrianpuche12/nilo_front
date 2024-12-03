@@ -1,21 +1,21 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, matchPath } from 'react-router-dom';
 import { useAuth } from './AuthContext';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, roles, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [isVerified, setIsVerified] = useState(false); // Nuevo estado para controlar el renderizado
 
   useEffect(() => {
-    if (loading) return; // No hacer nada mientras se cargan los datos
+    if (loading) return; // No hagas nada hasta que se complete la carga
 
     if (!isAuthenticated) {
-      // Si no está autenticado, redirige al login
       navigate('/login', { replace: true });
-    } else if (roles.includes('admin')) {
-      // Si es administrador, verifica si está en una ruta permitida
+      return;
+    }
+
+    if (roles.includes('admin')) {
       const adminAllowedRoutes = [
         '/admin/adminhome',
         '/countries',
@@ -24,23 +24,25 @@ export const ProtectedRoute = ({ children }) => {
         '/users',
         '/cities',
         '/itineraries',
+        '/profile',
       ];
 
-      if (!adminAllowedRoutes.includes(location.pathname)) {
-        // Redirige directamente a /admin/adminhome
+      if (!isRouteAllowed(location.pathname, adminAllowedRoutes)) {
         navigate('/admin/adminhome', { replace: true });
-      } else {
-        setIsVerified(true); // Marca como verificado si está en una ruta permitida
       }
-    } else {
-      setIsVerified(true); // Para usuarios no administradores, permite el acceso a rutas normales
     }
+    // No es necesario actualizar `isVerified` aquí, porque `children` será mostrado automáticamente
   }, [isAuthenticated, roles, loading, navigate, location.pathname]);
 
-  if (loading || !isVerified) {
-    // Mientras se verifica la autenticación o la ruta, muestra una pantalla de carga
+  if (loading) {
     return <div>Cargando...</div>;
   }
 
-  return children; // Renderiza los hijos solo cuando todo está verificado
+  return children;
+};
+
+const isRouteAllowed = (path, allowedRoutes) => {
+  return (
+    allowedRoutes.includes(path) || matchPath('/user/:id', path)
+  );
 };

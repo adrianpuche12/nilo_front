@@ -10,6 +10,8 @@ import { useAuth } from '../Auth/AuthContext';
 import Navbar from '../NavBar';
 import Footer from '../Footer';
 import AdminNavbar from '../Admin/AdminNavbar';
+import Title from '../Utiles/Title';
+
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -354,10 +356,7 @@ const Activities = () => {
             ) : (
               // Vista desktop del encabezado
               <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography variant="h4">
-                  Gestión de Actividades
-                </Typography>
-                <Stack direction="row" spacing={2}>
+                <Title text ="Gestión de Actividades" variant="h4"/>
                   <Button
                     variant="contained"
                     color="primary"
@@ -373,8 +372,7 @@ const Activities = () => {
                     startIcon={<PlaylistAddIcon />}
                   >
                     Crear varias actividades
-                  </Button>
-                </Stack>
+                  </Button>                
               </Stack>
             )}
           </Grid>
