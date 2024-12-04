@@ -8,10 +8,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
 import { useAuth } from './Auth/AuthContext';
-import { constNav, setConstNav } from './Utiles/Global'; // Importar la variable global
 import Navbar from './NavBar';
 import Footer from './Footer';
-import AdminNavbar from './Admin/AdminNavBar';
+import AdminNavbar from './Admin/AdminNavbar';
+import Title from './Utiles/Title';
+
 
 // Variables de entorno para URL y token
 const API_URL = process.env.REACT_APP_API_URL;
@@ -257,32 +258,16 @@ const Cities = () => {
     return province?.name || 'Provincia no encontrada';
   };
 
-
+  const { roles } = useAuth();
 
   return (
     <div>
-      {constNav === 1 ? <AdminNavbar /> : <Navbar />}
+      {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
       <Box sx={{ padding: '20px' }}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             {isMobile ? (
               // Vista mobile del encabezado
-              <Stack spacing={2}>
-                <Typography variant="h4">
-                  Gestión de Ciudades
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleOpen}
-                  startIcon={<AddIcon />}
-                  fullWidth
-                >
-                  Nueva Ciudad
-                </Button>
-              </Stack>
-            ) : (
-              // Vista desktop del encabezado
               <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Typography variant="h4">
                   Gestión de Ciudades
@@ -296,6 +281,21 @@ const Cities = () => {
                   Nueva Ciudad
                 </Button>
               </Stack>
+
+            ) : (
+              // Vista desktop del encabezado
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Title text="Gestión de Ciudades" variant="h4" />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleOpen}
+                  startIcon={<AddIcon />}
+                >
+                  Nueva Ciudad
+                </Button>
+              </Stack>
+
             )}
           </Grid>
 

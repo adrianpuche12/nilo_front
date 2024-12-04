@@ -16,7 +16,7 @@ const ActivityDetailCard = ({ activity }) => {
       }}
     >
       <CardContent>
-        <Typography variant="h5" component="div" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+        <Typography variant="h6" component="div" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
           Detalles de la Actividad
         </Typography>
         <Box sx={{ mt: 2 }}>

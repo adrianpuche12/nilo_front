@@ -8,8 +8,8 @@ import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
 import Navbar from '../NavBar';
 import Footer from '../Footer';
-import { constNav, setConstNav } from '../Utiles/Global';
-import AdminNavbar from '../Admin/AdminNavBar';
+import AdminNavbar from '../Admin/AdminNavbar';
+import Title from '../Utiles/Title';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -295,15 +295,17 @@ const Itineraries = () => {
         return activity ? activity.name : 'Actividad no encontrada';
     };
 
+    const { roles } = useAuth();
+
     return (
         <div>
-            {constNav === 1 ? <AdminNavbar /> : <Navbar />}
+            {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
             <Box sx={{ padding: '20px' }}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         {isMobile ? (
                             // Vista mobile del encabezado
-                            <Stack spacing={2}>
+                            <Stack direction="row" justifyContent="space-between" alignItems="center">
                                 <Typography variant="h4">
                                     Gestión de Itinerarios
                                 </Typography>
@@ -312,17 +314,14 @@ const Itineraries = () => {
                                     color="primary"
                                     onClick={handleOpen}
                                     startIcon={<AddIcon />}
-                                    fullWidth
                                 >
-                                    Nuevo Itinerario
+                                    Nueva Itinerario
                                 </Button>
                             </Stack>
                         ) : (
                             // Vista desktop del encabezado
                             <Stack direction="row" justifyContent="space-between" alignItems="center">
-                                <Typography variant="h4">
-                                    Gestión de Itinerarios
-                                </Typography>
+                                <Title text="Gestión de Itinerarios" variant="h4" />
                                 <Button
                                     variant="contained"
                                     color="primary"

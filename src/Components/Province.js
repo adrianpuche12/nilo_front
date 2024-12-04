@@ -8,8 +8,8 @@ import axios from 'axios';
 import { useAuth } from './Auth/AuthContext';
 import Navbar from './NavBar';
 import Footer from './Footer';
-import AdminNavbar from './Admin/AdminNavBar';
-import { constNav} from './Utiles/Global';
+import AdminNavbar from './Admin/AdminNavbar';
+import Title from './Utiles/Title';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -247,30 +247,16 @@ const Province = () => {
     return country?.name || 'País no encontrado';
   };
 
+  const { roles } = useAuth();
+
   return (
     <div>
-      {constNav === 1 ? <AdminNavbar /> : <Navbar />}
+      {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
       <Box sx={{ padding: '20px' }}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             {isMobile ? (
               // Vista mobile del encabezado
-              <Stack spacing={2}>
-                <Typography variant="h4">
-                  Gestión de Provincias
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleOpen}
-                  startIcon={<AddIcon />}
-                  fullWidth
-                >
-                  Nueva Provincia
-                </Button>
-              </Stack>
-            ) : (
-              // Vista desktop del encabezado
               <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Typography variant="h4">
                   Gestión de Provincias
@@ -284,6 +270,21 @@ const Province = () => {
                   Nueva Provincia
                 </Button>
               </Stack>
+
+            ) : (
+              // Vista desktop del encabezado
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Title text="Gestión de Provincias" variant="h4" />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleOpen}
+                  startIcon={<AddIcon />}
+                >
+                  Nueva Provincia
+                </Button>
+              </Stack>
+
             )}
           </Grid>
 

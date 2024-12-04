@@ -1,34 +1,48 @@
-import { useNavigate, useLocation } from 'react-router-dom'; 
-import { useAuth } from './AuthContext'; 
+import { useNavigate, useLocation, matchPath } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 import { useEffect } from 'react';
 
 export const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, roles, loading } = useAuth();
-  const navigate = useNavigate();  
-  const location = useLocation(); // Para obtener la ruta actual
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    if (loading) {
+    if (loading) return; // No hagas nada hasta que se complete la carga
+
+    if (!isAuthenticated) {
+      navigate('/login', { replace: true });
       return;
     }
 
-    if (!isAuthenticated) {
-      // Redirige a login si no está autenticado
-      navigate('/login', { replace: true });
-    } else if (roles.includes('admin')) {
-      // Permitir a admin acceder a...
-      const adminAllowedRoutes = ['/admin/adminhome', '/countries', '/province', '/activities', '/users', '/cities', '/itineraries'];
+    if (roles.includes('admin')) {
+      const adminAllowedRoutes = [
+        '/admin/adminhome',
+        '/countries',
+        '/province',
+        '/activities',
+        '/users',
+        '/cities',
+        '/itineraries',
+        '/profile',
+      ];
 
-      if (!adminAllowedRoutes.includes(location.pathname)) {
-        // Redirige a /admin/adminhome si está en una ruta no permitida
+      if (!isRouteAllowed(location.pathname, adminAllowedRoutes)) {
         navigate('/admin/adminhome', { replace: true });
       }
     }
-  }, [isAuthenticated, roles, loading, navigate, location.pathname]); // Incluimos location.pathname para detectar cambios de ruta
+    // No es necesario actualizar `isVerified` aquí, porque `children` será mostrado automáticamente
+  }, [isAuthenticated, roles, loading, navigate, location.pathname]);
 
   if (loading) {
     return <div>Cargando...</div>;
   }
 
-    return children;
+  return children;
+};
+
+const isRouteAllowed = (path, allowedRoutes) => {
+  return (
+    allowedRoutes.includes(path) || matchPath('/user/:id', path)
+  );
 };
