@@ -18,7 +18,7 @@ import Countries from '../Components/Countries';
 import UserProfile from '../Components/User/UserProfile'
 //import TripCities from '../Components/TripCities';
 import AdminHome from '../Components/Admin/AdminHome'; // Importar el componente AdminHome
-import AdminNavbar from '../Components/Admin/AdminNavbar';
+import AdminNavbar from '../Components/Admin/AdminNavBar';
 
 const AppRoutes = () => {
   return (

@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Navbar from '../NavBar';
 import Footer from '../Footer';
-import AdminNavbar from '../Admin/AdminNavbar';
+import AdminNavbar from '../Admin/AdminNavBar';
 import { useAuth } from '../Auth/AuthContext';
 
 function AllUsers() {

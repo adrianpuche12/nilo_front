@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
 import Navbar from '../NavBar';
 import Footer from '../Footer';
-import AdminNavbar from '../Admin/AdminNavbar';
+import AdminNavbar from '../Admin/AdminNavBar';
 import Title from '../Utiles/Title';
 
 const API_URL = process.env.REACT_APP_API_URL;

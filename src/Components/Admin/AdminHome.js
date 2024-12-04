@@ -5,7 +5,7 @@ import { useAuth } from '../Auth/AuthContext';
 
 import Title from '../Utiles/Title';
 //import HomeCards from './HomeCards/HomeCards';
-import AdminNavbar from './AdminNavbar';
+import AdminNavbar from './AdminNavBar';
 import Footer from '../Footer';
 
 
