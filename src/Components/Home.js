@@ -58,7 +58,7 @@ function Home() {
           <Box sx={{
             borderBottom: 1,
             borderColor: 'divider',
-            bgcolor: theme.palette.grey[50],
+            bgcolor: theme.palette.background.default,
             borderTopLeftRadius: 8,
             borderTopRightRadius: 8,
           }}>
@@ -109,7 +109,7 @@ function Home() {
             '&:last-child': {
               pb: 0
             },
-            backgroundColor: '#ffffff'
+            backgroundColor: theme.palette.background.default
           }}>
             <TabPanel value={value} index={0}>
               <ActivitiesList />
