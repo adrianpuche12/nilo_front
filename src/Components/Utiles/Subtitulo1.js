@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Typography, useTheme } from '@mui/material';
 
-function Subtitulo_1({ text, color, margin, align, variant }) {
+function Subtitulo1({ text, color, margin, align, variant }) {
   const theme = useTheme();
 
   return (
@@ -25,7 +25,7 @@ function Subtitulo_1({ text, color, margin, align, variant }) {
   );
 }
 
-Subtitulo_1.propTypes = {
+Subtitulo1.propTypes = {
   text: PropTypes.string.isRequired,     // Contenido del subtítulo
   color: PropTypes.string,               // Color del texto
   margin: PropTypes.string,              // Margen
@@ -33,11 +33,11 @@ Subtitulo_1.propTypes = {
   variant: PropTypes.string,             // Variante de Typography
 };
 
-Subtitulo_1.defaultProps = {
+Subtitulo1.defaultProps = {
   color: 'text.primary',       // Color predeterminado del tema
   margin: '16px 0',            // Margen predeterminado
   align: 'left',               // Alineación predeterminada
   variant: 'h6',               // Variante predeterminada
 };
 
-export default Subtitulo_1;
+export default Subtitulo1;

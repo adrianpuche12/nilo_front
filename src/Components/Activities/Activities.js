@@ -11,6 +11,7 @@ import Navbar from '../NavBar';
 import Footer from '../Footer';
 import AdminNavbar from '../Admin/AdminNavbar';
 import Title from '../Utiles/Title';
+import Descripcion1 from '../Utiles/Descripcion1'
 
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -329,9 +330,7 @@ const Activities = () => {
             {isMobile ? (
               // Vista mobile del encabezado
               <Stack spacing={2}>
-                <Typography variant="h4">
-                  Gestión de Actividades
-                </Typography>
+                <Title text ="Gestión de Actividades" variant="h4"/>
                 <Stack direction="row" spacing={2} sx={{ width: '100%' }}>
                   <Button
                     variant="contained"
@@ -375,6 +374,21 @@ const Activities = () => {
                   </Button>                
               </Stack>
             )}
+
+            {/* Componente de Descripción */}
+            <Grid
+              item
+              xs={12}
+              container
+              justifyContent="left" 
+              alignItems="center" 
+              sx={{ mt: 2 }}
+            >
+              <Descripcion1
+                text="Esta pantalla facilita la gestión de itinerarios, permitiendo su creación, edición y eliminación, así como la integración con actividades y ciudades, incluyendo la creación de actividades de forma individual o por lote."
+                sx={{ mt: 10 }}
+              />
+            </Grid>
           </Grid>
 
           {/* Botones de acción para mobile */}

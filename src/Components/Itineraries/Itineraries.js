@@ -10,6 +10,7 @@ import Navbar from '../NavBar';
 import Footer from '../Footer';
 import AdminNavbar from '../Admin/AdminNavbar';
 import Title from '../Utiles/Title';
+import Descripcion1 from '../Utiles/Descripcion1';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -300,15 +301,13 @@ const Itineraries = () => {
     return (
         <div>
             {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
-            <Box sx={{ padding: '20px' }}>
-                <Grid container spacing={3}>
+            <Box sx={{ padding: '10px' }}>
+                <Grid container spacing={1}>
                     <Grid item xs={12}>
                         {isMobile ? (
                             // Vista mobile del encabezado
                             <Stack direction="row" justifyContent="space-between" alignItems="center">
-                                <Typography variant="h4">
-                                    Gestión de Itinerarios
-                                </Typography>
+                                <Title text="Gestión de Itinerarios" variant="h4" />
                                 <Button
                                     variant="contained"
                                     color="primary"
@@ -332,6 +331,20 @@ const Itineraries = () => {
                                 </Button>
                             </Stack>
                         )}
+                        {/* Componente de Descripción */}
+                        <Grid
+                            item
+                            xs={12}
+                            container
+                            justifyContent="left" 
+                            alignItems="center" 
+                            sx={{ mt: 2 }}
+                        >
+                        <Descripcion1
+                            text="Esta pantalla permite gestionar los itinerarios, incluyendo su creación, edición y eliminación, además de sincronizarlos con actividades y ciudades."
+                            sx={{ mt: 10 }}
+                        />
+                        </Grid>
                     </Grid>
 
                     {/* Botones de acción para mobile */}

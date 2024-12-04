@@ -34,6 +34,7 @@ import Navbar from './NavBar';
 import Footer from './Footer';
 import AdminNavbar from './Admin/AdminNavbar';
 import Title from './Utiles/Title';
+import Descripcion1 from './Utiles/Descripcion1'
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -138,6 +139,18 @@ const Countries = () => {
     setSelectedCountry((prev) => (prev === countryId ? null : countryId));
   };
 
+  const handleDeleteSelected = () => {
+    if (selectedCountry) {
+      handleDelete(selectedCountry);
+    }
+  };
+  
+  const getCountryName = (id) => {
+    const country = countries.find((country) => country.id === id);
+    return country ? country.name : 'Desconocido';
+  };
+  
+
   const MobileView = () => (
     <Grid container spacing={3}>
       {countries.map((country) => (
@@ -149,13 +162,13 @@ const Countries = () => {
               border: selectedCountry === country.id ? 2 : 0,
               borderColor: 'primary.main',
             }}
-            onClick={() => handleSelectionChange(country.id)}
+            onClick={() => handleSelectionChange(country.id)} // Este evento se dispara al hacer clic en el Card
           >
             <CardContent>
               <Stack direction="row" alignItems="center" spacing={2}>
                 <Radio
-                  checked={selectedCountry === country.id}
-                  onChange={() => handleSelectionChange(country.id)}
+                  checked={selectedCountry === country.id} // Marca el Radio cuando el país es seleccionado
+                  onChange={() => handleSelectionChange(country.id)} // Cambia la selección del país al hacer clic
                 />
                 <Typography variant="h6">{country.name}</Typography>
               </Stack>
@@ -172,6 +185,7 @@ const Countries = () => {
       ))}
     </Grid>
   );
+  
 
   const DesktopView = () => (
     <TableContainer component={Paper}>
@@ -210,71 +224,141 @@ const Countries = () => {
   return (
     <div>
       {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
-      <Box sx={{ padding: '20px' }}>
-        <Grid container spacing={3}>
+      <Box sx={{ padding: '10px' }}>
+        <Grid container spacing={1}>
           <Grid item xs={12}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-              <Title text="Gestión de Países" variant="h4" />
+            {isMobile ? (
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Title text="Gestión de Países" variant="h4" />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleOpen}
+                  startIcon={<AddIcon />}
+                >
+                  Nuevo País
+                </Button>
+              </Stack>
+            ) : (
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Title text="Gestión de Países" variant="h4" />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleOpen}
+                  startIcon={<AddIcon />}
+                >
+                  Nuevo País
+                </Button>
+              </Stack>
+            )}
+          </Grid>
+  
+          <Grid item xs={12} container justifyContent="left" alignItems="center" sx={{ mt: 2 }}>
+            <Descripcion1
+              text="Esta pantalla permite gestionar los países, incluyendo su creación, edición y eliminación."
+            />
+          </Grid>
+  
+          {isMobile && (
+            <Grid item xs={12}>
+              <Stack
+                direction="row"
+                spacing={2}
+                sx={{
+                  borderTop: 1,
+                  borderBottom: 1,
+                  borderColor: 'divider',
+                  py: 2,
+                  mb: 2,
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleEdit}
+                  disabled={!selectedCountry}
+                  startIcon={<EditIcon />}
+                  fullWidth
+                >
+                  Editar
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleDeleteSelected}
+                  disabled={!selectedCountry}
+                  startIcon={<DeleteIcon />}
+                  fullWidth
+                >
+                  Eliminar
+                </Button>
+              </Stack>
+            </Grid>
+          )}
+  
+          <Grid item xs={12}>
+            {isMobile ? (
+              <MobileView
+                countries={countries}
+                selectedCountry={selectedCountry}
+                handleSelectionChange={handleSelectionChange}
+              />
+            ) : (
+              <DesktopView
+                countries={countries}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+              />
+            )}
+          </Grid>
+  
+          <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+            <DialogTitle>{editMode ? 'Editar País' : 'Nuevo País'}</DialogTitle>
+            <DialogContent>
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid item xs={12}>
+                  <TextField
+                    name="name"
+                    label="Nombre"
+                    fullWidth
+                    value={currentCountry.name}
+                    onChange={handleChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    name="population"
+                    label="Población"
+                    type="number"
+                    fullWidth
+                    value={currentCountry.population}
+                    onChange={handleChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    name="region"
+                    label="Región"
+                    fullWidth
+                    value={currentCountry.region}
+                    onChange={handleChange}
+                  />
+                </Grid>
+              </Grid>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose}>Cancelar</Button>
               <Button
+                onClick={editMode ? handleUpdate : handleCreate}
                 variant="contained"
                 color="primary"
-                onClick={handleOpen}
-                startIcon={<AddIcon />}
               >
-                Nuevo País
+                {editMode ? 'Actualizar' : 'Crear'}
               </Button>
-            </Stack>
-          </Grid>
-          <Grid item xs={12}>
-            {isMobile ? <MobileView /> : <DesktopView />}
-          </Grid>
+            </DialogActions>
+          </Dialog>
         </Grid>
-
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>{editMode ? 'Editar País' : 'Nuevo País'}</DialogTitle>
-          <DialogContent>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  name="name"
-                  label="Nombre"
-                  fullWidth
-                  value={currentCountry.name}
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="population"
-                  label="Población"
-                  type="number"
-                  fullWidth
-                  value={currentCountry.population}
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="region"
-                  label="Región"
-                  fullWidth
-                  value={currentCountry.region}
-                  onChange={handleChange}
-                />
-              </Grid>
-            </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancelar</Button>
-            <Button
-              onClick={editMode ? handleUpdate : handleCreate}
-              variant="contained"
-              color="primary"
-            >
-              {editMode ? 'Actualizar' : 'Crear'}
-            </Button>
-          </DialogActions>
-        </Dialog>
       </Box>
       <Footer />
     </div>

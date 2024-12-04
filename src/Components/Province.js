@@ -10,6 +10,8 @@ import Navbar from './NavBar';
 import Footer from './Footer';
 import AdminNavbar from './Admin/AdminNavbar';
 import Title from './Utiles/Title';
+import Descripcion1 from './Utiles/Descripcion1';
+
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -252,27 +254,10 @@ const Province = () => {
   return (
     <div>
       {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
-      <Box sx={{ padding: '20px' }}>
-        <Grid container spacing={3}>
+      <Box sx={{ padding: '10px' }}>
+        <Grid container spacing={1}>
           <Grid item xs={12}>
             {isMobile ? (
-              // Vista mobile del encabezado
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography variant="h4">
-                  Gestión de Provincias
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleOpen}
-                  startIcon={<AddIcon />}
-                >
-                  Nueva Provincia
-                </Button>
-              </Stack>
-
-            ) : (
-              // Vista desktop del encabezado
               <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Title text="Gestión de Provincias" variant="h4" />
                 <Button
@@ -284,11 +269,27 @@ const Province = () => {
                   Nueva Provincia
                 </Button>
               </Stack>
-
+            ) : (
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Title text="Gestión de Provincias" variant="h4" />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleOpen}
+                  startIcon={<AddIcon />}
+                >
+                  Nueva Provincia
+                </Button>
+              </Stack>
             )}
           </Grid>
-
-          {/* Botones de acción para mobile */}
+          
+          <Grid item xs={12} container justifyContent="left" alignItems="center" sx={{ mt: 2 }}>
+            <Descripcion1
+              text="Esta pantalla permite gestionar las provincias, incluyendo su creación, edición y eliminación."
+            />
+          </Grid>
+  
           {isMobile && (
             <Grid item xs={12}>
               <Stack
@@ -299,7 +300,7 @@ const Province = () => {
                   borderBottom: 1,
                   borderColor: 'divider',
                   py: 2,
-                  mb: 2
+                  mb: 2,
                 }}
               >
                 <Button
@@ -325,7 +326,7 @@ const Province = () => {
               </Stack>
             </Grid>
           )}
-
+  
           <Grid item xs={12}>
             {isMobile ? (
               <MobileView
@@ -344,12 +345,9 @@ const Province = () => {
             )}
           </Grid>
         </Grid>
-
-        {/* Diálogo crear/editar provincia */}
+  
         <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>
-            {editMode ? 'Editar Provincia' : 'Nueva Provincia'}
-          </DialogTitle>
+          <DialogTitle>{editMode ? 'Editar Provincia' : 'Nueva Provincia'}</DialogTitle>
           <DialogContent>
             <Grid container spacing={2} sx={{ mt: 1 }}>
               <Grid item xs={12}>
@@ -393,11 +391,7 @@ const Province = () => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancelar</Button>
-            <Button
-              onClick={editMode ? handleUpdate : handleCreate}
-              variant="contained"
-              color="primary"
-            >
+            <Button onClick={editMode ? handleUpdate : handleCreate} variant="contained" color="primary">
               {editMode ? 'Actualizar' : 'Crear'}
             </Button>
           </DialogActions>
@@ -406,6 +400,6 @@ const Province = () => {
       <Footer />
     </div>
   );
-};
+};  
 
 export default Province;

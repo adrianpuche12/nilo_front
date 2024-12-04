@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Typography, useTheme } from '@mui/material';
 
-function Descripcion_1({ text, margin }) {
+function Descripcion1({ text, margin }) {
   const theme = useTheme();
 
   return (
@@ -26,13 +26,13 @@ function Descripcion_1({ text, margin }) {
   );
 }
 
-Descripcion_1.propTypes = {
+Descripcion1.propTypes = {
   text: PropTypes.string.isRequired, // Contenido de la descripción
   margin: PropTypes.string,           // Margen ajustable
 };
 
-Descripcion_1.defaultProps = {
+Descripcion1.defaultProps = {
   margin: '16px 0', // Margen predeterminado
 };
 
-export default Descripcion_1;
+export default Descripcion1;
