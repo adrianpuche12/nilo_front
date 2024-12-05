@@ -139,6 +139,7 @@ const UserProfile = () => {
                                     <Typography variant="body1" color="textSecondary" gutterBottom>
                                         {userProfile.phone}
                                     </Typography>
+                                    
                                     <GenericButton
                                         text="Cerrar"
                                         color="secondary"
@@ -148,8 +149,7 @@ const UserProfile = () => {
                                         text="Editar Perfil"
                                         color="primary"
                                         onClick={handleEdit}
-                                    />
-                                    
+                                    />                                   
                                 </>
                             ) : (
                                 <Grid container spacing={2}>
