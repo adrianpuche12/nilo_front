@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Navbar from '../NavBar';
 import Footer from '../Footer';
+import AdminNavbar from '../Admin/AdminNavbar';
+import { useAuth } from '../Auth/AuthContext';
 
 function AllUsers() {
   const navigate = useNavigate();
@@ -17,9 +19,11 @@ function AllUsers() {
     navigate(`/user/${id}`);
   };
 
+  const { roles } = useAuth();
+
   return (
     <div>
-      <Navbar />
+      {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
       <Box sx={{ padding: 4 }}>
         <Title text="Usuarios" />
         <Box

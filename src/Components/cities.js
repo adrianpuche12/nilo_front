@@ -10,6 +10,10 @@ import axios from 'axios';
 import { useAuth } from './Auth/AuthContext';
 import Navbar from './NavBar';
 import Footer from './Footer';
+import AdminNavbar from './Admin/AdminNavbar';
+import Title from './Utiles/Title';
+import Descripcion1 from './Utiles/Descripcion1';
+
 
 // Variables de entorno para URL y token
 const API_URL = process.env.REACT_APP_API_URL;
@@ -255,24 +259,37 @@ const Cities = () => {
     return province?.name || 'Provincia no encontrada';
   };
 
+  const { roles } = useAuth();
+
   return (
     <div>
-      <Navbar />
-      <Box sx={{ padding: '20px' }}>
-        <Grid container spacing={3}>
+      {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
+      <Box sx={{ padding: '10px' }}>
+        <Grid container spacing={1}>
           <Grid item xs={12}>
             {isMobile ? (
               // Vista mobile del encabezado
-              <Stack spacing={2}>
-                <Typography variant="h4">
-                  Gestión de Ciudades
-                </Typography>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                sx={{ marginBottom: '-40px', width: '100%' }}
+              >
+                <Title
+                  text="Gestión de Ciudades"
+                  variant="h4"
+                  sx={{
+                    marginBottom: '10px',
+                    textAlign: 'left',
+                    width: '100%',
+                  }}
+                />
                 <Button
                   variant="contained"
                   color="primary"
                   onClick={handleOpen}
                   startIcon={<AddIcon />}
-                  fullWidth
+                  sx={{ margin: 0 }}
                 >
                   Nueva Ciudad
                 </Button>
@@ -280,9 +297,7 @@ const Cities = () => {
             ) : (
               // Vista desktop del encabezado
               <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography variant="h4">
-                  Gestión de Ciudades
-                </Typography>
+                <Title text="Gestión de Ciudades" variant="h4" />
                 <Button
                   variant="contained"
                   color="primary"
@@ -293,8 +308,23 @@ const Cities = () => {
                 </Button>
               </Stack>
             )}
+            
+            {/* Componente de Descripción */}
+            <Grid
+              item
+              xs={12}
+              container
+              justifyContent="left" 
+              alignItems="center" 
+              sx={{ mt: 2 }}
+            >
+              <Descripcion1
+                text="Esta pantalla permite gestionar las ciudades relacionadas con los itinerarios y actividades. Aquí puede crear, editar o eliminar ciudades y asociarlas a una provincia."
+                sx={{ mt: 10 }}
+              />
+            </Grid>
           </Grid>
-
+  
           {/* Botones de acción para mobile */}
           {isMobile && (
             <Grid item xs={12}>
@@ -332,7 +362,7 @@ const Cities = () => {
               </Stack>
             </Grid>
           )}
-
+  
           <Grid item xs={12}>
             {isMobile ? (
               <MobileView
@@ -351,7 +381,7 @@ const Cities = () => {
             )}
           </Grid>
         </Grid>
-
+  
         {/* Diálogo para crear/editar ciudad */}
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>
@@ -413,6 +443,7 @@ const Cities = () => {
       <Footer />
     </div>
   );
+  
 };
 
 export default Cities;

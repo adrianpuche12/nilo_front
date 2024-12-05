@@ -20,6 +20,8 @@ import Cities from '../Components/cities';
 import Countries from '../Components/Countries';
 import UserProfile from '../Components/User/UserProfile'
 //import TripCities from '../Components/TripCities';
+import AdminHome from '../Components/Admin/AdminHome'; // Importar el componente AdminHome
+import AdminNavbar from '../Components/Admin/AdminNavbar';
 
 const AppRoutes = () => {
   return (
@@ -38,8 +40,11 @@ const AppRoutes = () => {
         <Route path="/province" element={<ProtectedRoute><Province /></ProtectedRoute>} />
         <Route path="/itineraries" element={<ProtectedRoute><Itineraries /></ProtectedRoute>} />
         <Route path="/cities" element={<ProtectedRoute><Cities /></ProtectedRoute>} />
-        {/*<Route path="/trip-cities" element={<ProtectedRoute><TripCities /></ProtectedRoute>} />*/}        
+        {/*<Route path="/trip-cities" element={<ProtectedRoute><TripCities /></ProtectedRoute>} />*/}   
+        <Route path="/admin/adminhome" element={<ProtectedRoute><AdminHome /></ProtectedRoute>} />
+        <Route path="/admin/adminnav" element={<ProtectedRoute><AdminNavbar /></ProtectedRoute>} />
         <Route path="*" element={<Navigate to="/" replace />} />
+
       </Routes>
     </AuthProvider>
   );

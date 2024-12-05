@@ -16,7 +16,7 @@ const darkTheme = createTheme({
     },
     text: {
       primary: '#e0e0e0', // Gris claro para el texto principal
-      secondary: '#bdbdbd', // Gris tenue para texto secundario
+      secondary: '#99BBDD', // Gris tenue para texto secundario
     },
   },
   components: {

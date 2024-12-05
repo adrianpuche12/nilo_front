@@ -16,7 +16,7 @@ const ItineraryDetailCard = ({ itinerary }) => {
       }}
     >
       <CardContent>
-        <Typography variant="h5" component="div" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+        <Typography variant="h6" component="div" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
           Detalles del Itinerario
         </Typography>
         <Box sx={{ mt: 2 }}>
