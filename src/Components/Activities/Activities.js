@@ -11,7 +11,10 @@ import Navbar from '../NavBar';
 import Footer from '../Footer';
 import AdminNavbar from '../Admin/AdminNavbar';
 import Title from '../Utiles/Title';
-import Descripcion1 from '../Utiles/Descripcion1'
+import Descripcion1 from '../Utiles/Descripcion1';
+import Subtitulo1 from '../Utiles/Subtitulo1';
+import GenericButton from '../Utiles/GenericButton';
+
 
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -332,46 +335,36 @@ const Activities = () => {
               <Stack spacing={2}>
                 <Title text ="Gestión de Actividades" variant="h4"/>
                 <Stack direction="row" spacing={2} sx={{ width: '100%' }}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleOpen}
-                    startIcon={<AddIcon />}
-                    fullWidth
-                  >
-                    Nueva Actividad
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={handleBatchOpen}
-                    startIcon={<PlaylistAddIcon />}
-                    fullWidth
-                  >
-                    Crear varias actividades
-                  </Button>
+                <GenericButton
+                  text="Nueva Actividad"
+                  color="primary"
+                  startIcon={<AddIcon />}
+                  onClick={handleOpen}
+                />
+                <GenericButton
+                  text="Crear varias actividades"
+                  color="secondary"
+                  onClick={handleBatchOpen}
+                  startIcon={<PlaylistAddIcon />}
+                />
                 </Stack>
               </Stack>
             ) : (
               // Vista desktop del encabezado
               <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Title text ="Gestión de Actividades" variant="h4"/>
-                  <Button
-                    variant="contained"
+                  <GenericButton
+                    text="Nueva Actividad"
                     color="primary"
-                    onClick={handleOpen}
                     startIcon={<AddIcon />}
-                  >
-                    Nueva Actividad
-                  </Button>
-                  <Button
-                    variant="contained"
+                    onClick={handleOpen}
+                  />
+                  <GenericButton
+                    text="Crear varias actividades"
                     color="secondary"
                     onClick={handleBatchOpen}
                     startIcon={<PlaylistAddIcon />}
-                  >
-                    Crear varias actividades
-                  </Button>                
+                  />                
               </Stack>
             )}
 
@@ -405,26 +398,22 @@ const Activities = () => {
                   mb: 2
                 }}
               >
-                <Button
-                  variant="contained"
+                <GenericButton
+                  text="Editar"
                   color="primary"
+                  startIcon={<EditIcon />}
                   onClick={handleEditSelected}
                   disabled={!selectedActivity}
-                  startIcon={<EditIcon />}
                   fullWidth
-                >
-                  Editar
-                </Button>
-                <Button
-                  variant="contained"
+                />
+                <GenericButton
+                  text="Eliminar"
                   color="error"
+                  startIcon={<DeleteIcon />}
                   onClick={handleDeleteSelected}
                   disabled={!selectedActivity}
-                  startIcon={<DeleteIcon />}
                   fullWidth
-                >
-                  Eliminar
-                </Button>
+                />
               </Stack>
             </Grid>
           )}
@@ -452,7 +441,7 @@ const Activities = () => {
         {/* Diálogo crear/editar actividad individual */}
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>
-            {editMode ? 'Editar Actividad' : 'Nueva Actividad'}
+            {editMode ? <Title text="Editar País" /> : <Title text="Nuevo País" />}
           </DialogTitle>
           <DialogContent>
             <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -500,14 +489,18 @@ const Activities = () => {
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Cancelar</Button>
-            <Button
+            <GenericButton
+              text="Cancelar"
+              color="secondary" 
+              onClick={handleClose}
+              fullWidth
+            />
+            <GenericButton
+              text={editMode ? 'Actualizar' : 'Crear'}
+              color="primary" 
               onClick={editMode ? handleUpdate : handleCreate}
-              variant="contained"
-              color="primary"
-            >
-              {editMode ? 'Actualizar' : 'Crear'}
-            </Button>
+              fullWidth
+            />
           </DialogActions>
         </Dialog>
 
@@ -518,7 +511,9 @@ const Activities = () => {
           maxWidth="md"
           fullWidth
         >
-          <DialogTitle>Nuevas Actividades</DialogTitle>
+          <DialogTitle>
+            <Title text="Nuevas Actividades"/>
+          </DialogTitle>
           <DialogContent>
             <Grid container spacing={2} sx={{ mt: 1 }}>
               <Grid item xs={12} sm={4}>
@@ -563,20 +558,17 @@ const Activities = () => {
                 </TextField>
               </Grid>
               <Grid item xs={12}>
-                <Button
-                  variant="contained"
+              <GenericButton
+                  text="Añadir a la lista"
                   color="primary"
-                  onClick={handleAddToBatch}
                   startIcon={<AddIcon />}
-                  fullWidth
-                >
-                  Añadir a la lista
-                </Button>
+                  onClick={handleAddToBatch}
+                />                
               </Grid>
 
               <Grid item xs={12}>
                 <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                  Actividades en la Lista ({batchActivities.length})
+                  <Subtitulo1 text="Actividades en la Lista"/> ({batchActivities.length})
                 </Typography>
                 <List>
                   {batchActivities.map((activity, index) => (
@@ -601,15 +593,19 @@ const Activities = () => {
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleBatchClose}>Cancelar</Button>
-            <Button
-              onClick={handleSaveBatch}
-              variant="contained"
+            <GenericButton
+              text="Cancelar"
+              color="secondary"
+              startIcon={<AddIcon />}
+              onClick={handleBatchClose}
+            />   
+            <GenericButton
+              text="Guardar actividades"
               color="primary"
+              startIcon={<AddIcon />}
+              onClick={handleSaveBatch}
               disabled={batchActivities.length === 0}
-            >
-              Guardar actividades
-            </Button>
+            /> 
           </DialogActions>
         </Dialog>
       </Box>

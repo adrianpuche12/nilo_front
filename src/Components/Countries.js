@@ -1,29 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Typography,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  MenuItem,
-  Grid,
-  IconButton,
-  useTheme,
-  useMediaQuery,
-  Card,
-  CardContent,
-  Stack,
-  Box,
-  Radio,
+import {  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button,
+          Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Grid, IconButton, useTheme,
+          useMediaQuery, Card, CardContent, Stack, Box, Radio,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -35,6 +13,7 @@ import Footer from './Footer';
 import AdminNavbar from './Admin/AdminNavbar';
 import Title from './Utiles/Title';
 import Descripcion1 from './Utiles/Descripcion1'
+import GenericButton from './Utiles/GenericButton';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -230,26 +209,22 @@ const Countries = () => {
             {isMobile ? (
               <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Title text="Gestión de Países" variant="h4" />
-                <Button
-                  variant="contained"
+                <GenericButton
+                  text="Nuevo País"
                   color="primary"
-                  onClick={handleOpen}
                   startIcon={<AddIcon />}
-                >
-                  Nuevo País
-                </Button>
+                  onClick={handleOpen}
+               />
               </Stack>
             ) : (
               <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Title text="Gestión de Países" variant="h4" />
-                <Button
-                  variant="contained"
+                <GenericButton
+                  text="Nuevo País"
                   color="primary"
-                  onClick={handleOpen}
                   startIcon={<AddIcon />}
-                >
-                  Nuevo País
-                </Button>
+                  onClick={handleOpen}
+               />
               </Stack>
             )}
           </Grid>
@@ -273,26 +248,22 @@ const Countries = () => {
                   mb: 2,
                 }}
               >
-                <Button
-                  variant="contained"
+                <GenericButton
+                  text="Editar"
                   color="primary"
+                  startIcon={<EditIcon />}
                   onClick={handleEdit}
                   disabled={!selectedCountry}
-                  startIcon={<EditIcon />}
                   fullWidth
-                >
-                  Editar
-                </Button>
-                <Button
-                  variant="contained"
+                />
+                <GenericButton
+                  text="Eliminar"
                   color="error"
+                  startIcon={<DeleteIcon />}
                   onClick={handleDeleteSelected}
                   disabled={!selectedCountry}
-                  startIcon={<DeleteIcon />}
                   fullWidth
-                >
-                  Eliminar
-                </Button>
+                />
               </Stack>
             </Grid>
           )}
@@ -314,7 +285,10 @@ const Countries = () => {
           </Grid>
   
           <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-            <DialogTitle>{editMode ? 'Editar País' : 'Nuevo País'}</DialogTitle>
+            <DialogTitle>
+              {editMode ? <Title text="Editar País" /> : <Title text="Nuevo País" />}
+            </DialogTitle>
+
             <DialogContent>
               <Grid container spacing={2} sx={{ mt: 1 }}>
                 <Grid item xs={12}>
@@ -348,14 +322,18 @@ const Countries = () => {
               </Grid>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose}>Cancelar</Button>
-              <Button
-                onClick={editMode ? handleUpdate : handleCreate}
-                variant="contained"
-                color="primary"
-              >
-                {editMode ? 'Actualizar' : 'Crear'}
-              </Button>
+            <GenericButton
+              text="Cancelar"
+              color="secondary" 
+              onClick={handleClose}
+              fullWidth
+            />
+            <GenericButton
+              text={editMode ? 'Actualizar' : 'Crear'}
+              color="primary" 
+              onClick={editMode ? handleUpdate : handleCreate}
+              fullWidth
+            />
             </DialogActions>
           </Dialog>
         </Grid>

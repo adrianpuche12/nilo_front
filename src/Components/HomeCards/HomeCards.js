@@ -51,6 +51,7 @@ const HomeCards = () => {
             image={card.image}
             description={card.description}
             actionLabel={card.actionLabel}
+            //onActionClick={() => console.log(`Clicked on ${card.title}`)} // Acción del botón
           />
         </SwiperSlide>
       ))}

@@ -3,6 +3,9 @@ import { Paper, Typography, Avatar, Grid, Button, Box, TextField, CircularProgre
 import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
 import Navbar from '../NavBar';
+import GenericButton from '../Utiles/GenericButton';
+import { useNavigate } from 'react-router-dom';
+
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -22,6 +25,9 @@ const UserProfile = () => {
         email: '',
         phone: ''
     });
+
+
+    const navigate = useNavigate();
 
     const getAxiosConfig = () => ({
         headers: {
@@ -67,6 +73,12 @@ const UserProfile = () => {
     const handleCancel = () => {
         setIsEditing(false);
         setEditForm(userProfile);
+    };
+
+    const handleClose = () => {
+    setIsEditing(false);
+    setEditForm(userProfile);
+    navigate('/'); // Redirige a la ruta Home ("/")
     };
 
     const handleSaveChanges = async () => {
@@ -127,14 +139,17 @@ const UserProfile = () => {
                                     <Typography variant="body1" color="textSecondary" gutterBottom>
                                         {userProfile.phone}
                                     </Typography>
-                                    <Button
-                                        variant="contained"
+                                    <GenericButton
+                                        text="Cerrar"
+                                        color="secondary"
+                                        onClick={handleClose}                                        
+                                    />
+                                    <GenericButton
+                                        text="Editar Perfil"
                                         color="primary"
                                         onClick={handleEdit}
-                                        sx={{ mt: 2 }}
-                                    >
-                                        Editar Perfil
-                                    </Button>
+                                    />
+                                    
                                 </>
                             ) : (
                                 <Grid container spacing={2}>
@@ -170,21 +185,18 @@ const UserProfile = () => {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Box display="flex" justifyContent="flex-end" gap={2}>
-                                            <Button
-                                                variant="outlined"
-                                                onClick={handleCancel}
+                                            <GenericButton
+                                                text="Cancelar"
+                                                color="secondary"
                                                 disabled={loading}
-                                            >
-                                                Cancelar
-                                            </Button>
-                                            <Button
-                                                variant="contained"
+                                                onClick={handleCancel}
+                                            />
+                                            <GenericButton
+                                                text="Guardar Cambios"
                                                 color="primary"
                                                 onClick={handleSaveChanges}
                                                 disabled={loading}
-                                            >
-                                                {loading ? <CircularProgress size={24} /> : 'Guardar Cambios'}
-                                            </Button>
+                                            />
                                         </Box>
                                     </Grid>
                                 </Grid>

@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
 import ItineraryDetailCard from '../Itineraries/ItineraryDetailCard';
 import Title from '../Utiles/Title';
+import Subtitulo1 from '../Utiles/Subtitulo1'
+import GenericButton from '../Utiles/GenericButton';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -89,21 +91,21 @@ const ItinerariesCard = () => {
             <Card sx={{ maxWidth: 400, borderRadius: 3, boxShadow: 2 }}>
               <CardContent>
                 <Box sx={{ textAlign: 'center' }}>
-                  <Typography variant="h6">{itinerary.name}</Typography>
+                  <Typography>
+                    <Subtitulo1 text={itinerary.name} align="center"/>
+                  </Typography>
                   <Divider sx={{ my: 1 }} />
                   <Typography variant="body2">{getCityName(itinerary.cityId)}</Typography>
                   <Typography variant="body2">{itinerary.description}</Typography>
                   <Typography variant="body2" sx={{ mb: 2 }}>
                     {itinerary.activities.map(activity => activity.name).join(', ')}
                   </Typography>
-                  <Button
+                  <GenericButton
+                    text="Ver más"
                     variant="contained"
-                    color="primary"
-                    fullWidth
-                    onClick={() => handleViewMore(itinerary)}
-                  >
-                    Ver más
-                  </Button>
+                    color="info"
+                    onClick={() => handleViewMore(itinerary)} // Al hacer clic, muestra el detalle en el modal
+                  /> 
                 </Box>
               </CardContent>
             </Card>
@@ -130,9 +132,12 @@ const ItinerariesCard = () => {
           {selectedItinerary && <ItineraryDetailCard itinerary={selectedItinerary} />}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModal} color="primary">
-            Cerrar
-          </Button>
+        <GenericButton
+            text="Cerrar"
+            variant="contained"
+            color="secondary"
+            onClick={handleCloseModal}
+          /> 
         </DialogActions>
       </Dialog>
     </div>

@@ -14,6 +14,7 @@ import Navbar from '../NavBar';
 import Footer from '../Footer';
 import AdminNavbar from '../Admin/AdminNavbar';
 import { useAuth } from '../Auth/AuthContext';
+import GenericButton from '../Utiles/GenericButton';
 
 function UserDetail() {
   const { id } = useParams();
@@ -148,19 +149,11 @@ function UserDetail() {
 
           {/* Botón Cerrar */}
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', padding: 2 }}>
-            <Button
+            <GenericButton
+              text="Cerrar"
+              color="secondary"
               onClick={handleClose}
-              sx={{
-                color: '#1976d2', // Texto en azul
-                fontWeight: 'bold',
-                textTransform: 'none', // Texto sin mayúsculas automáticas
-                '&:hover': {
-                  backgroundColor: '#e3f2fd', // Fondo azul claro al pasar el cursor
-                },
-              }}
-            >
-              Cerrar
-            </Button>
+            />
           </Box>
         </Card>
       </Box>

@@ -1,21 +1,25 @@
 // src/components/HomeCards/CardItem.js
 
-// Representacion de una tarjeta individual
-
 import React from 'react';
-import { Card, CardContent, CardMedia, Typography, Button } from '@mui/material';
+import { Card, CardContent, CardMedia, Typography } from '@mui/material';
+import GenericButton from '../Utiles/GenericButton'; 
+import Subtitulo1 from '../Utiles/Subtitulo1';
 
-const CardItem = ({ title, image, description, actionLabel }) => (
-  <Card sx={{ maxWidth: 470, margin: 2 }}> 
+const CardItem = ({ title, image, description, actionLabel, onActionClick }) => (
+  <Card sx={{ maxWidth: 470, margin: 2 }}>
     <CardMedia component="img" height="140" image={image} alt={title} />
     <CardContent>
-      <Typography variant="h5" component="div">
-        {title}
-      </Typography>
+        <Subtitulo1 text= {title} />
       <Typography variant="body2" color="text.secondary">
         {description}
       </Typography>
-      <Button size="small">{actionLabel}</Button>      
+      {/* Usar GenericButton */}
+      <GenericButton
+        text={actionLabel}          
+        color="info"              
+        onClick={onActionClick}      
+        fullWidth={false}            
+      />
     </CardContent>
   </Card>
 );

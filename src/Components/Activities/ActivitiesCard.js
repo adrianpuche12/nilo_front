@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
 import ActivityDetailCard from './ActivityDetailCard'; 
 import Title from '../Utiles/Title';
+import Subtitulo1 from '../Utiles/Subtitulo1'
+import GenericButton from '../Utiles/GenericButton';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -89,21 +91,21 @@ const ActivitiesCard = () => {
             <Card sx={{ maxWidth: 400, borderRadius: 3, boxShadow: 2 }}>
               <CardContent>
                 <Box sx={{ textAlign: 'center' }}>
-                  <Typography variant="h6">{activity.name}</Typography>
+                <Typography>
+                    <Subtitulo1 text={activity.name} align="center"/>
+                  </Typography>
                   <Divider sx={{ my: 1 }} />
                   <Typography variant="body2">{getCityName(activity.cityId)}</Typography>
                   <Typography variant="body2">{activity.type}</Typography>
                   <Typography variant="body2" sx={{ mb: 2 }}>
                     {activity.duration} min
                   </Typography>
-                  <Button
+                  <GenericButton
+                    text="Ver más"
                     variant="contained"
-                    color="primary"
-                    fullWidth
+                    color="info"
                     onClick={() => handleViewMore(activity)} // Al hacer clic, muestra el detalle en el modal
-                  >
-                    Ver más
-                  </Button>
+                  />                  
                 </Box>
               </CardContent>
             </Card>
@@ -130,9 +132,12 @@ const ActivitiesCard = () => {
           {selectedActivity && <ActivityDetailCard activity={selectedActivity} />}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModal} color="primary">
-            Cerrar
-          </Button>
+          <GenericButton
+            text="Cerrar"
+            variant="contained"
+            color="secondary"
+            onClick={handleCloseModal}
+          /> 
         </DialogActions>
       </Dialog>
     </div>
