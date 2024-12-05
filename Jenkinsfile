@@ -1,7 +1,9 @@
 pipeline {
     agent {
         label 'node'}
-
+    tools{
+        ('22.12.0')
+    }
     environment {
         REACT_APP_NILO = "mi-react-app"
         DOCKER_IMAGE = "miusuario/mi-react-app"
