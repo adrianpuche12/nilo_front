@@ -20,11 +20,9 @@ import UserProfile from '../Components/User/UserProfile'
 //import TripCities from '../Components/TripCities';
 import AdminHome from '../Components/Admin/AdminHome'; 
 import AdminNavbar from '../Components/Admin/AdminNavbar';
-<<<<<<< HEAD
 import UserReservations from '../Components/User/UserReservations';
-=======
 import PromotionDetail from '../Components/Promotions/PromotionDetail';
->>>>>>> bae4d5a70254468a168e60b4c97508ead89c63fd
+
 
 const AppRoutes = () => {
   return (

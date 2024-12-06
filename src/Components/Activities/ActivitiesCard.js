@@ -104,17 +104,9 @@ const ActivitiesCard = () => {
             variant="contained"
             color="secondary"
             onClick={handleCloseModal}
-<<<<<<< HEAD
+
           /> 
-        <GenericButton
-            text="Reservar"
-            variant="contained"
-            color="primary"
-           // onClick={}
-          /> 
-=======
-          />
->>>>>>> bae4d5a70254468a168e60b4c97508ead89c63fd
+       
         </DialogActions>
       </Dialog>
     </ActivityCarousel>

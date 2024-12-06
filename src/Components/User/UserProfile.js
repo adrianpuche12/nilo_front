@@ -5,6 +5,7 @@ import { useAuth } from '../Auth/AuthContext';
 import Navbar from '../NavBar';
 import GenericButton from '../Utiles/GenericButton';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../Footer';
 
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -206,6 +207,7 @@ const UserProfile = () => {
                     </Grid>
                 </Paper>
             </Box>
+          <Footer />
         </div>
     );
 };
