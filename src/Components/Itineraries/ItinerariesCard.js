@@ -178,8 +178,7 @@ const ItinerariesCard = () => {
           <GenericButton
             text="Reservar"
             variant="contained"
-            color="primary"
-            fullWidth
+            color="primary"            
           />
         </DialogActions>
       </Dialog>
