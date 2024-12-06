@@ -1,128 +1,117 @@
-import React, { useState } from 'react';
-import { Container, Card, CardContent, Tabs, Tab, Box, useTheme } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Container, Box } from '@mui/material';
 import { useAuth } from './Auth/AuthContext';
-import ActivitiesList from './Activities/ActivitiesCard';
-import ItinerariesList from './Itineraries/ItinerariesCard';
-import Title from './Utiles/Title';
+import ActivitiesCard from './Activities/ActivitiesCard';
+import ItinerariesCard from './Itineraries/ItinerariesCard';
 import HomeCards from './HomeCards/HomeCards';
 import Navbar from './NavBar';
 import Footer from './Footer';
+import Subtitulo_1 from './Utiles/Subtitulo1';
+import Descripcion_1 from './Utiles/Descripcion1';
+import Title from './Utiles/Title'
+import PromotionsCard from './Promotions/PromotionCard';
 
+const sectionStyles = {
+  wrapper: {
+    mb: 8,
+  },
+  headerContainer: {
+    maxWidth: '800px',
+    mx: 'auto',
+    mb: 4,
+    textAlign: 'center',
+  },
+  description: {
+    fontSize: '1.1rem',
+    color: 'text.secondary',
+    lineHeight: 1.6,
+    px: { xs: 2, sm: 4 },
+    maxWidth: '650px',
+    mx: 'auto',
+  }
+};
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`tabpanel-${index}`}
-      aria-labelledby={`tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: { xs: 2, md: 3 } }}>
-          {children}
-        </Box>
-      )}
-    </div>
-  );
-}
-
-function Home() {
-  const [value, setValue] = useState(0);
-  const theme = useTheme();
+const Home = () => {
   const { logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
 
   return (
     <>
       <Navbar />
       <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
-        <Title text="Componente Home" />
-
-        {/* Aquí se agrega el componente HomeCards */}
-        <HomeCards />
-
-        <Card variant="outlined">
-          <Box sx={{
-            borderBottom: 1,
-            borderColor: 'divider',
-            bgcolor: theme.palette.background.default,
-            borderTopLeftRadius: 8,
-            borderTopRightRadius: 8,
-          }}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              aria-label="navigation tabs"
-              centered
-              sx={{
-                '& .MuiTabs-indicator': {
-                  height: 3,
-                  borderRadius: '3px 3px 0 0',
-                },
-                '& .MuiTab-root': {
-                  textTransform: 'none',
-                  fontSize: '1rem',
-                  fontWeight: 500,
-                  minHeight: 56,
-                  py: 2,
-                  px: 4,
-                  color: theme.palette.text.secondary,
-                  '&.Mui-selected': {
-                    color: theme.palette.primary.main,
-                    fontWeight: 600,
-                  },
-                  '&:hover': {
-                    color: theme.palette.primary.main,
-                    opacity: 0.8,
-                  },
-                }
-              }}
-            >
-              <Tab
-                label="Actividades"
-                id="tab-0"
-                aria-controls="tabpanel-0"
+        {/* Paquetes Carrusel */}
+        <Box sx={sectionStyles.wrapper}>
+          <Box sx={sectionStyles.headerContainer}>
+            <Title
+              text="Conoce nuestros paquetes de Viaje"
+            />
+            <Box sx={sectionStyles.description}>
+              <Descripcion_1
+                text="Explora nuestros paquetes exclusivos para hacer tu próximo viaje inolvidable."
+                margin="0"
               />
-              <Tab
-                label="Itinerarios"
-                id="tab-1"
-                aria-controls="tabpanel-1"
-              />
-            </Tabs>
+            </Box>
           </Box>
+          <HomeCards />
+        </Box>
 
-          <CardContent sx={{
-            p: 0,
-            '&:last-child': {
-              pb: 0
-            },
-            backgroundColor: theme.palette.background.default
-          }}>
-            <TabPanel value={value} index={0}>
-              <ActivitiesList />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              <ItinerariesList />
-            </TabPanel>
-          </CardContent>
-        </Card>
+        {/* Promociones Carrusel */}
+        <Box sx={sectionStyles.wrapper}>
+          <Box sx={sectionStyles.headerContainer}>
+            <Subtitulo_1
+              text="Promociones Especiales"
+              color="primary.main"
+              align="center"
+              margin="0 0 16px 0"
+            />
+            <Descripcion_1
+              text="Descubre nuestras mejores ofertas y aprovecha descuentos exclusivos."
+              margin="0 0 24px 0"
+            />
+            <PromotionsCard />
+          </Box>
+        </Box>
+
+        {/* Actividades Carrusel */}
+        <Box sx={sectionStyles.wrapper}>
+          <Box sx={sectionStyles.headerContainer}>
+            <Subtitulo_1
+              text="Actividades Destacadas"
+              color="primary.main"
+              align="center"
+              margin="0 0 1rem 0"
+            />
+            <Box sx={sectionStyles.description}>
+              <Descripcion_1
+                text="Descubre experiencias únicas y emocionantes en cada destino. Desde aventuras al aire libre hasta tours culturales."
+                margin="0"
+              />
+            </Box>
+          </Box>
+          <ActivitiesCard />
+        </Box>
+
+        {/* Itinerarios Carrusel */}
+        <Box sx={sectionStyles.wrapper}>
+          <Box sx={sectionStyles.headerContainer}>
+            <Subtitulo_1
+              text="Itinerarios Recomendados"
+              color="primary.main"
+              align="center"
+              margin="0 0 1rem 0"
+            />
+            <Box sx={sectionStyles.description}>
+              <Descripcion_1
+                text="Planes completos y cuidadosamente diseñados para aprovechar al máximo tu tiempo. Encuentra el itinerario perfecto para tu próxima aventura."
+                margin="0"
+              />
+            </Box>
+          </Box>
+          <ItinerariesCard />
+        </Box>
       </Container>
       <Footer />
     </>
   );
-}
+};
 
 export default Home;
