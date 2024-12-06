@@ -19,6 +19,7 @@ import { ThemeContext } from './Utiles/Theme/ThemeProvider';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import HomeIcon from '@mui/icons-material/Home'; // Importamos el ícono de "Home"
+import GenericButton from './Utiles/GenericButton'
 
 const Navbar = () => {
   const { logout } = useAuth();
@@ -40,6 +41,7 @@ const Navbar = () => {
     { to: "/province", label: "Province" },
     { to: "/itineraries", label: "Itineraries" },
     { to: "/cities", label: "Cities" },
+    { to: "/userReservations", label: "Reservas" },
   ];
 
   const handleDrawerToggle = () => {
@@ -62,27 +64,26 @@ const Navbar = () => {
         </ListItem>
       ))}
       <ListItem>
-        <Button
+        
+        <GenericButton
+          text="Profile"
           component={NavLink}
           to="/profile"
           color="inherit"
           fullWidth
           sx={{ justifyContent: 'flex-start' }}
-          startIcon={<User />}
-        >
-          Profile
-        </Button>
-      </ListItem>
-      <ListItem>
-        <Button
+          startIcon={<User />}            
+        />         
+        </ListItem>
+        <ListItem>
+        <GenericButton
+          text="Logout"
           color="inherit"
-          fullWidth
-          onClick={handleLogout}
-          sx={{ justifyContent: 'flex-start' }}
-          startIcon={<LogOut />}
-        >
-          Logout
-        </Button>
+            fullWidth
+            onClick={handleLogout}
+            sx={{ justifyContent: 'flex-start' }}
+            startIcon={<LogOut />}            
+        />         
       </ListItem>
     </List>
   );

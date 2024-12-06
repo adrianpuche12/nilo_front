@@ -132,11 +132,18 @@ const ActivitiesCard = () => {
           {selectedActivity && <ActivityDetailCard activity={selectedActivity} />}
         </DialogContent>
         <DialogActions>
-          <GenericButton
+          
+        <GenericButton
             text="Cerrar"
             variant="contained"
             color="secondary"
             onClick={handleCloseModal}
+          /> 
+        <GenericButton
+            text="Reservar"
+            variant="contained"
+            color="primary"
+           // onClick={}
           /> 
         </DialogActions>
       </Dialog>

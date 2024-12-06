@@ -138,18 +138,19 @@ const UserProfile = () => {
                                     </Typography>
                                     <Typography variant="body1" color="textSecondary" gutterBottom>
                                         {userProfile.phone}
-                                    </Typography>
-                                    
-                                    <GenericButton
-                                        text="Cerrar"
-                                        color="secondary"
-                                        onClick={handleClose}                                        
-                                    />
-                                    <GenericButton
-                                        text="Editar Perfil"
-                                        color="primary"
-                                        onClick={handleEdit}
-                                    />                                   
+                                    </Typography>                                    
+                                    <Box display="flex" gap={2}> 
+                                        <GenericButton
+                                            text="Cerrar"
+                                            color="secondary"
+                                            onClick={handleClose}
+                                        />
+                                        <GenericButton
+                                            text="Editar Perfil"
+                                            color="primary"
+                                            onClick={handleEdit}
+                                        />
+                                    </Box>                                 
                                 </>
                             ) : (
                                 <Grid container spacing={2}>

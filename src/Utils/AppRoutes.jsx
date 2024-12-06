@@ -17,8 +17,9 @@ import Cities from '../Components/cities';
 import Countries from '../Components/Countries';
 import UserProfile from '../Components/User/UserProfile'
 //import TripCities from '../Components/TripCities';
-import AdminHome from '../Components/Admin/AdminHome'; // Importar el componente AdminHome
+import AdminHome from '../Components/Admin/AdminHome'; 
 import AdminNavbar from '../Components/Admin/AdminNavbar';
+import UserReservations from '../Components/User/UserReservations';
 
 const AppRoutes = () => {
   return (
@@ -40,6 +41,7 @@ const AppRoutes = () => {
         {/*<Route path="/trip-cities" element={<ProtectedRoute><TripCities /></ProtectedRoute>} />*/}   
         <Route path="/admin/adminhome" element={<ProtectedRoute><AdminHome /></ProtectedRoute>} />
         <Route path="/admin/adminnav" element={<ProtectedRoute><AdminNavbar /></ProtectedRoute>} />
+        <Route path="/userReservations" element={<ProtectedRoute><UserReservations /></ProtectedRoute>} />
         <Route path="*" element={<Navigate to="/" replace />} />
 
       </Routes>

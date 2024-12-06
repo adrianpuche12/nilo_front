@@ -132,11 +132,18 @@ const ItinerariesCard = () => {
           {selectedItinerary && <ItineraryDetailCard itinerary={selectedItinerary} />}
         </DialogContent>
         <DialogActions>
+          
         <GenericButton
             text="Cerrar"
             variant="contained"
             color="secondary"
             onClick={handleCloseModal}
+          /> 
+        <GenericButton
+            text="Reservar"
+            variant="contained"
+            color="primary"
+           // onClick={}
           /> 
         </DialogActions>
       </Dialog>
