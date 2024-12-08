@@ -6,9 +6,9 @@ import ItinerariesCard from './Itineraries/ItinerariesCard';
 import HomeCards from './HomeCards/HomeCards';
 import Navbar from './NavBar';
 import Footer from './Footer';
-import Subtitulo_1 from './Utiles/Subtitulo1';
-import Descripcion_1 from './Utiles/Descripcion1';
-import Title from './Utiles/Title'
+import Subtitulo1 from './Utiles/Subtitulo1';
+import Descripcion1 from './Utiles/Descripcion1';
+import Title from './Utiles/Title';
 import PromotionsCard from './Promotions/PromotionCard';
 
 const sectionStyles = {
@@ -28,7 +28,34 @@ const sectionStyles = {
     px: { xs: 2, sm: 4 },
     maxWidth: '650px',
     mx: 'auto',
-  }
+  },
+  carouselWrapper: {
+    position: 'relative',
+    marginBottom: { xs: 4, sm: 6 }, // Ajusta la distancia globalmente
+  },
+  pagination: {
+    marginTop: '-10px', // Reduce la distancia entre el carrusel y los puntos
+    display: 'flex',
+    justifyContent: 'center',
+  },
+};
+
+// Estilos unificados para las cards
+const cardStyles = {
+  maxWidth: 300, // Tamaño fijo para ancho máximo
+  height: 400, // Altura fija
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  mx: 'auto', // Centramos cada card en su carrusel
+  boxShadow: 3, // Añadimos sombra para uniformidad
+  borderRadius: 2, // Bordes redondeados
+  p: 2, // Espaciado interno
+  '@media (max-width: 600px)': {
+    maxWidth: '100%', // Ajuste responsivo para móvil
+    height: 'auto', // Altura dinámica
+  },
 };
 
 const Home = () => {
@@ -41,72 +68,78 @@ const Home = () => {
         {/* Paquetes Carrusel */}
         <Box sx={sectionStyles.wrapper}>
           <Box sx={sectionStyles.headerContainer}>
-            <Title
-              text="Conoce nuestros paquetes de Viaje"
-            />
+            <Title text="Conoce nuestros paquetes de Viaje" />
             <Box sx={sectionStyles.description}>
-              <Descripcion_1
+              <Descripcion1
                 text="Explora nuestros paquetes exclusivos para hacer tu próximo viaje inolvidable."
                 margin="0"
               />
             </Box>
           </Box>
-          <HomeCards />
+          <Box sx={sectionStyles.carouselWrapper}>
+            <HomeCards sx={cardStyles} />
+          </Box>
         </Box>
 
         {/* Promociones Carrusel */}
         <Box sx={sectionStyles.wrapper}>
           <Box sx={sectionStyles.headerContainer}>
-            <Subtitulo_1
+            <Subtitulo1
               text="Promociones Especiales"
               color="primary.main"
               align="center"
               margin="0 0 16px 0"
             />
-            <Descripcion_1
+            <Descripcion1
               text="Descubre nuestras mejores ofertas y aprovecha descuentos exclusivos."
               margin="0 0 24px 0"
             />
-            <PromotionsCard />
+          </Box>
+          <Box sx={sectionStyles.carouselWrapper}>
+            <PromotionsCard sx={cardStyles} />
           </Box>
         </Box>
 
         {/* Actividades Carrusel */}
         <Box sx={sectionStyles.wrapper}>
           <Box sx={sectionStyles.headerContainer}>
-            <Subtitulo_1
+            <Subtitulo1
               text="Actividades Destacadas"
               color="primary.main"
               align="center"
               margin="0 0 1rem 0"
             />
             <Box sx={sectionStyles.description}>
-              <Descripcion_1
+              <Descripcion1
                 text="Descubre experiencias únicas y emocionantes en cada destino. Desde aventuras al aire libre hasta tours culturales."
                 margin="0"
               />
             </Box>
           </Box>
-          <ActivitiesCard />
+          <Box sx={sectionStyles.carouselWrapper}>
+            <ActivitiesCard sx={cardStyles} />
+          </Box>
         </Box>
 
         {/* Itinerarios Carrusel */}
         <Box sx={sectionStyles.wrapper}>
           <Box sx={sectionStyles.headerContainer}>
-            <Subtitulo_1
+            <Subtitulo1
               text="Itinerarios Recomendados"
               color="primary.main"
               align="center"
               margin="0 0 1rem 0"
             />
             <Box sx={sectionStyles.description}>
-              <Descripcion_1
+              <Descripcion1
                 text="Planes completos y cuidadosamente diseñados para aprovechar al máximo tu tiempo. Encuentra el itinerario perfecto para tu próxima aventura."
                 margin="0"
               />
             </Box>
           </Box>
-          <ItinerariesCard />
+          <Box sx={sectionStyles.carouselWrapper}>
+            <ItinerariesCard sx={cardStyles} />
+          </Box>
         </Box>
       </Container>
       <Footer />

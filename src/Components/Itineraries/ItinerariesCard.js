@@ -1,22 +1,26 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, Typography, Box, Divider, Pagination, Dialog, DialogActions, DialogContent } from '@mui/material';
+import { Card, CardContent, Typography, Box, Divider, Dialog, DialogActions, DialogContent, Pagination } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination as SwiperPagination, Autoplay } from 'swiper/modules';
+import { Navigation, Pagination as SwiperPagination, Autoplay } from 'swiper/modules';
+import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
 import 'swiper/css';
+import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import Subtitulo1 from '../Utiles/Subtitulo1';
+import { HomeCarousel } from '../HomeCards/Carousel';
 import GenericButton from '../Utiles/GenericButton';
 
-const ItinerariesCard = () => {
+const ItinerariesCard = ({ sx }) => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const { accessToken } = useAuth();
   const [itineraries, setItineraries] = useState([]);
   const [cities, setCities] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5); // Puedes cambiar esto según tus necesidades
+  const [itemsPerPage] = useState(5);
   const [openModal, setOpenModal] = useState(false);
   const [selectedItinerary, setSelectedItinerary] = useState(null);
 
@@ -67,6 +71,11 @@ const ItinerariesCard = () => {
     setOpenModal(true);
   };
 
+  const handleViewMore = (activity) => {
+    setSelectedItinerary(activity);
+    setOpenModal(true);
+  };
+
   const handleCloseModal = () => {
     setOpenModal(false);
     setSelectedItinerary(null);
@@ -76,68 +85,110 @@ const ItinerariesCard = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItineraries = itineraries.slice(indexOfFirstItem, indexOfLastItem);
 
+  const truncateText = (text, maxLength = 50) =>
+    text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+
   return (
-    <Box className="itineraries-swiper">
+    <HomeCarousel sx={{}}>
       <Swiper
-        modules={[SwiperPagination, Autoplay]}
+        modules={[Navigation, SwiperPagination, Autoplay]}
+        navigation
+        pagination={{ clickable: true }}
+        autoplay={{ delay: 3000, disableOnInteraction: false }}
         spaceBetween={20}
-        pagination={{
-          el: '.itineraries-swiper-pagination',
-          clickable: true,
-        }}
-        autoplay={{
-          delay: 5000,
-          disableOnInteraction: false,
-        }}
         breakpoints={{
-          640: { slidesPerView: 1 },
+          320: { slidesPerView: 1 },
+          480: { slidesPerView: 1.2 },
           768: { slidesPerView: 2 },
           1024: { slidesPerView: 3 },
+          1440: { slidesPerView: 4 },
         }}
+        loop
       >
         {currentItineraries.map((itinerary) => (
           <SwiperSlide key={itinerary.id}>
             <Card
               sx={{
-                maxWidth: 400,
-                borderRadius: 3,
-                boxShadow: 2,
-                height: '100%',
-                cursor: 'pointer',
-                transition: 'transform 0.2s',
-                '&:hover': {
-                  transform: 'scale(1.02)',
-                }
+                maxWidth: 450,
+                minHeight: 350,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                alignItems: "center",
+                boxShadow: 3,
+                padding: 2,
+                borderRadius: 2,
+                cursor: "pointer",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                  transition: "transform 0.2s",
+                },
               }}
               onClick={() => handleItineraryClick(itinerary.id)}
             >
-              <CardContent>
-                <Box sx={{ textAlign: 'center' }}>
-                  <Typography>
-                    <Subtitulo1 text={itinerary.name} align="center" />
-                  </Typography>
-                  <Divider sx={{ my: 1 }} />
-                  <Typography variant="body2" color="text.secondary" gutterBottom>
-                    {getCityName(itinerary.cityId)}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      mb: 2,
-                    }}
-                  >
-                    {itinerary.description}
-                  </Typography>
+              <Box
+                component="img"
+                src={itinerary.image || "/default-image.jpg"}
+                alt={itinerary.name}
+                sx={{
+                  width: "100%",
+                  height: "200px",
+                  objectFit: "cover",
+                  borderRadius: 2,
+                  backgroundColor: itinerary.image ? 'transparent' : 'grey.300', // Fondo gris si no hay imagen
+                }}
+              />
+
+              <CardContent
+                sx={{
+                  flex: 1,
+                  padding: "16px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontSize: { xs: "1rem", sm: "1.2rem" },
+                    fontWeight: 600,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    maxHeight: "3.6em",
+                  }}
+                >
+                  {truncateText(itinerary.name)}
+                </Typography>
+                <Divider sx={{ my: 1 }} />
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontSize: { xs: "0.8rem", sm: "1rem" },
+                    marginTop: "8px",
+                    textAlign: "justify",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    maxHeight: "3em",
+                  }}
+                >
+                  {truncateText(itinerary.description)}
+                </Typography>
+                <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
                   <GenericButton
                     text="Ver más"
                     variant="contained"
                     color="info"
-                    onClick={() => handleOpenModal(itinerary)}
+                    sx={{
+                      marginTop: "12px",
+                      fontSize: { xs: "0.7rem", sm: "0.9rem" },
+                      width: "150px",
+                      height: "40px",
+                    }}
+                    onClick={() => handleItineraryClick(itinerary.id)}
                   />
                 </Box>
               </CardContent>
@@ -145,18 +196,6 @@ const ItinerariesCard = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-
-      {/* Paginación */}
-      <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
-        <Pagination
-          count={Math.ceil(itineraries.length / itemsPerPage)} // Total de páginas
-          page={currentPage} // Página actual
-          onChange={handlePageChange} // Función de cambio
-          color="primary"
-          siblingCount={0}
-          boundaryCount={1}
-        />
-      </Box>
 
       {/* Modal para detalle */}
       <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="sm">
@@ -182,7 +221,7 @@ const ItinerariesCard = () => {
           />
         </DialogActions>
       </Dialog>
-    </Box>
+    </HomeCarousel>
   );
 };
 
