@@ -40,6 +40,7 @@ const AdminNavbar = () => {
     { to: "/province", label: "Province" },
     { to: "/itineraries", label: "Itineraries" },
     { to: "/cities", label: "Cities" },
+    { to: "/userReservations", label: "Reservas" },
   ];
 
   const handleDrawerToggle = () => {

@@ -1,48 +1,38 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, Typography, Box, Divider } from '@mui/material';
+import React, { useRef, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-import { useTheme } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom'; // Importar useNavigate
-import axios from 'axios';
-import { useAuth } from '../Auth/AuthContext';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { Box, Card, CardContent, Typography, Button } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { promotionsData } from './PromotionData';
+import { useNavigate } from 'react-router-dom';
 import { HomeCarousel } from '../HomeCards/Carousel';
-import GenericButton from '../Utiles/GenericButton';
+import GenericButton from '../Utiles/GenericButton'
 
-const ActivitiesCard = ({ sx }) => {
+// Función para truncar texto si excede los 40 caracteres
+const truncateText = (text, maxLength = 40) => {
+  if (text.length > maxLength) {
+    return text.substring(0, maxLength) + '...';
+  }
+  return text;
+};
+
+const PromotionsCard = ({ sx }) => {
   const theme = useTheme();
-  const navigate = useNavigate(); // Inicializar navigate
-  const { accessToken } = useAuth();
-  const [activities, setActivities] = useState([]);
-
-  const getAxiosConfig = useCallback(() => ({
-    headers: { Authorization: `Bearer ${accessToken}` },
-  }), [accessToken]);
-
-  const fetchActivities = useCallback(async () => {
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/activities`, getAxiosConfig());
-      setActivities(response.data);
-    } catch (err) {
-      console.error(err);
-    }
-  }, [getAxiosConfig]);
+  const navigate = useNavigate();
+  const swiperRef = useRef(null);
 
   useEffect(() => {
-    if (accessToken) {
-      fetchActivities();
+    if (swiperRef.current) {
+      swiperRef.current.swiper.autoplay.start();
     }
-  }, [accessToken, fetchActivities]);
+  }, []);
 
-  const handleActivityClick = (activityId) => {
-    navigate(`/activities/${activityId}`); // Redirigir a la página de detalles de la actividad
+  const handlePromotionClick = (promotionId) => {
+    navigate(`/promotions/${promotionId}`);
   };
-
-  const truncateText = (text, maxLength = 50) =>
-    text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
 
   return (
     <HomeCarousel sx={sx}>
@@ -61,9 +51,10 @@ const ActivitiesCard = ({ sx }) => {
         }}
         loop
         style={{ padding: 'auto' }}
+        ref={swiperRef}
       >
-        {activities.map((activity) => (
-          <SwiperSlide key={activity.id}>
+        {promotionsData.map((promotion) => (
+          <SwiperSlide key={promotion.id}>
             <Card
               sx={{
                 maxWidth: 450,
@@ -81,18 +72,18 @@ const ActivitiesCard = ({ sx }) => {
                   transition: 'transform 0.2s',
                 },
               }}
-              onClick={() => handleActivityClick(activity.id)} // Usar handleActivityClick
+              onClick={() => handlePromotionClick(promotion.id)}
             >
               <Box
                 component="img"
-                src={activity.image || '/default-image.jpg'}
-                alt={activity.name}
+                src={promotion.image}
+                alt={promotion.title}
                 sx={{
-                  width: '100%',
-                  height: '200px',
-                  objectFit: 'cover',
+                  width: "100%",
+                  height: "200px",
+                  objectFit: "cover",
                   borderRadius: 2,
-                  backgroundColor: activity.image ? 'transparent' : 'grey.300',
+                  backgroundColor: promotion.image ? 'transparent' : 'grey.300', // Fondo gris si no hay imagen
                 }}
               />
               <CardContent
@@ -116,9 +107,8 @@ const ActivitiesCard = ({ sx }) => {
                     maxHeight: '3.6em',
                   }}
                 >
-                  {truncateText(activity.name)}
+                  {truncateText(promotion.title)}
                 </Typography>
-                <Divider sx={{ my: 1 }} />
                 <Typography
                   variant="body2"
                   sx={{
@@ -131,25 +121,28 @@ const ActivitiesCard = ({ sx }) => {
                     maxHeight: '3em',
                   }}
                 >
-                  {truncateText(activity.type)}
+                  {truncateText(promotion.description)}
                 </Typography>
-                <Typography variant="body2">{activity.duration} min</Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                <GenericButton
-                    text="Ver más"
-                    variant="contained"
-                    color="info"
-                    sx={{
-                      marginTop: "12px",
-                      fontSize: { xs: "0.7rem", sm: "0.9rem" },
-                      width: "150px",
-                      height: "40px",
-                    }}
-                    onClick={(e) => {
-                      e.stopPropagation(); // Evitar que el clic en el botón active el evento de la tarjeta
-                      handleActivityClick(activity.id);
-                    }}
-                  />                  
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    width: '100%',
+                  }}
+                >
+                  <GenericButton
+                      text="Ver más"
+                      variant="contained"
+                      color="info"
+                      sx={{
+                        marginTop: '12px',
+                        fontSize: { xs: '0.7rem', sm: '0.9rem' },
+                        width: '150px',
+                        height: '40px',
+                      }}
+                      onClick={() => handlePromotionClick(promotion.id)}
+                  />
                 </Box>
               </CardContent>
             </Card>
@@ -160,4 +153,4 @@ const ActivitiesCard = ({ sx }) => {
   );
 };
 
-export default ActivitiesCard;
+export default PromotionsCard;

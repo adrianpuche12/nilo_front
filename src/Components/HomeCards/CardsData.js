@@ -8,7 +8,7 @@ export const cardsData = [
   },
   {
     id: 2,
-    title: 'Crucero por el Caribe',
+    title: 'Crucero por el CaribeCrucero por el Caribe',
     image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400',
     description: 'Relájate en aguas cristalinas.',
     actionLabel: 'Ver más',

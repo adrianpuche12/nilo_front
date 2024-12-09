@@ -11,6 +11,8 @@ import Footer from '../Footer';
 import AdminNavbar from '../Admin/AdminNavbar';
 import Title from '../Utiles/Title';
 import Descripcion1 from '../Utiles/Descripcion1';
+import GenericButton from '../Utiles/GenericButton';
+import Subtitulo2 from '../Utiles/Subtitulo2'
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -308,27 +310,23 @@ const Itineraries = () => {
                             // Vista mobile del encabezado
                             <Stack direction="row" justifyContent="space-between" alignItems="center">
                                 <Title text="Gestión de Itinerarios" variant="h4" />
-                                <Button
-                                    variant="contained"
+                                <GenericButton
+                                    text="Nuevo Itinerario"
                                     color="primary"
-                                    onClick={handleOpen}
                                     startIcon={<AddIcon />}
-                                >
-                                    Nueva Itinerario
-                                </Button>
+                                    onClick={handleOpen}
+                                />
                             </Stack>
                         ) : (
                             // Vista desktop del encabezado
                             <Stack direction="row" justifyContent="space-between" alignItems="center">
                                 <Title text="Gestión de Itinerarios" variant="h4" />
-                                <Button
-                                    variant="contained"
+                                <GenericButton
+                                    text="Nuevo Itinerario"
                                     color="primary"
-                                    onClick={handleOpen}
                                     startIcon={<AddIcon />}
-                                >
-                                    Nuevo Itinerario
-                                </Button>
+                                    onClick={handleOpen}
+                                />
                             </Stack>
                         )}
                         {/* Componente de Descripción */}
@@ -361,26 +359,24 @@ const Itineraries = () => {
                                     mb: 2
                                 }}
                             >
-                                <Button
-                                    variant="contained"
+                                <GenericButton
+                                    text="Editar"
                                     color="primary"
+                                    variant="contained"
+                                    startIcon={<AddIcon />}
                                     onClick={handleEditSelected}
                                     disabled={!selectedItinerary}
-                                    startIcon={<EditIcon />}
                                     fullWidth
-                                >
-                                    Editar
-                                </Button>
-                                <Button
+                                />  
+                                <GenericButton
+                                    text="Eliminar"
                                     variant="contained"
                                     color="error"
                                     onClick={handleDeleteSelected}
                                     disabled={!selectedItinerary}
                                     startIcon={<DeleteIcon />}
                                     fullWidth
-                                >
-                                    Eliminar
-                                </Button>
+                                />  
                             </Stack>
                         </Grid>
                     )}
@@ -409,7 +405,7 @@ const Itineraries = () => {
                 {/* Diálogo crear/editar itinerario */}
                 <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
                     <DialogTitle>
-                        {editMode ? 'Editar Itinerario' : 'Nuevo Itinerario'}
+                        {editMode ? <Title text="Editar País" /> : <Title text="Nuevo País" />}
                     </DialogTitle>
                     <DialogContent>
                         <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -477,7 +473,7 @@ const Itineraries = () => {
 
                                     <Grid item xs={12}>
                                         <Typography variant="subtitle1" gutterBottom>
-                                            Actividades Seleccionadas:
+                                            <Subtitulo2 text= "Actividades Seleccionadas:"/>
                                         </Typography>
                                         <List>
                                             {currentItinerary.activities.map((activity) => (
@@ -499,15 +495,20 @@ const Itineraries = () => {
                         </Grid>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose}>Cancelar</Button>
-                        <Button
-                            onClick={editMode ? handleUpdate : handleCreate}
+                        <GenericButton
+                            text="Cancelar"
+                            color="secondary" 
+                            onClick={handleClose}
+                            fullWidth
+                            />
+                            <GenericButton
+                            text={editMode ? 'Actualizar' : 'Crear'}
+                            color="primary" 
                             variant="contained"
-                            color="primary"
+                            onClick={editMode ? handleUpdate : handleCreate}
                             disabled={!currentItinerary.name || !currentItinerary.cityId || currentItinerary.activities.length === 0}
-                        >
-                            {editMode ? 'Actualizar' : 'Crear'}
-                        </Button>
+                            fullWidth
+                        />
                     </DialogActions>
                 </Dialog>
             </Box>

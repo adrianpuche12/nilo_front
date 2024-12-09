@@ -13,7 +13,7 @@ import Footer from './Footer';
 import AdminNavbar from './Admin/AdminNavbar';
 import Title from './Utiles/Title';
 import Descripcion1 from './Utiles/Descripcion1';
-
+import GenericButton from './Utiles/GenericButton';
 
 // Variables de entorno para URL y token
 const API_URL = process.env.REACT_APP_API_URL;
@@ -284,28 +284,23 @@ const Cities = () => {
                     width: '100%',
                   }}
                 />
-                <Button
-                  variant="contained"
+                <GenericButton
+                  text="Nueva Ciudad"
                   color="primary"
-                  onClick={handleOpen}
                   startIcon={<AddIcon />}
-                  sx={{ margin: 0 }}
-                >
-                  Nueva Ciudad
-                </Button>
+                  onClick={handleOpen}
+                />
               </Stack>
             ) : (
               // Vista desktop del encabezado
               <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Title text="Gestión de Ciudades" variant="h4" />
-                <Button
-                  variant="contained"
+                <GenericButton
+                  text="Nueva Ciudad"
                   color="primary"
-                  onClick={handleOpen}
                   startIcon={<AddIcon />}
-                >
-                  Nueva Ciudad
-                </Button>
+                  onClick={handleOpen}
+                />
               </Stack>
             )}
             
@@ -339,26 +334,22 @@ const Cities = () => {
                   mb: 2
                 }}
               >
-                <Button
-                  variant="contained"
+                <GenericButton
+                  text="Editar"
                   color="primary"
+                  startIcon={<EditIcon />}
                   onClick={handleEditSelected}
                   disabled={!selectedCity}
-                  startIcon={<EditIcon />}
                   fullWidth
-                >
-                  Editar
-                </Button>
-                <Button
-                  variant="contained"
+                />
+                <GenericButton
+                  text="Eliminar"
                   color="error"
+                  startIcon={<DeleteIcon />}
                   onClick={handleDeleteSelected}
                   disabled={!selectedCity}
-                  startIcon={<DeleteIcon />}
                   fullWidth
-                >
-                  Eliminar
-                </Button>
+                />
               </Stack>
             </Grid>
           )}
@@ -385,7 +376,7 @@ const Cities = () => {
         {/* Diálogo para crear/editar ciudad */}
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>
-            {editMode ? 'Editar Ciudad' : 'Nueva Ciudad'}
+            {editMode ? <Title text="Editar País" /> : <Title text="Nuevo País" />}
           </DialogTitle>
           <DialogContent>
             <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -429,14 +420,18 @@ const Cities = () => {
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Cancelar</Button>
-            <Button
+          <GenericButton
+              text="Cancelar"
+              color="secondary" 
+              onClick={handleClose}
+              fullWidth
+            />
+            <GenericButton
+              text={editMode ? 'Actualizar' : 'Crear'}
+              color="primary" 
               onClick={editMode ? handleUpdate : handleCreate}
-              variant="contained"
-              color="primary"
-            >
-              {editMode ? 'Actualizar' : 'Crear'}
-            </Button>
+              fullWidth
+            />
           </DialogActions>
         </Dialog>
       </Box>
