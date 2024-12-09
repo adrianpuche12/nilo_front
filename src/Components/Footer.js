@@ -60,6 +60,7 @@ const Footer = () => {
               gap: 2
             }}
           >
+            
             <Link
               href="/contacto"
               underline="none"
