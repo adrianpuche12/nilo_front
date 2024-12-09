@@ -28,10 +28,11 @@ const CardItem = ({ title, image, description, actionLabel, sx }) => {
         src={image}
         alt={title}
         sx={{
-          width: '100%',
-          height: '200px', // Aumentamos la altura de la imagen
-          objectFit: 'cover',
-          borderRadius: '8px', // Aquí se agrega el borde redondeado
+          width: "100%",
+          height: "200px",
+          objectFit: "cover",
+          borderRadius: 2,
+          backgroundColor: image ? 'transparent' : 'grey.300', // Fondo gris si no hay imagen
         }}
       />
       <CardContent

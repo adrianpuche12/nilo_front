@@ -13,28 +13,28 @@ import PromotionsCard from './Promotions/PromotionCard';
 
 const sectionStyles = {
   wrapper: {
-    mb: 8,
+    mb: 0.5,  // Minimiza el espacio entre secciones
   },
   headerContainer: {
     maxWidth: '800px',
     mx: 'auto',
-    mb: 4,
+    mb: 0.25, // Minimiza el margen inferior
     textAlign: 'center',
   },
   description: {
-    fontSize: '1.1rem',
+    fontSize: '0.8rem', // Reduce aún más el tamaño de la fuente
     color: 'text.secondary',
-    lineHeight: 1.6,
-    px: { xs: 2, sm: 4 },
-    maxWidth: '650px',
+    lineHeight: 1.2, // Reduce al máximo el interlineado
+    px: { xs: 0.25, sm: 0.5 }, // Minimiza el padding horizontal
+    maxWidth: '500px', // Reduce el ancho máximo de la descripción
     mx: 'auto',
   },
   carouselWrapper: {
     position: 'relative',
-    marginBottom: { xs: 4, sm: 6 }, // Ajusta la distancia globalmente
+    marginBottom: { xs: 0.25, sm: 0.5 }, // Minimiza el margen entre carruseles
   },
   pagination: {
-    marginTop: '-10px', // Reduce la distancia entre el carrusel y los puntos
+    marginTop: '-4px', // Minimiza la distancia entre el carrusel y los puntos
     display: 'flex',
     justifyContent: 'center',
   },
@@ -42,21 +42,22 @@ const sectionStyles = {
 
 // Estilos unificados para las cards
 const cardStyles = {
-  maxWidth: 300, // Tamaño fijo para ancho máximo
-  height: 400, // Altura fija
+  maxWidth: 200, // Minimiza aún más el ancho de las tarjetas
+  height: 250, // Reduce aún más la altura de las tarjetas
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
   alignItems: 'center',
-  mx: 'auto', // Centramos cada card en su carrusel
-  boxShadow: 3, // Añadimos sombra para uniformidad
-  borderRadius: 2, // Bordes redondeados
-  p: 2, // Espaciado interno
+  mx: 'auto',
+  boxShadow: 0, // Elimina la sombra para mayor ligereza
+  borderRadius: 2,
+  p: 0.1,  // Minimiza el padding de las tarjetas
   '@media (max-width: 600px)': {
-    maxWidth: '100%', // Ajuste responsivo para móvil
-    height: 'auto', // Altura dinámica
+    maxWidth: '100%',
+    height: 'auto',
   },
 };
+
 
 const Home = () => {
   const { logout } = useAuth();

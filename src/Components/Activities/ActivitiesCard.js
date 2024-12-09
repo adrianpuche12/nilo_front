@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, Typography, Box, Divider, Dialog, DialogActions, DialogContent } from '@mui/material';
+import { Card, CardContent, Typography, Box, Divider } from '@mui/material';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { useTheme } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom'; // Importar useNavigate
 import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
-import ActivityDetailCard from './ActivityDetailCard';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -14,10 +14,9 @@ import GenericButton from '../Utiles/GenericButton';
 
 const ActivitiesCard = ({ sx }) => {
   const theme = useTheme();
+  const navigate = useNavigate(); // Inicializar navigate
   const { accessToken } = useAuth();
   const [activities, setActivities] = useState([]);
-  const [selectedActivity, setSelectedActivity] = useState(null);
-  const [openModal, setOpenModal] = useState(false);
 
   const getAxiosConfig = useCallback(() => ({
     headers: { Authorization: `Bearer ${accessToken}` },
@@ -38,13 +37,8 @@ const ActivitiesCard = ({ sx }) => {
     }
   }, [accessToken, fetchActivities]);
 
-  const handleViewMore = (activity) => {
-    setSelectedActivity(activity);
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
+  const handleActivityClick = (activityId) => {
+    navigate(`/activities/${activityId}`); // Redirigir a la página de detalles de la actividad
   };
 
   const truncateText = (text, maxLength = 50) =>
@@ -87,18 +81,18 @@ const ActivitiesCard = ({ sx }) => {
                   transition: 'transform 0.2s',
                 },
               }}
-              onClick={() => handleViewMore(activity)}
+              onClick={() => handleActivityClick(activity.id)} // Usar handleActivityClick
             >
               <Box
                 component="img"
                 src={activity.image || '/default-image.jpg'}
                 alt={activity.name}
                 sx={{
-                  width: "100%",
-                  height: "200px",
-                  objectFit: "cover",
+                  width: '100%',
+                  height: '200px',
+                  objectFit: 'cover',
                   borderRadius: 2,
-                  backgroundColor: activity.image ? 'transparent' : 'grey.300', // Fondo gris si no hay imagen
+                  backgroundColor: activity.image ? 'transparent' : 'grey.300',
                 }}
               />
               <CardContent
@@ -141,42 +135,27 @@ const ActivitiesCard = ({ sx }) => {
                 </Typography>
                 <Typography variant="body2">{activity.duration} min</Typography>
                 <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                  <GenericButton
+                <GenericButton
                     text="Ver más"
                     variant="contained"
                     color="info"
                     sx={{
-                      marginTop: '12px',
-                      fontSize: { xs: '0.7rem', sm: '0.9rem' },
-                      width: '150px',
-                      height: '40px',
+                      marginTop: "12px",
+                      fontSize: { xs: "0.7rem", sm: "0.9rem" },
+                      width: "150px",
+                      height: "40px",
                     }}
-                    onClick={() => handleViewMore(activity)}
-                  />
+                    onClick={(e) => {
+                      e.stopPropagation(); // Evitar que el clic en el botón active el evento de la tarjeta
+                      handleActivityClick(activity.id);
+                    }}
+                  />                  
                 </Box>
               </CardContent>
             </Card>
           </SwiperSlide>
         ))}
       </Swiper>
-
-      {/* Modal para detalle */}
-      <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="sm">
-        <Typography variant="h6" sx={{ p: 2 }}>
-          Detalle de la Actividad
-        </Typography>
-        <DialogContent>
-          {selectedActivity && <ActivityDetailCard activity={selectedActivity} />}
-        </DialogContent>
-        <DialogActions>
-          <GenericButton
-            text="Cerrar"
-            variant="contained"
-            color="secondary"
-            onClick={handleCloseModal}
-          />
-        </DialogActions>
-      </Dialog>
     </HomeCarousel>
   );
 };

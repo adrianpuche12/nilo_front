@@ -5,8 +5,8 @@ import { ArrowBack, Check } from '@mui/icons-material';
 import { promotionsData } from './PromotionData';
 import Navbar from '../NavBar';
 import Footer from '../Footer';
-import Subtitulo_1 from '../Utiles/Subtitulo1';
-import Descripcion_1 from '../Utiles/Descripcion1';
+import Subtitulo1 from '../Utiles/Subtitulo1';
+import Descripcion1 from '../Utiles/Descripcion1';
 
 const PromotionDetail = () => {
   const { id } = useParams();
@@ -61,7 +61,7 @@ const PromotionDetail = () => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <Box sx={{ p: 4 }}>
-                  <Subtitulo_1 
+                  <Subtitulo1 
                     text={promotion.title}
                     color="primary.main"
                     margin="0 0 1rem 0"
@@ -78,7 +78,7 @@ const PromotionDetail = () => {
                     {promotion.description}
                   </Typography>
 
-                  <Descripcion_1 
+                  <Descripcion1 
                     text={promotion.fullDescription}
                     margin="0 0 2rem 0"
                   />

@@ -22,6 +22,7 @@ import AdminHome from '../Components/Admin/AdminHome';
 import AdminNavbar from '../Components/Admin/AdminNavbar';
 import UserReservations from '../Components/User/UserReservations';
 import PromotionDetail from '../Components/Promotions/PromotionDetail';
+import ActivityDetail from '../Components/Activities/ActivityDetailCard.js';
 
 
 const AppRoutes = () => {
@@ -42,6 +43,7 @@ const AppRoutes = () => {
         <Route path="/itineraries" element={<ProtectedRoute><Itineraries /></ProtectedRoute>} />
         <Route path="/itineraries/:id" element={<ProtectedRoute><ItinerariesDetail /></ProtectedRoute>} />
         <Route path="/promotions/:id" element={<ProtectedRoute><PromotionDetail /></ProtectedRoute>} />
+        <Route path="/Activities/:id" element={<ProtectedRoute><ActivityDetail /></ProtectedRoute>} />
         <Route path="/cities" element={<ProtectedRoute><Cities /></ProtectedRoute>} />
         {/*<Route path="/trip-cities" element={<ProtectedRoute><TripCities /></ProtectedRoute>} />*/}   
         <Route path="/admin/adminhome" element={<ProtectedRoute><AdminHome /></ProtectedRoute>} />

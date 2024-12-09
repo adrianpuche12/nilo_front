@@ -79,10 +79,11 @@ const PromotionsCard = ({ sx }) => {
                 src={promotion.image}
                 alt={promotion.title}
                 sx={{
-                  width: '100%',
-                  height: '200px',
-                  objectFit: 'cover',
-                  borderRadius: '8px',
+                  width: "100%",
+                  height: "200px",
+                  objectFit: "cover",
+                  borderRadius: 2,
+                  backgroundColor: promotion.image ? 'transparent' : 'grey.300', // Fondo gris si no hay imagen
                 }}
               />
               <CardContent
