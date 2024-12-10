@@ -37,7 +37,7 @@ export const cardsData = [
   {
     id: 6,
     title: 'Excursión a la Selva',
-    image: 'https://plus.unsplash.com/premium_photo-1687428554400-3ebabab7de29?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8c2VsdmF8ZW58MHx8MHx8fDA%3D',
+    image: 'https://images.unsplash.com/photo-1475333017476-3482638e685b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8c2VsdmF8ZW58MHx8MHx8fDA%3D',
     description: 'Explora la jungla amazónica.',
     actionLabel: 'Ver más',
   },
