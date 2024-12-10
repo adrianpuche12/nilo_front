@@ -101,17 +101,19 @@ const ActivityDetail = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     height: '100%', 
+                    borderRadius: '16px',
                   }}
                 >
                   <CardMedia
                     component="img"
-                    image={activity.image} 
+                    image={activity.image || 'https://images.unsplash.com/photo-1548574505-5e239809ee19'} 
                     alt={activity.name}
                     sx={{ 
                       objectFit: 'cover', 
                       width: '100%', // La imagen debe ocupar el 100% del ancho
                       height: '100%', // La imagen debe ocupar el 100% de la altura del contenedor
                       maxHeight: '500px', // Limita la altura máxima de la imagen
+                      borderRadius: '16px',
                     }}
                   />
                 </Box>

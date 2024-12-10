@@ -13,28 +13,28 @@ import PromotionsCard from './Promotions/PromotionCard';
 
 const sectionStyles = {
   wrapper: {
-    mb: 0.5,  // Minimiza el espacio entre secciones
+    mb: 0.5,  
   },
   headerContainer: {
     maxWidth: '800px',
     mx: 'auto',
-    mb: 0.25, // Minimiza el margen inferior
+    mb: 0.25, 
     textAlign: 'center',
   },
   description: {
-    fontSize: '0.8rem', // Reduce aún más el tamaño de la fuente
+    fontSize: '0.8rem', 
     color: 'text.secondary',
-    lineHeight: 1.2, // Reduce al máximo el interlineado
-    px: { xs: 0.25, sm: 0.5 }, // Minimiza el padding horizontal
-    maxWidth: '500px', // Reduce el ancho máximo de la descripción
+    lineHeight: 1.2, 
+    px: { xs: 0.25, sm: 0.5 }, 
+    maxWidth: '500px', 
     mx: 'auto',
   },
   carouselWrapper: {
     position: 'relative',
-    marginBottom: { xs: 0.25, sm: 0.5 }, // Minimiza el margen entre carruseles
+    marginBottom: { xs: 0.25, sm: 0.5 }, 
   },
   pagination: {
-    marginTop: '-4px', // Minimiza la distancia entre el carrusel y los puntos
+    marginTop: '-4px', 
     display: 'flex',
     justifyContent: 'center',
   },
@@ -42,16 +42,16 @@ const sectionStyles = {
 
 // Estilos unificados para las cards
 const cardStyles = {
-  maxWidth: 200, // Minimiza aún más el ancho de las tarjetas
-  height: 250, // Reduce aún más la altura de las tarjetas
+  maxWidth: 200, 
+  height: 250, 
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
   alignItems: 'center',
   mx: 'auto',
-  boxShadow: 0, // Elimina la sombra para mayor ligereza
+  boxShadow: 0, 
   borderRadius: 2,
-  p: 0.1,  // Minimiza el padding de las tarjetas
+  p: 0.1, 
   '@media (max-width: 600px)': {
     maxWidth: '100%',
     height: 'auto',
@@ -65,7 +65,7 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+      <Container maxWidth="xl" sx={{ mt: 1, mb: 4 }}>
         {/* Paquetes Carrusel */}
         <Box sx={sectionStyles.wrapper}>
           <Box sx={sectionStyles.headerContainer}>

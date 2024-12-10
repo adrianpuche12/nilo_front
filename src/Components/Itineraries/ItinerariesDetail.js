@@ -1,13 +1,23 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Paper, Typography, Box, Card, CardContent, Divider, Button, Grid, Chip, CircularProgress } from '@mui/material';
+import {
+  Container,
+  Paper,
+  Typography,
+  Box,
+  Grid,
+  Chip,
+  CircularProgress,
+  Button,
+  CardMedia,
+} from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
 import Navbar from '../NavBar';
 import Footer from '../Footer';
-import Subtitulo_1 from '../Utiles/Subtitulo1';
-import Descripcion_1 from '../Utiles/Descripcion1';
+import Subtitulo1 from '../Utiles/Subtitulo1';
+import Descripcion1 from '../Utiles/Descripcion1';
 
 const ItinerariesDetail = () => {
   const { id } = useParams();
@@ -18,19 +28,22 @@ const ItinerariesDetail = () => {
   const [error, setError] = useState(null);
   const [city, setCity] = useState(null);
 
-  const getAxiosConfig = useCallback(() => ({
-    headers: { Authorization: `Bearer ${accessToken}` },
-  }), [accessToken]);
+  const getAxiosConfig = useCallback(
+    () => ({
+      headers: { Authorization: `Bearer ${accessToken}` },
+    }),
+    [accessToken]
+  );
 
   const fetchItineraryData = useCallback(async () => {
     try {
       setLoading(true);
       const itineraryResponse = await axios.get(
-        `${process.env.REACT_APP_API_URL}/itineraries/${id}`, 
+        `${process.env.REACT_APP_API_URL}/itineraries/${id}`,
         getAxiosConfig()
       );
       setItinerary(itineraryResponse.data);
-      
+
       const cityResponse = await axios.get(
         `${process.env.REACT_APP_API_URL}/cities/${itineraryResponse.data.cityId}`,
         getAxiosConfig()
@@ -53,10 +66,10 @@ const ItinerariesDetail = () => {
 
   if (loading) {
     return (
-      <Box 
-        display="flex" 
-        justifyContent="center" 
-        alignItems="center" 
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
         minHeight="100vh"
       >
         <CircularProgress />
@@ -66,19 +79,11 @@ const ItinerariesDetail = () => {
 
   if (error || !itinerary) {
     return (
-      <Box 
-        display="flex" 
-        flexDirection="column" 
-        alignItems="center" 
-        py={4}
-      >
+      <Box display="flex" flexDirection="column" alignItems="center" py={4}>
         <Typography color="error" gutterBottom>
           {error || 'Itinerario no encontrado'}
         </Typography>
-        <Button 
-          variant="contained" 
-          onClick={() => navigate('/')}
-        >
+        <Button variant="contained" onClick={() => navigate('/')}>
           Volver al inicio
         </Button>
       </Box>
@@ -97,48 +102,78 @@ const ItinerariesDetail = () => {
           >
             Volver
           </Button>
-          
+
           <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
-            <Subtitulo_1 
-              text={itinerary.name}
-              color="primary.main"
-              margin="0 0 1rem 0"
-            />
-            
             <Grid container spacing={4}>
-              <Grid item xs={12}>
-                <Chip 
+              <Grid item xs={12} md={6}>
+                <Box
+                  sx={{
+                    backgroundColor: 'grey.300', // Fondo gris
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100%',
+                    borderRadius: '16px',
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    image={itinerary.image || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b'}
+                    alt={itinerary.name}
+                    sx={{
+                      objectFit: 'cover',
+                      width: '100%',
+                      height: '100%',
+                      maxHeight: '500px', // Limita la altura máxima
+                      borderRadius: '16px',
+                    }}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Subtitulo1
+                  text={itinerary.name}
+                  color="primary.main"
+                  margin="0 0 1rem 0"
+                />
+
+                <Chip
                   label={city?.name || 'Ciudad no disponible'}
                   color="primary"
                   sx={{ mb: 2 }}
                 />
-                
-                <Descripcion_1 
-                  text={itinerary.description}
-                  margin="1rem 0"
-                />
 
-                <Divider sx={{ my: 3 }} />
+                <Descripcion1 text={itinerary.description} margin="1rem 0" />
 
                 <Typography variant="h6" gutterBottom>
-                  Actividades Incluidas
+                  Detalles del Itinerario
                 </Typography>
-                <Grid container spacing={2}>
-                  {itinerary.activities.map((activity) => (
-                    <Grid item xs={12} sm={6} md={4} key={activity.id}>
-                      <Card variant="outlined">
-                        <CardContent>
-                          <Typography variant="subtitle1" gutterBottom>
-                            {activity.name}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {activity.type}
-                          </Typography>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                  ))}
-                </Grid>
+                <Box>
+                  <Typography variant="subtitle1">
+                    <strong>Duración:</strong> {itinerary.duration || 'N/A'}
+                  </Typography>
+                  <Typography variant="subtitle1">
+                    <strong>Tipo:</strong> {itinerary.type || 'N/A'}
+                  </Typography>
+                  <Typography variant="subtitle1">
+                    <strong>Costo:</strong> {itinerary.cost || 'N/A'}
+                  </Typography>
+                  <Typography variant="subtitle1">
+                    <strong>Recomendaciones:</strong>{' '}
+                    {itinerary.recommendations || 'N/A'}
+                  </Typography>
+                </Box>
+
+                <Box display="flex" justifyContent="flex-end" sx={{ mt: 4 }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    sx={{ py: 1.5, fontSize: '1.1rem' }}
+                  >
+                    Reservar Ahora
+                  </Button>
+                </Box>
               </Grid>
             </Grid>
           </Paper>

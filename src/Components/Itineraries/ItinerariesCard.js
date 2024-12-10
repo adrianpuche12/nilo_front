@@ -128,7 +128,7 @@ const ItinerariesCard = ({ sx }) => {
             >
               <Box
                 component="img"
-                src={itinerary.image || "/default-image.jpg"}
+                src={itinerary.image || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b'}
                 alt={itinerary.name}
                 sx={{
                   width: "100%",

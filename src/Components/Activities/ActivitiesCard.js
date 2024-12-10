@@ -85,7 +85,7 @@ const ActivitiesCard = ({ sx }) => {
             >
               <Box
                 component="img"
-                src={activity.image || '/default-image.jpg'}
+                src={activity.image || 'https://images.unsplash.com/photo-1548574505-5e239809ee19'}
                 alt={activity.name}
                 sx={{
                   width: '100%',
