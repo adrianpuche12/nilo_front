@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Typography, Avatar, Grid, Button, Box, TextField, CircularProgress, Alert } from '@mui/material';
+import { Paper, Typography, Avatar, Grid, Box, TextField, CircularProgress, Alert } from '@mui/material';
 import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
 import Navbar from '../NavBar';
@@ -7,11 +7,9 @@ import GenericButton from '../Utiles/GenericButton';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../Footer';
 
-
 const API_URL = process.env.REACT_APP_API_URL;
 
 const UserProfile = () => {
-    // Estados
     const { accessToken } = useAuth();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -27,7 +25,6 @@ const UserProfile = () => {
         phone: ''
     });
 
-
     const navigate = useNavigate();
 
     const getAxiosConfig = () => ({
@@ -36,7 +33,6 @@ const UserProfile = () => {
         }
     });
 
-    // Función para obtener el perfil del usuario
     const fetchUserProfile = async () => {
         setLoading(true);
         try {
@@ -77,9 +73,9 @@ const UserProfile = () => {
     };
 
     const handleClose = () => {
-    setIsEditing(false);
-    setEditForm(userProfile);
-    navigate('/'); // Redirige a la ruta Home ("/")
+        setIsEditing(false);
+        setEditForm(userProfile);
+        navigate('/');
     };
 
     const handleSaveChanges = async () => {
@@ -87,6 +83,7 @@ const UserProfile = () => {
             setLoading(true);
             await axios.put(`${API_URL}/users`, editForm, getAxiosConfig());
             await fetchUserProfile();
+            setIsEditing(false);
             setError(null);
         } catch (err) {
             setError('Error al actualizar el perfil: ' + err.message);
@@ -97,50 +94,121 @@ const UserProfile = () => {
 
     if (loading && !isEditing) {
         return (
-            <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-                <CircularProgress />
+            <Box 
+                sx={{
+                    minHeight: '100vh',
+                    display: 'flex',
+                    flexDirection: 'column'
+                }}
+            >
+                <Navbar />
+                <Box 
+                    sx={{ 
+                        flex: 1,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}
+                >
+                    <CircularProgress />
+                </Box>
+                <Footer />
             </Box>
         );
     }
 
     return (
-        <div>
+        <Box 
+            sx={{
+                minHeight: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                backgroundColor: 'background.default'
+            }}
+        >
             <Navbar />
-            <Box sx={{ p: 3, maxWidth: 800, margin: '0 auto' }}>
+            <Box 
+                sx={{ 
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    p: { xs: 2, sm: 3 },
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    overflow: 'auto'
+                }}
+            >
                 {error && (
-                    <Alert severity="error" sx={{ mb: 2 }}>
+                    <Alert severity="error" sx={{ mb: 2, width: '100%' }}>
                         {error}
                     </Alert>
                 )}
-                <Paper variant="outlined" sx={{ p: 4 }}>
-                    <Grid container spacing={3} alignItems="center">
-                        <Grid item xs={12} sm={4}>
-                            <Box display="flex" justifyContent="center">
-                                <Avatar
-                                    sx={{
-                                        width: 100,
-                                        height: 100,
-                                        bgcolor: 'primary.main'
-                                    }}
-                                >
-                                    {userProfile.name?.charAt(0)}
-                                </Avatar>
-                            </Box>
+                <Paper 
+                    variant="outlined" 
+                    sx={{ 
+                        p: { xs: 2, sm: 4 },
+                        display: 'flex',
+                        flexDirection: 'column',
+                        width: '100%',
+                        maxWidth: '1200px',
+                        mx: 'auto',
+                        my: { xs: 1, sm: 2 },
+                        boxSizing: 'border-box'
+                    }}
+                >
+                    <Grid 
+                        container 
+                        spacing={3} 
+                        alignItems="start"
+                    >
+                        <Grid 
+                            item 
+                            xs={12} 
+                            sm={4}
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                gap: 2
+                            }}
+                        >
+                            <Avatar
+                                sx={{
+                                    width: { xs: 80, sm: 100, md: 120 },
+                                    height: { xs: 80, sm: 100, md: 120 },
+                                    bgcolor: 'primary.main',
+                                    fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
+                                }}
+                            >
+                                {userProfile.name?.charAt(0)}
+                            </Avatar>
                         </Grid>
 
                         <Grid item xs={12} sm={8}>
                             {!isEditing ? (
-                                <>
-                                    <Typography variant="h5" gutterBottom>
+                                <Box sx={{ 
+                                    display: 'flex', 
+                                    flexDirection: 'column', 
+                                    gap: 2,
+                                    width: '100%'
+                                }}>
+                                    <Typography variant="h5" component="h1">
                                         {userProfile.name}
                                     </Typography>
-                                    <Typography variant="body1" color="textSecondary" gutterBottom>
+                                    <Typography variant="body1" color="textSecondary">
                                         {userProfile.email}
                                     </Typography>
-                                    <Typography variant="body1" color="textSecondary" gutterBottom>
+                                    <Typography variant="body1" color="textSecondary">
                                         {userProfile.phone}
-                                    </Typography>                                    
-                                    <Box display="flex" gap={2}> 
+                                    </Typography>
+                                    <Box 
+                                        sx={{
+                                            display: 'flex',
+                                            gap: 2,
+                                            mt: { xs: 2, sm: 'auto' },
+                                            flexWrap: 'wrap'
+                                        }}
+                                    >
                                         <GenericButton
                                             text="Cerrar"
                                             color="secondary"
@@ -151,8 +219,8 @@ const UserProfile = () => {
                                             color="primary"
                                             onClick={handleEdit}
                                         />
-                                    </Box>                                 
-                                </>
+                                    </Box>
+                                </Box>
                             ) : (
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
@@ -186,7 +254,15 @@ const UserProfile = () => {
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <Box display="flex" justifyContent="flex-end" gap={2}>
+                                        <Box 
+                                            sx={{
+                                                display: 'flex',
+                                                justifyContent: 'flex-end',
+                                                gap: 2,
+                                                mt: 2,
+                                                flexWrap: 'wrap'
+                                            }}
+                                        >
                                             <GenericButton
                                                 text="Cancelar"
                                                 color="secondary"
@@ -207,8 +283,8 @@ const UserProfile = () => {
                     </Grid>
                 </Paper>
             </Box>
-          <Footer />
-        </div>
+            <Footer />
+        </Box>
     );
 };
 
