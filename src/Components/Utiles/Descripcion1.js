@@ -1,10 +1,8 @@
-// nilo_proyect_front/src/Components/Utiles/Descripcion_1.js
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Typography, useTheme } from '@mui/material';
 
-function Descripcion1({ text, margin }) {
+function Descripcion1({ text, margin, align }) {
   const theme = useTheme();
 
   return (
@@ -19,6 +17,7 @@ function Descripcion1({ text, margin }) {
           md: '1.125rem',  // Tamaño para pantallas grandes
         },
         lineHeight: 1.5, // Ajuste de línea para mejor legibilidad
+        textAlign: align, // Alineación del texto (centrado o cualquier valor)
       }}
     >
       {text}
@@ -29,10 +28,12 @@ function Descripcion1({ text, margin }) {
 Descripcion1.propTypes = {
   text: PropTypes.string.isRequired, // Contenido de la descripción
   margin: PropTypes.string,           // Margen ajustable
+  align: PropTypes.string,            // Alineación del texto (center, left, right)
 };
 
 Descripcion1.defaultProps = {
   margin: '16px 0', // Margen predeterminado
+  align: 'left',    // Alineación predeterminada
 };
 
 export default Descripcion1;

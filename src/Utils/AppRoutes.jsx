@@ -23,6 +23,8 @@ import AdminNavbar from '../Components/Admin/AdminNavbar';
 import UserReservations from '../Components/User/UserReservations';
 import PromotionDetail from '../Components/Promotions/PromotionDetail';
 import ActivityDetail from '../Components/Activities/ActivityDetailCard.js';
+import AboutUs from '../Components/Pages/AboutUs.js'
+import Contactos from '../Components/Pages/Contactos.js'
 
 
 const AppRoutes = () => {
@@ -49,6 +51,8 @@ const AppRoutes = () => {
         <Route path="/admin/adminhome" element={<ProtectedRoute><AdminHome /></ProtectedRoute>} />
         <Route path="/admin/adminnav" element={<ProtectedRoute><AdminNavbar /></ProtectedRoute>} />
         <Route path="/userReservations" element={<ProtectedRoute><UserReservations /></ProtectedRoute>} />
+        <Route path="/about-us" element={<ProtectedRoute><AboutUs/></ProtectedRoute>} />
+        <Route path="/contactos" element={<ProtectedRoute><Contactos/></ProtectedRoute>} />
         <Route path="*" element={<Navigate to="/" replace />} />
 
       </Routes>

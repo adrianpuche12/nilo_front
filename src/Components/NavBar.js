@@ -41,6 +41,8 @@ const Navbar = () => {
     { to: "/itineraries", label: "Itineraries" },
     { to: "/cities", label: "Cities" },
     { to: "/userReservations", label: "Reservas" },
+    { to: "/about-us", label: "Acerca de Nosotros" },
+    { to: "/contactos", label: "Contactos" },
   ];
 
   const handleDrawerToggle = () => {

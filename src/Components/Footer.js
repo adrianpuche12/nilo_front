@@ -62,7 +62,7 @@ const Footer = () => {
           >
             
             <Link
-              href="/contacto"
+              href="/contactos"
               underline="none"
               color="text.primary"
               sx={{ '&:hover': { color: 'primary.main' } }}
@@ -70,7 +70,7 @@ const Footer = () => {
               Contactos
             </Link>
             <Link
-              href="/acerca-de"
+              href="/about-us"
               underline="none"
               color="text.primary"
               sx={{ '&:hover': { color: 'primary.main' } }}
