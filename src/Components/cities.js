@@ -14,6 +14,7 @@ import AdminNavbar from './Admin/AdminNavbar';
 import Title from './Utiles/Title';
 import Descripcion1 from './Utiles/Descripcion1';
 import GenericButton from './Utiles/GenericButton';
+import { CreateButton, EditButton, CloseButton, DeleteButton } from './Utiles/ActionButtons';
 
 // Variables de entorno para URL y token
 const API_URL = process.env.REACT_APP_API_URL;
@@ -82,12 +83,10 @@ const DesktopView = ({ cities, handleEdit, handleDelete, getProvinceName }) => (
             <TableCell>{city.description}</TableCell>
             <TableCell>{getProvinceName(city.province)}</TableCell>
             <TableCell>
-              <IconButton
-                color="primary"
+              <EditButton
                 onClick={() => handleEdit(city)}
-              >
-                <EditIcon />
-              </IconButton>
+                size="small"
+              />
               <IconButton
                 color="error"
                 onClick={() => handleDelete(city.id)}
@@ -284,33 +283,31 @@ const Cities = () => {
                     width: '100%',
                   }}
                 />
-                <GenericButton
-                  text="Nueva Ciudad"
-                  color="primary"
-                  startIcon={<AddIcon />}
+                <CreateButton
                   onClick={handleOpen}
+                  componentName="Ciudad"
+                  startIcon={<AddIcon />}
                 />
               </Stack>
             ) : (
               // Vista desktop del encabezado
               <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Title text="Gestión de Ciudades" variant="h4" />
-                <GenericButton
-                  text="Nueva Ciudad"
-                  color="primary"
-                  startIcon={<AddIcon />}
+                <CreateButton
                   onClick={handleOpen}
+                  componentName="Ciudad"
+                  startIcon={<AddIcon />}
                 />
               </Stack>
             )}
-            
+
             {/* Componente de Descripción */}
             <Grid
               item
               xs={12}
               container
-              justifyContent="left" 
-              alignItems="center" 
+              justifyContent="left"
+              alignItems="center"
               sx={{ mt: 2 }}
             >
               <Descripcion1
@@ -319,7 +316,7 @@ const Cities = () => {
               />
             </Grid>
           </Grid>
-  
+
           {/* Botones de acción para mobile */}
           {isMobile && (
             <Grid item xs={12}>
@@ -334,18 +331,12 @@ const Cities = () => {
                   mb: 2
                 }}
               >
-                <GenericButton
-                  text="Editar"
-                  color="primary"
-                  startIcon={<EditIcon />}
+                <EditButton
                   onClick={handleEditSelected}
                   disabled={!selectedCity}
                   fullWidth
                 />
-                <GenericButton
-                  text="Eliminar"
-                  color="error"
-                  startIcon={<DeleteIcon />}
+                <DeleteButton
                   onClick={handleDeleteSelected}
                   disabled={!selectedCity}
                   fullWidth
@@ -353,7 +344,7 @@ const Cities = () => {
               </Stack>
             </Grid>
           )}
-  
+
           <Grid item xs={12}>
             {isMobile ? (
               <MobileView
@@ -372,11 +363,11 @@ const Cities = () => {
             )}
           </Grid>
         </Grid>
-  
+
         {/* Diálogo para crear/editar ciudad */}
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>
-            {editMode ? <Title text="Editar País" /> : <Title text="Nuevo País" />}
+            {editMode ? <Title text="Editar Ciudad" /> : <Title text="Nueva Ciudad" />}
           </DialogTitle>
           <DialogContent>
             <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -420,15 +411,13 @@ const Cities = () => {
             </Grid>
           </DialogContent>
           <DialogActions>
-          <GenericButton
-              text="Cancelar"
-              color="secondary" 
+            <CloseButton
               onClick={handleClose}
               fullWidth
             />
             <GenericButton
               text={editMode ? 'Actualizar' : 'Crear'}
-              color="primary" 
+              color="primary"
               onClick={editMode ? handleUpdate : handleCreate}
               fullWidth
             />
@@ -438,7 +427,7 @@ const Cities = () => {
       <Footer />
     </div>
   );
-  
+
 };
 
 export default Cities;

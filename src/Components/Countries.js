@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import {  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button,
-          Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Grid, IconButton, useTheme,
-          useMediaQuery, Card, CardContent, Stack, Box, Radio,
+import {
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button,
+  Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Grid, IconButton, useTheme,
+  useMediaQuery, Card, CardContent, Stack, Box, Radio,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -14,6 +15,7 @@ import AdminNavbar from './Admin/AdminNavbar';
 import Title from './Utiles/Title';
 import Descripcion1 from './Utiles/Descripcion1'
 import GenericButton from './Utiles/GenericButton';
+import { CreateButton, EditButton, CloseButton, DeleteButton } from './Utiles/ActionButtons';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -123,12 +125,12 @@ const Countries = () => {
       handleDelete(selectedCountry);
     }
   };
-  
+
   const getCountryName = (id) => {
     const country = countries.find((country) => country.id === id);
     return country ? country.name : 'Desconocido';
   };
-  
+
 
   const MobileView = () => (
     <Grid container spacing={3}>
@@ -164,7 +166,7 @@ const Countries = () => {
       ))}
     </Grid>
   );
-  
+
 
   const DesktopView = () => (
     <TableContainer component={Paper}>
@@ -186,9 +188,10 @@ const Countries = () => {
               <TableCell>{country.population}</TableCell>
               <TableCell>{country.region}</TableCell>
               <TableCell>
-                <IconButton color="primary" onClick={() => handleEdit(country)}>
-                  <EditIcon />
-                </IconButton>
+                <EditButton
+                  onClick={() => handleEdit(country)}
+                  size="small"
+                />
                 <IconButton color="error" onClick={() => handleDelete(country.id)}>
                   <DeleteIcon />
                 </IconButton>
@@ -209,32 +212,30 @@ const Countries = () => {
             {isMobile ? (
               <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Title text="Gestión de Países" variant="h4" />
-                <GenericButton
-                  text="Nuevo País"
-                  color="primary"
-                  startIcon={<AddIcon />}
+                <CreateButton
                   onClick={handleOpen}
-               />
+                  componentName="País"
+                  startIcon={<AddIcon />}
+                />
               </Stack>
             ) : (
               <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Title text="Gestión de Países" variant="h4" />
-                <GenericButton
-                  text="Nuevo País"
-                  color="primary"
-                  startIcon={<AddIcon />}
+                <CreateButton
                   onClick={handleOpen}
-               />
+                  componentName="País"
+                  startIcon={<AddIcon />}
+                />
               </Stack>
             )}
           </Grid>
-  
+
           <Grid item xs={12} container justifyContent="left" alignItems="center" sx={{ mt: 2 }}>
             <Descripcion1
               text="Esta pantalla permite gestionar los países, incluyendo su creación, edición y eliminación."
             />
           </Grid>
-  
+
           {isMobile && (
             <Grid item xs={12}>
               <Stack
@@ -248,18 +249,12 @@ const Countries = () => {
                   mb: 2,
                 }}
               >
-                <GenericButton
-                  text="Editar"
-                  color="primary"
-                  startIcon={<EditIcon />}
+                <EditButton
                   onClick={handleEdit}
                   disabled={!selectedCountry}
                   fullWidth
                 />
-                <GenericButton
-                  text="Eliminar"
-                  color="error"
-                  startIcon={<DeleteIcon />}
+                <DeleteButton
                   onClick={handleDeleteSelected}
                   disabled={!selectedCountry}
                   fullWidth
@@ -267,7 +262,7 @@ const Countries = () => {
               </Stack>
             </Grid>
           )}
-  
+
           <Grid item xs={12}>
             {isMobile ? (
               <MobileView
@@ -283,7 +278,7 @@ const Countries = () => {
               />
             )}
           </Grid>
-  
+
           <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
             <DialogTitle>
               {editMode ? <Title text="Editar País" /> : <Title text="Nuevo País" />}
@@ -322,18 +317,16 @@ const Countries = () => {
               </Grid>
             </DialogContent>
             <DialogActions>
-            <GenericButton
-              text="Cancelar"
-              color="secondary" 
-              onClick={handleClose}
-              fullWidth
-            />
-            <GenericButton
-              text={editMode ? 'Actualizar' : 'Crear'}
-              color="primary" 
-              onClick={editMode ? handleUpdate : handleCreate}
-              fullWidth
-            />
+              <CloseButton
+                onClick={handleClose}
+                fullWidth
+              />
+              <GenericButton
+                text={editMode ? 'Actualizar' : 'Crear'}
+                color="primary"
+                onClick={editMode ? handleUpdate : handleCreate}
+                fullWidth
+              />
             </DialogActions>
           </Dialog>
         </Grid>

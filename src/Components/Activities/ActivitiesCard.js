@@ -10,7 +10,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { HomeCarousel } from '../HomeCards/Carousel';
-import GenericButton from '../Utiles/GenericButton';
+import { ViewMoreButton } from '../Utiles/ActionButtons';
 
 const ActivitiesCard = ({ sx }) => {
   const theme = useTheme();
@@ -135,21 +135,18 @@ const ActivitiesCard = ({ sx }) => {
                 </Typography>
                 <Typography variant="body2">{activity.duration} min</Typography>
                 <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                <GenericButton
-                    text="Ver más"
-                    variant="contained"
-                    color="info"
+                  <ViewMoreButton
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleActivityClick(activity.id);
+                    }}
                     sx={{
                       marginTop: "12px",
                       fontSize: { xs: "0.7rem", sm: "0.9rem" },
                       width: "150px",
                       height: "40px",
                     }}
-                    onClick={(e) => {
-                      e.stopPropagation(); // Evitar que el clic en el botón active el evento de la tarjeta
-                      handleActivityClick(activity.id);
-                    }}
-                  />                  
+                  />
                 </Box>
               </CardContent>
             </Card>

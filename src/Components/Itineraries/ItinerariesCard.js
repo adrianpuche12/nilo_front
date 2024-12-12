@@ -12,6 +12,8 @@ import 'swiper/css/pagination';
 import Subtitulo1 from '../Utiles/Subtitulo1';
 import { HomeCarousel } from '../HomeCards/Carousel';
 import GenericButton from '../Utiles/GenericButton';
+import { ViewMoreButton } from '../Utiles/ActionButtons';
+
 
 const ItinerariesCard = ({ sx }) => {
   const theme = useTheme();
@@ -178,17 +180,14 @@ const ItinerariesCard = ({ sx }) => {
                   {truncateText(itinerary.description)}
                 </Typography>
                 <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
-                  <GenericButton
-                    text="Ver más"
-                    variant="contained"
-                    color="info"
+                  <ViewMoreButton
+                    onClick={() => handleItineraryClick(itinerary.id)}
                     sx={{
                       marginTop: "12px",
                       fontSize: { xs: "0.7rem", sm: "0.9rem" },
                       width: "150px",
                       height: "40px",
                     }}
-                    onClick={() => handleItineraryClick(itinerary.id)}
                   />
                 </Box>
               </CardContent>
@@ -217,7 +216,7 @@ const ItinerariesCard = ({ sx }) => {
           <GenericButton
             text="Reservar"
             variant="contained"
-            color="primary"            
+            color="primary"
           />
         </DialogActions>
       </Dialog>

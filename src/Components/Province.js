@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography,  
-          Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Grid, 
-          IconButton, useTheme, useMediaQuery, Card, CardContent, Stack, Box, Radio } 
-from '@mui/material';
+import {
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography,
+  Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Grid,
+  IconButton, useTheme, useMediaQuery, Card, CardContent, Stack, Box, Radio
+}
+  from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
@@ -14,6 +16,8 @@ import AdminNavbar from './Admin/AdminNavbar';
 import Title from './Utiles/Title';
 import Descripcion1 from './Utiles/Descripcion1';
 import GenericButton from './Utiles/GenericButton';
+import { CreateButton, EditButton, CloseButton, DeleteButton } from './Utiles/ActionButtons';
+
 
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -82,9 +86,10 @@ const DesktopView = ({ provinces, handleEdit, handleDelete, getCountryName }) =>
             <TableCell>{province.description}</TableCell>
             <TableCell>{getCountryName(province.country)}</TableCell>
             <TableCell>
-              <IconButton color="primary" onClick={() => handleEdit(province)}>
-                <EditIcon />
-              </IconButton>
+              <EditButton
+                onClick={() => handleEdit(province)}
+                size="small"
+              />
               <IconButton color="error" onClick={() => handleDelete(province.id)}>
                 <DeleteIcon />
               </IconButton>
@@ -263,32 +268,30 @@ const Province = () => {
             {isMobile ? (
               <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Title text="Gestión de Provincias" variant="h4" />
-                <GenericButton
-                  text="Nueva Provincia"
-                  color="primary"
-                  startIcon={<AddIcon />}
+                <CreateButton
                   onClick={handleOpen}
+                  componentName="Provincia"
+                  startIcon={<AddIcon />}
                 />
               </Stack>
             ) : (
               <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Title text="Gestión de Provincias" variant="h4" />
-                <GenericButton
-                  text="Nueva Provincia"
-                  color="primary"
-                  startIcon={<AddIcon />}
+                <CreateButton
                   onClick={handleOpen}
-               />
+                  componentName="Provincia"
+                  startIcon={<AddIcon />}
+                />
               </Stack>
             )}
           </Grid>
-          
+
           <Grid item xs={12} container justifyContent="left" alignItems="center" sx={{ mt: 2 }}>
             <Descripcion1
               text="Esta pantalla permite gestionar las provincias, incluyendo su creación, edición y eliminación."
             />
           </Grid>
-  
+
           {isMobile && (
             <Grid item xs={12}>
               <Stack
@@ -302,18 +305,12 @@ const Province = () => {
                   mb: 2,
                 }}
               >
-                <GenericButton
-                  text="Editar"
-                  color="primary"
-                  startIcon={<EditIcon />}
+                <EditButton
                   onClick={handleEditSelected}
                   disabled={!selectedProvince}
                   fullWidth
                 />
-                <GenericButton
-                  text="Eliminar"
-                  color="error"
-                  startIcon={<DeleteIcon />}
+                <DeleteButton
                   onClick={handleDeleteSelected}
                   disabled={!selectedProvince}
                   fullWidth
@@ -321,7 +318,7 @@ const Province = () => {
               </Stack>
             </Grid>
           )}
-  
+
           <Grid item xs={12}>
             {isMobile ? (
               <MobileView
@@ -340,10 +337,10 @@ const Province = () => {
             )}
           </Grid>
         </Grid>
-  
+
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>
-            {editMode ? <Title text="Editar País" /> : <Title text="Nuevo País" />}
+            {editMode ? <Title text="Editar Provincia" /> : <Title text="Nueva Provincia" />}
           </DialogTitle>
           <DialogContent>
             <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -387,24 +384,22 @@ const Province = () => {
             </Grid>
           </DialogContent>
           <DialogActions>
-            <GenericButton
-              text="Cancelar"
-              color="secondary" 
+            <CloseButton
               onClick={handleClose}
               fullWidth
             />
             <GenericButton
               text={editMode ? 'Actualizar' : 'Crear'}
-              color="primary" 
+              color="primary"
               onClick={editMode ? handleUpdate : handleCreate}
               fullWidth
-            />            
+            />
           </DialogActions>
         </Dialog>
       </Box>
       <Footer />
     </div>
   );
-};  
+};
 
 export default Province;

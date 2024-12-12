@@ -10,6 +10,8 @@ import { promotionsData } from './PromotionData';
 import { useNavigate } from 'react-router-dom';
 import { HomeCarousel } from '../HomeCards/Carousel';
 import GenericButton from '../Utiles/GenericButton'
+import { ViewMoreButton } from '../Utiles/ActionButtons';
+
 
 // Función para truncar texto si excede los 40 caracteres
 const truncateText = (text, maxLength = 40) => {
@@ -131,17 +133,14 @@ const PromotionsCard = ({ sx }) => {
                     width: '100%',
                   }}
                 >
-                  <GenericButton
-                      text="Ver más"
-                      variant="contained"
-                      color="info"
-                      sx={{
-                        marginTop: '12px',
-                        fontSize: { xs: '0.7rem', sm: '0.9rem' },
-                        width: '150px',
-                        height: '40px',
-                      }}
-                      onClick={() => handlePromotionClick(promotion.id)}
+                  <ViewMoreButton
+                    onClick={() => handlePromotionClick(promotion.id)}
+                    sx={{
+                      marginTop: "12px",
+                      fontSize: { xs: "0.7rem", sm: "0.9rem" },
+                      width: "150px",
+                      height: "40px",
+                    }}
                   />
                 </Box>
               </CardContent>

@@ -10,6 +10,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Tooltip,
   useMediaQuery
 } from '@mui/material';
 import { LogOut, User, Menu } from 'lucide-react';
@@ -18,7 +19,9 @@ import { useAuth } from './Auth/AuthContext';
 import { ThemeContext } from './Utiles/Theme/ThemeProvider';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import HomeIcon from '@mui/icons-material/Home'; 
+import HomeIcon from '@mui/icons-material/Home';
+import GenericButton from './Utiles/GenericButton';
+import { US, ES } from 'country-flag-icons/react/3x2';
 
 const Navbar = () => {
   const { logout } = useAuth();
@@ -27,10 +30,41 @@ const Navbar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = useState(false);
   const { themeMode, toggleTheme } = useContext(ThemeContext);
+  const [currentLanguage, setCurrentLanguage] = useState('en');
 
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+
+  const toggleLanguage = () => {
+    setCurrentLanguage(currentLanguage === 'en' ? 'es' : 'en');
+  };
+
+  const LanguageIcon = () => {
+    const tooltipText = currentLanguage === 'en' ? 'Cambiar a Español' : 'Switch to English';
+    
+    return (
+      <Tooltip title={tooltipText}>
+        <IconButton 
+          color="inherit" 
+          onClick={toggleLanguage}
+          sx={{
+            padding: '8px',
+            '& svg': {
+              width: '24px',
+              height: '16px',
+            }
+          }}
+        >
+          {currentLanguage === 'en' ? (
+            <US title="US Flag" />
+          ) : (
+            <ES title="Spanish Flag" />
+          )}
+        </IconButton>
+      </Tooltip>
+    );
   };
 
   const navLinks = [
@@ -64,107 +98,92 @@ const Navbar = () => {
           </Button>
         </ListItem>
       ))}
+      <ListItem>
+        <GenericButton
+          text="Profile"
+          component={NavLink}
+          to="/profile"
+          color="inherit"
+          fullWidth
+          sx={{ justifyContent: 'flex-start' }}
+          startIcon={<User />}            
+        />         
+      </ListItem>
+      <ListItem>
+        <GenericButton
+          text="Logout"
+          color="inherit"
+          fullWidth
+          onClick={handleLogout}
+          sx={{ justifyContent: 'flex-start' }}
+          startIcon={<LogOut />}            
+        />         
+      </ListItem>
     </List>
   );
 
   return (
     <AppBar position="static" color="primary">
       <Toolbar>
-        {isMobile ? (
-          <>
-            {/* Menú hamburguesa */}
-            <Box sx={{ flexGrow: 0 }}>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                edge="start"
-                onClick={handleDrawerToggle}
-              >
-                <Menu />
-              </IconButton>
-            </Box>
-
-            {/* Ícono de Home al centro */}
-            <Box
-              sx={{
-                flexGrow: 1,
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            >
-              <IconButton color="inherit" component={NavLink} to="/">
-                <HomeIcon />
-              </IconButton>
-            </Box>
-
-            {/* Iconos al extremo derecho */}
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              {/* Icono de cambio de tema */}
-              <IconButton onClick={toggleTheme} color="inherit">
-                {themeMode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
-              </IconButton>
-
-              {/* Ícono de perfil */}
-              <IconButton color="inherit" component={NavLink} to="/profile">
-                <User />
-              </IconButton>
-
-              {/* Ícono de logout */}
-              <IconButton color="inherit" onClick={handleLogout}>
-                <LogOut />
-              </IconButton>
-            </Box>
-          </>
-        ) : (
-          <>
-            <Box 
-              display={{ xs: 'none', md: 'flex' }} 
-              alignItems="center" 
-              flexGrow={1}
-            >
-              {navLinks.map((link) => (
-                <NavigationLink key={link.to} to={link.to}>
-                  {link.label}
-                </NavigationLink>
-              ))}
-            </Box>
-            <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
-              <IconButton color="inherit" component={NavLink} to="/">
-                <HomeIcon />
-              </IconButton>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <IconButton onClick={toggleTheme} color="inherit">
-                {themeMode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
-              </IconButton>
-              <IconButton color="inherit" component={NavLink} to="/profile">
-                <User />
-              </IconButton>
-              <IconButton color="inherit" onClick={handleLogout}>
-                <LogOut />
-              </IconButton>
-            </Box>
-          </>
+        {isMobile && (
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2 }}
+          >
+            <Menu />
+          </IconButton>
         )}
+        
+        <Box 
+          display={{ xs: 'none', md: 'flex' }} 
+          alignItems="center" 
+          flexGrow={1}
+        >
+          {navLinks.map((link) => (
+            <NavigationLink key={link.to} to={link.to}>
+              {link.label}
+            </NavigationLink>
+          ))}
+        </Box>
+
+        <Box display={{ xs: 'flex', md: 'flex' }} alignItems="center" gap={1}>
+          <IconButton color="inherit" component={NavLink} to="/">
+            <HomeIcon />
+          </IconButton>
+
+          {/* Selector de idioma */}
+          <LanguageIcon />
+
+          <IconButton onClick={toggleTheme} color="inherit">
+            {themeMode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
+          </IconButton>
+
+          <IconButton color="inherit" component={NavLink} to="/profile">
+            <User />
+          </IconButton>
+          <IconButton color="inherit" onClick={handleLogout}>
+            <LogOut />
+          </IconButton>
+        </Box>
       </Toolbar>
 
-      {/* Drawer para el menú en móviles */}
       <Drawer
         variant="temporary"
         anchor="left"
         open={mobileOpen}
         onClose={handleDrawerToggle}
         ModalProps={{
-          keepMounted: true, // Mejora de rendimiento en móviles
+          keepMounted: true, 
         }}
         sx={{
           display: { xs: 'block', md: 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
+          '& .MuiDrawer-paper': { 
+            boxSizing: 'border-box', 
+            width: 240 
+          },
         }}
       >
         {drawer}

@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Card, CardContent, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Radio, IconButton, List, ListItem, ListItemText,
-  ListItemSecondaryAction, Paper, Box, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, useTheme, useMediaQuery } from '@mui/material';
+import { Grid, Card, CardContent, Typography, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Radio, IconButton, Box, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, useTheme, useMediaQuery, Paper } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
-import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
 import Navbar from '../NavBar';
@@ -12,10 +10,8 @@ import Footer from '../Footer';
 import AdminNavbar from '../Admin/AdminNavbar';
 import Title from '../Utiles/Title';
 import Descripcion1 from '../Utiles/Descripcion1';
-import Subtitulo1 from '../Utiles/Subtitulo1';
 import GenericButton from '../Utiles/GenericButton';
-
-
+import { CreateButton, EditButton, CloseButton, DeleteButton } from '../Utiles/ActionButtons';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -83,12 +79,10 @@ const DesktopView = ({ activities, handleEdit, handleDelete, getCityName }) => (
             <TableCell>{activity.type}</TableCell>
             <TableCell>{getCityName(activity.cityId)}</TableCell>
             <TableCell>
-              <IconButton
-                color="primary"
+              <EditButton
                 onClick={() => handleEdit(activity)}
-              >
-                <EditIcon />
-              </IconButton>
+                size="small"
+              />
               <IconButton
                 color="error"
                 onClick={() => handleDelete(activity.id)}
@@ -104,7 +98,6 @@ const DesktopView = ({ activities, handleEdit, handleDelete, getCityName }) => (
 );
 
 const Activities = () => {
-  //Estados
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { accessToken } = useAuth();
@@ -113,16 +106,9 @@ const Activities = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
-  const [batchOpen, setBatchOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [currentActivity, setCurrentActivity] = useState({
-    name: '',
-    type: '',
-    cityId: ''
-  });
-  const [batchActivities, setBatchActivities] = useState([]);
-  const [tempActivity, setTempActivity] = useState({
     name: '',
     type: '',
     cityId: ''
@@ -136,7 +122,6 @@ const Activities = () => {
     }
   });
 
-  // Traer actividades y ciudades
   useEffect(() => {
     if (accessToken) {
       fetchActivities();
@@ -144,11 +129,10 @@ const Activities = () => {
     }
   }, [accessToken]);
 
-  // Función para obtener actividades
   const fetchActivities = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/activities`, getAxiosConfig);
+      const response = await axios.get(`${API_URL}/activities`, getAxiosConfig());
       setActivities(response.data);
       setError(null);
     } catch (err) {
@@ -158,17 +142,15 @@ const Activities = () => {
     }
   };
 
-  // Función para obtener ciudades
   const fetchCities = async () => {
     try {
-      const response = await axios.get(`${API_URL}/cities`, getAxiosConfig);
+      const response = await axios.get(`${API_URL}/cities`, getAxiosConfig());
       setCities(response.data);
     } catch (err) {
       setError('Error al cargar las ciudades: ' + err.message);
     }
   };
 
-  // Manejadores para el diálogo individual
   const handleOpen = () => {
     setOpen(true);
     setEditMode(false);
@@ -184,23 +166,6 @@ const Activities = () => {
     setEditMode(false);
   };
 
-  // Manejadores para el diálogo de lote
-  const handleBatchOpen = () => {
-    setBatchOpen(true);
-    setBatchActivities([]);
-    setTempActivity({
-      name: '',
-      type: '',
-      cityId: ''
-    });
-  };
-
-  const handleBatchClose = () => {
-    setBatchOpen(false);
-    setBatchActivities([]);
-  };
-
-  // Manejador para cambios en el formulario individual
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCurrentActivity(prev => ({
@@ -209,52 +174,9 @@ const Activities = () => {
     }));
   };
 
-  // Manejador para cambios en el formulario de lote
-  const handleTempChange = (e) => {
-    const { name, value } = e.target;
-    setTempActivity(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-
-  // Añadir actividad temporal a la lista de lote
-  const handleAddToBatch = () => {
-    if (tempActivity.name && tempActivity.type && tempActivity.cityId) {
-      setBatchActivities([...batchActivities, { ...tempActivity }]);
-      setTempActivity({
-        name: '',
-        type: '',
-        cityId: ''
-      });
-    }
-  };
-
-  // Remover actividad de la lista de lote
-  const handleRemoveFromBatch = (index) => {
-    setBatchActivities(batchActivities.filter((_, i) => i !== index));
-  };
-
-  // Guardar todas las actividades del lote
-  const handleSaveBatch = async () => {
-    try {
-      await Promise.all(
-        batchActivities.map(activity =>
-          axios.post(`${API_URL}/activities`, activity, getAxiosConfig)
-        )
-      );
-      await fetchActivities();
-      handleBatchClose();
-    } catch (err) {
-      setError('Error al guardar las actividades: ' + err.message);
-    }
-  };
-
-  // Crear nueva actividad individual
   const handleCreate = async () => {
     try {
-      await axios.post(`${API_URL}/activities`, currentActivity, getAxiosConfig);
+      await axios.post(`${API_URL}/activities`, currentActivity, getAxiosConfig());
       await fetchActivities();
       handleClose();
     } catch (err) {
@@ -262,7 +184,6 @@ const Activities = () => {
     }
   };
 
-  // Funciones de editar, actualizar y eliminar
   const handleEdit = (activity) => {
     setCurrentActivity(activity);
     setEditMode(true);
@@ -271,7 +192,7 @@ const Activities = () => {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`${API_URL}/activities/${currentActivity.id}`, currentActivity, getAxiosConfig);
+      await axios.put(`${API_URL}/activities/${currentActivity.id}`, currentActivity, getAxiosConfig());
       await fetchActivities();
       handleClose();
     } catch (err) {
@@ -282,7 +203,7 @@ const Activities = () => {
   const handleDelete = async (id) => {
     if (window.confirm('¿Está seguro de que desea eliminar esta actividad?')) {
       try {
-        await axios.delete(`${API_URL}/activities/${id}`, getAxiosConfig);
+        await axios.delete(`${API_URL}/activities/${id}`, getAxiosConfig());
         await fetchActivities();
       } catch (err) {
         setError('Error al eliminar la actividad: ' + err.message);
@@ -290,7 +211,6 @@ const Activities = () => {
     }
   };
 
-  //Manejador para seleccionar objeto
   const handleSelectionChange = (activityId) => {
     if (selectedActivity === activityId) {
       setSelectedActivity(null);
@@ -299,7 +219,6 @@ const Activities = () => {
     }
   };
 
-  //Editar seleccionado
   const handleEditSelected = () => {
     if (selectedActivity) {
       const activity = activities.find(a => a.id === selectedActivity);
@@ -309,82 +228,62 @@ const Activities = () => {
     }
   };
 
-  //Borrar seleccionado
   const handleDeleteSelected = () => {
     if (selectedActivity) {
       handleDelete(selectedActivity);
     }
   };
 
-  // Función para obtener el nombre de la ciudad
   const getCityName = (cityId) => {
     const city = cities.find(city => city.id === parseInt(cityId));
     return city ? city.name : 'Ciudad no encontrada';
   };
 
   const { roles } = useAuth();
-  
+
   return (
     <div>
       {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
-      <Box sx={{ padding: '20px' }}>
-        <Grid container spacing={3}>
+      <Box sx={{ padding: '10px' }}>
+        <Grid container spacing={1}>
           <Grid item xs={12}>
             {isMobile ? (
               // Vista mobile del encabezado
               <Stack spacing={2}>
-                <Title text ="Gestión de Actividades" variant="h4"/>
-                <Stack direction="row" spacing={2} sx={{ width: '100%' }}>
-                <GenericButton
-                  text="Nueva Actividad"
-                  color="primary"
-                  startIcon={<AddIcon />}
+                <Title text="Gestión de Actividades" variant="h4" />
+                <CreateButton
                   onClick={handleOpen}
+                  componentName="Actividad"
+                  startIcon={<AddIcon />}
                 />
-                <GenericButton
-                  text="Crear varias actividades"
-                  color="secondary"
-                  onClick={handleBatchOpen}
-                  startIcon={<PlaylistAddIcon />}
-                />
-                </Stack>
               </Stack>
             ) : (
               // Vista desktop del encabezado
               <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Title text ="Gestión de Actividades" variant="h4"/>
-                  <GenericButton
-                    text="Nueva Actividad"
-                    color="primary"
-                    startIcon={<AddIcon />}
-                    onClick={handleOpen}
-                  />
-                  <GenericButton
-                    text="Crear varias actividades"
-                    color="secondary"
-                    onClick={handleBatchOpen}
-                    startIcon={<PlaylistAddIcon />}
-                  />                
+                <Title text="Gestión de Actividades" variant="h4" />
+                <CreateButton
+                  onClick={handleOpen}
+                  componentName="Actividad"
+                  startIcon={<AddIcon />}
+                />
               </Stack>
             )}
 
-            {/* Componente de Descripción */}
             <Grid
               item
               xs={12}
               container
-              justifyContent="left" 
-              alignItems="center" 
+              justifyContent="left"
+              alignItems="center"
               sx={{ mt: 2 }}
             >
               <Descripcion1
-                text="Esta pantalla facilita la gestión de itinerarios, permitiendo su creación, edición y eliminación, así como la integración con actividades y ciudades, incluyendo la creación de actividades de forma individual o por lote."
+                text="Esta pantalla facilita la gestión de actividades, permitiendo su creación, edición y eliminación, así como la integración con ciudades."
                 sx={{ mt: 10 }}
               />
             </Grid>
           </Grid>
 
-          {/* Botones de acción para mobile */}
           {isMobile && (
             <Grid item xs={12}>
               <Stack
@@ -398,18 +297,12 @@ const Activities = () => {
                   mb: 2
                 }}
               >
-                <GenericButton
-                  text="Editar"
-                  color="primary"
-                  startIcon={<EditIcon />}
+                <EditButton
                   onClick={handleEditSelected}
                   disabled={!selectedActivity}
                   fullWidth
                 />
-                <GenericButton
-                  text="Eliminar"
-                  color="error"
-                  startIcon={<DeleteIcon />}
+                <DeleteButton
                   onClick={handleDeleteSelected}
                   disabled={!selectedActivity}
                   fullWidth
@@ -437,11 +330,9 @@ const Activities = () => {
           </Grid>
         </Grid>
 
-
-        {/* Diálogo crear/editar actividad individual */}
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>
-            {editMode ? <Title text="Editar País" /> : <Title text="Nuevo País" />}
+            {editMode ? <Title text="Editar Actividad" /> : <Title text="Nueva Actividad" />}
           </DialogTitle>
           <DialogContent>
             <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -489,123 +380,16 @@ const Activities = () => {
             </Grid>
           </DialogContent>
           <DialogActions>
-            <GenericButton
-              text="Cancelar"
-              color="secondary" 
+            <CloseButton
               onClick={handleClose}
               fullWidth
             />
             <GenericButton
               text={editMode ? 'Actualizar' : 'Crear'}
-              color="primary" 
+              color="primary"
               onClick={editMode ? handleUpdate : handleCreate}
               fullWidth
             />
-          </DialogActions>
-        </Dialog>
-
-        {/* Diálogo para crear lista de actividades */}
-        <Dialog
-          open={batchOpen}
-          onClose={handleBatchClose}
-          maxWidth="md"
-          fullWidth
-        >
-          <DialogTitle>
-            <Title text="Nuevas Actividades"/>
-          </DialogTitle>
-          <DialogContent>
-            <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  name="name"
-                  label="Nombre"
-                  fullWidth
-                  value={tempActivity.name}
-                  onChange={handleTempChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  name="type"
-                  select
-                  label="Tipo"
-                  fullWidth
-                  value={tempActivity.type}
-                  onChange={handleTempChange}
-                >
-                  {activityTypes.map((type) => (
-                    <MenuItem key={type} value={type}>
-                      {type}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  name="cityId"
-                  select
-                  label="Ciudad"
-                  fullWidth
-                  value={tempActivity.cityId}
-                  onChange={handleTempChange}
-                >
-                  {cities.map((city) => (
-                    <MenuItem key={city.id} value={city.id}>
-                      {city.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid item xs={12}>
-              <GenericButton
-                  text="Añadir a la lista"
-                  color="primary"
-                  startIcon={<AddIcon />}
-                  onClick={handleAddToBatch}
-                />                
-              </Grid>
-
-              <Grid item xs={12}>
-                <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                  <Subtitulo1 text="Actividades en la Lista"/> ({batchActivities.length})
-                </Typography>
-                <List>
-                  {batchActivities.map((activity, index) => (
-                    <ListItem key={index} divider>
-                      <ListItemText
-                        primary={activity.name}
-                        secondary={`Tipo: ${activity.type}, Ciudad: ${getCityName(activity.cityId)}`}
-                      />
-                      <ListItemSecondaryAction>
-                        <IconButton
-                          edge="end"
-                          color="error"
-                          onClick={() => handleRemoveFromBatch(index)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                  ))}
-                </List>
-              </Grid>
-            </Grid>
-          </DialogContent>
-          <DialogActions>
-            <GenericButton
-              text="Cancelar"
-              color="secondary"
-              startIcon={<AddIcon />}
-              onClick={handleBatchClose}
-            />   
-            <GenericButton
-              text="Guardar actividades"
-              color="primary"
-              startIcon={<AddIcon />}
-              onClick={handleSaveBatch}
-              disabled={batchActivities.length === 0}
-            /> 
           </DialogActions>
         </Dialog>
       </Box>

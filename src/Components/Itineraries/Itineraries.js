@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Grid, IconButton, 
-  useTheme, useMediaQuery, Card, CardContent, Stack, Box, Radio, List, ListItem, ListItemText, FormControl, InputLabel, Select } from '@mui/material';
+import {
+    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Grid, IconButton,
+    useTheme, useMediaQuery, Card, CardContent, Stack, Box, Radio, List, ListItem, ListItemText, FormControl, InputLabel, Select
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
@@ -13,6 +15,7 @@ import Title from '../Utiles/Title';
 import Descripcion1 from '../Utiles/Descripcion1';
 import GenericButton from '../Utiles/GenericButton';
 import Subtitulo2 from '../Utiles/Subtitulo2'
+import { CreateButton, EditButton, CloseButton, DeleteButton } from '../Utiles/ActionButtons';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -94,9 +97,10 @@ const DesktopView = ({ itineraries, handleEdit, handleDelete, getCityName, getAc
                             {itinerary.activities.map(activity => getActivityName(activity)).join(', ')}
                         </TableCell>
                         <TableCell>
-                            <IconButton color="primary" onClick={() => handleEdit(itinerary)}>
-                                <EditIcon />
-                            </IconButton>
+                            <EditButton
+                                onClick={() => handleEdit(itinerary)}
+                                size="small"
+                            />
                             <IconButton color="error" onClick={() => handleDelete(itinerary.id)}>
                                 <DeleteIcon />
                             </IconButton>
@@ -310,22 +314,20 @@ const Itineraries = () => {
                             // Vista mobile del encabezado
                             <Stack direction="row" justifyContent="space-between" alignItems="center">
                                 <Title text="Gestión de Itinerarios" variant="h4" />
-                                <GenericButton
-                                    text="Nuevo Itinerario"
-                                    color="primary"
-                                    startIcon={<AddIcon />}
+                                <CreateButton
                                     onClick={handleOpen}
+                                    componentName="Itinerario"
+                                    startIcon={<AddIcon />}
                                 />
                             </Stack>
                         ) : (
                             // Vista desktop del encabezado
                             <Stack direction="row" justifyContent="space-between" alignItems="center">
                                 <Title text="Gestión de Itinerarios" variant="h4" />
-                                <GenericButton
-                                    text="Nuevo Itinerario"
-                                    color="primary"
-                                    startIcon={<AddIcon />}
+                                <CreateButton
                                     onClick={handleOpen}
+                                    componentName="Itinerario"
+                                    startIcon={<AddIcon />}
                                 />
                             </Stack>
                         )}
@@ -334,14 +336,14 @@ const Itineraries = () => {
                             item
                             xs={12}
                             container
-                            justifyContent="left" 
-                            alignItems="center" 
+                            justifyContent="left"
+                            alignItems="center"
                             sx={{ mt: 2 }}
                         >
-                        <Descripcion1
-                            text="Esta pantalla permite gestionar los itinerarios, incluyendo su creación, edición y eliminación, además de sincronizarlos con actividades y ciudades."
-                            sx={{ mt: 10 }}
-                        />
+                            <Descripcion1
+                                text="Esta pantalla permite gestionar los itinerarios, incluyendo su creación, edición y eliminación, además de sincronizarlos con actividades y ciudades."
+                                sx={{ mt: 10 }}
+                            />
                         </Grid>
                     </Grid>
 
@@ -359,24 +361,16 @@ const Itineraries = () => {
                                     mb: 2
                                 }}
                             >
-                                <GenericButton
-                                    text="Editar"
-                                    color="primary"
-                                    variant="contained"
-                                    startIcon={<AddIcon />}
+                                <EditButton
                                     onClick={handleEditSelected}
                                     disabled={!selectedItinerary}
                                     fullWidth
-                                />  
-                                <GenericButton
-                                    text="Eliminar"
-                                    variant="contained"
-                                    color="error"
+                                />
+                                <DeleteButton
                                     onClick={handleDeleteSelected}
                                     disabled={!selectedItinerary}
-                                    startIcon={<DeleteIcon />}
                                     fullWidth
-                                />  
+                                />
                             </Stack>
                         </Grid>
                     )}
@@ -405,7 +399,7 @@ const Itineraries = () => {
                 {/* Diálogo crear/editar itinerario */}
                 <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
                     <DialogTitle>
-                        {editMode ? <Title text="Editar País" /> : <Title text="Nuevo País" />}
+                        {editMode ? <Title text="Editar Itinerario" /> : <Title text="Nuevo Itinerario" />}
                     </DialogTitle>
                     <DialogContent>
                         <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -473,7 +467,7 @@ const Itineraries = () => {
 
                                     <Grid item xs={12}>
                                         <Typography variant="subtitle1" gutterBottom>
-                                            <Subtitulo2 text= "Actividades Seleccionadas:"/>
+                                            <Subtitulo2 text="Actividades Seleccionadas:" />
                                         </Typography>
                                         <List>
                                             {currentItinerary.activities.map((activity) => (
@@ -495,15 +489,13 @@ const Itineraries = () => {
                         </Grid>
                     </DialogContent>
                     <DialogActions>
-                        <GenericButton
-                            text="Cancelar"
-                            color="secondary" 
+                        <CloseButton
                             onClick={handleClose}
                             fullWidth
-                            />
-                            <GenericButton
+                        />
+                        <GenericButton
                             text={editMode ? 'Actualizar' : 'Crear'}
-                            color="primary" 
+                            color="primary"
                             variant="contained"
                             onClick={editMode ? handleUpdate : handleCreate}
                             disabled={!currentItinerary.name || !currentItinerary.cityId || currentItinerary.activities.length === 0}
