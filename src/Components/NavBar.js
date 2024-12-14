@@ -77,6 +77,7 @@ const Navbar = () => {
     { to: "/userReservations", label: "Reservas" },
     { to: "/about-us", label: "Acerca de Nosotros" },
     { to: "/contactos", label: "Contactos" },
+    { to: "/politica", label: "Política de la Empresa" },
   ];
 
   const handleDrawerToggle = () => {
