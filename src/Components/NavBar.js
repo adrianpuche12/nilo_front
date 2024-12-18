@@ -22,6 +22,8 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import HomeIcon from '@mui/icons-material/Home';
 import GenericButton from './Utiles/GenericButton';
 import { US, ES } from 'country-flag-icons/react/3x2';
+import { LanguageContext } from '../Contexts/LanguageContext';
+import { translations } from '../Contexts/Translations';
 
 const Navbar = () => {
   const { logout } = useAuth();
@@ -30,24 +32,21 @@ const Navbar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = useState(false);
   const { themeMode, toggleTheme } = useContext(ThemeContext);
-  const [currentLanguage, setCurrentLanguage] = useState('en');
+  const { currentLanguage, toggleLanguage } = useContext(LanguageContext);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
 
-  const toggleLanguage = () => {
-    setCurrentLanguage(currentLanguage === 'en' ? 'es' : 'en');
-  };
 
   const LanguageIcon = () => {
     const tooltipText = currentLanguage === 'en' ? 'Cambiar a Español' : 'Switch to English';
-    
+
     return (
       <Tooltip title={tooltipText}>
-        <IconButton 
-          color="inherit" 
+        <IconButton
+          color="inherit"
           onClick={toggleLanguage}
           sx={{
             padding: '8px',
@@ -68,16 +67,16 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    { to: "/countries", label: "Countries" },
-    { to: "/users", label: "Users" },
-    { to: "/activities", label: "Activities" },
-    { to: "/province", label: "Province" },
-    { to: "/itineraries", label: "Itineraries" },
-    { to: "/cities", label: "Cities" },
-    { to: "/userReservations", label: "Reservas" },
-    { to: "/about-us", label: "Acerca de Nosotros" },
-    { to: "/contactos", label: "Contactos" },
-    { to: "/politica", label: "Política de la Empresa" },
+    { to: "/countries", label: translations[currentLanguage].countries },
+    { to: "/users", label: translations[currentLanguage].users },
+    { to: "/activities", label: translations[currentLanguage].activities },
+    { to: "/province", label: translations[currentLanguage].province },
+    { to: "/itineraries", label: translations[currentLanguage].itineraries },
+    { to: "/cities", label: translations[currentLanguage].cities },
+    { to: "/userReservations", label: translations[currentLanguage].reservations },
+    { to: "/about-us", label: translations[currentLanguage].aboutUs },
+    { to: "/contactos", label: translations[currentLanguage].contacts },
+    { to: "/politica", label: translations[currentLanguage].policies },
   ];
 
   const handleDrawerToggle = () => {
@@ -101,24 +100,24 @@ const Navbar = () => {
       ))}
       <ListItem>
         <GenericButton
-          text="Profile"
+          text={translations[currentLanguage].profile}
           component={NavLink}
           to="/profile"
           color="inherit"
           fullWidth
           sx={{ justifyContent: 'flex-start' }}
-          startIcon={<User />}            
-        />         
+          startIcon={<User />}
+        />
       </ListItem>
       <ListItem>
         <GenericButton
-          text="Logout"
+          text={translations[currentLanguage].logout}
           color="inherit"
           fullWidth
           onClick={handleLogout}
           sx={{ justifyContent: 'flex-start' }}
-          startIcon={<LogOut />}            
-        />         
+          startIcon={<LogOut />}
+        />
       </ListItem>
     </List>
   );
@@ -137,10 +136,10 @@ const Navbar = () => {
             <Menu />
           </IconButton>
         )}
-        
-        <Box 
-          display={{ xs: 'none', md: 'flex' }} 
-          alignItems="center" 
+
+        <Box
+          display={{ xs: 'none', md: 'flex' }}
+          alignItems="center"
           flexGrow={1}
         >
           {navLinks.map((link) => (
@@ -177,13 +176,13 @@ const Navbar = () => {
         open={mobileOpen}
         onClose={handleDrawerToggle}
         ModalProps={{
-          keepMounted: true, 
+          keepMounted: true,
         }}
         sx={{
           display: { xs: 'block', md: 'none' },
-          '& .MuiDrawer-paper': { 
-            boxSizing: 'border-box', 
-            width: 240 
+          '& .MuiDrawer-paper': {
+            boxSizing: 'border-box',
+            width: 240
           },
         }}
       >
@@ -196,10 +195,10 @@ const Navbar = () => {
 const NavigationLink = ({ to, children }) => {
   const theme = useTheme();
   return (
-    <Button 
-      component={NavLink} 
-      to={to} 
-      color="inherit" 
+    <Button
+      component={NavLink}
+      to={to}
+      color="inherit"
       sx={{ marginRight: theme.spacing(2) }}
     >
       {children}

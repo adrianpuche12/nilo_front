@@ -1,0 +1,30 @@
+export const translations = {
+    en: {
+      countries: "Countries",
+      users: "Users",
+      activities: "Activities",
+      province: "Province",
+      itineraries: "Itineraries",
+      cities: "Cities",
+      reservations: "Reservations",
+      aboutUs: "About Us",
+      contacts: "Contacts",
+      policies: "Policies",
+      profile: "Profile",
+      logout: "Logout"
+    },
+    es: {
+      countries: "Países",
+      users: "Usuarios",
+      activities: "Actividades",
+      province: "Provincia",
+      itineraries: "Itinerarios",
+      cities: "Ciudades", 
+      reservations: "Reservas",
+      aboutUs: "Acerca de",
+      contacts: "Contactos",
+      policies: "Políticas",
+      profile: "Perfil",
+      logout: "Cerrar Sesión"
+    }
+  };
