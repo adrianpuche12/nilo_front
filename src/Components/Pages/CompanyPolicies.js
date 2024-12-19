@@ -6,13 +6,14 @@ import Title from '../Utiles/Title';
 import Subtitulo1 from '../Utiles/Subtitulo1';
 import Subtitulo2 from '../Utiles/Subtitulo2';
 import Descripcion1 from '../Utiles/Descripcion1';
+import { MainTitle } from '../Utiles/MainComponents';
 
 const CompanyPolicies = () => {
   return (
     <Box sx={{ bgcolor: 'background.default', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Navbar />
       <Container maxWidth="md" sx={{ py: 4, flex: 1 }}>
-        <Title text="Política de la Empresa" />
+        <MainTitle text="Política de la Empresa" align='center'/>
 
         <section>
           <Subtitulo1 

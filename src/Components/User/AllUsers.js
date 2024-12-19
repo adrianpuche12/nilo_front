@@ -11,6 +11,7 @@ import Navbar from '../NavBar';
 import Footer from '../Footer';
 import AdminNavbar from '../Admin/AdminNavbar';
 import { useAuth } from '../Auth/AuthContext';
+import { MainTitle } from '../Utiles/MainComponents';
 
 function AllUsers() {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ function AllUsers() {
     <div>
       {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
       <Box sx={{ padding: 4 }}>
-        <Title text="Usuarios" />
+      <MainTitle text="Usuarios" align='center'/>
         <Box
           display="flex"
           flexWrap="wrap"

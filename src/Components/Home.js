@@ -3,38 +3,38 @@ import { Container, Box } from '@mui/material';
 import { useAuth } from './Auth/AuthContext';
 import ActivitiesCard from './Activities/ActivitiesCard';
 import ItinerariesCard from './Itineraries/ItinerariesCard';
-import HomeCards from './HomeCards/HomeCards';
 import Navbar from './NavBar';
 import Footer from './Footer';
 import Subtitulo1 from './Utiles/Subtitulo1';
 import Descripcion1 from './Utiles/Descripcion1';
 import Title from './Utiles/Title';
 import PromotionsCard from './Promotions/PromotionCard';
+import { MainTitle, MainSubtitle, MainDescription1, MainDescription2, MainSection } from './Utiles/MainComponents';
 
 const sectionStyles = {
   wrapper: {
-    mb: 0.5,  
+    mb: 0.5,
   },
   headerContainer: {
     maxWidth: '800px',
     mx: 'auto',
-    mb: 0.25, 
+    mb: 0.25,
     textAlign: 'center',
   },
   description: {
-    fontSize: '0.8rem', 
+    fontSize: '0.8rem',
     color: 'text.secondary',
-    lineHeight: 1.2, 
-    px: { xs: 0.25, sm: 0.5 }, 
-    maxWidth: '500px', 
+    lineHeight: 1.2,
+    px: { xs: 0.25, sm: 0.5 },
+    maxWidth: '500px',
     mx: 'auto',
   },
   carouselWrapper: {
     position: 'relative',
-    marginBottom: { xs: 0.25, sm: 0.5 }, 
+    marginBottom: { xs: 0.25, sm: 0.5 },
   },
   pagination: {
-    marginTop: '-4px', 
+    marginTop: '-4px',
     display: 'flex',
     justifyContent: 'center',
   },
@@ -42,16 +42,16 @@ const sectionStyles = {
 
 // Estilos unificados para las cards
 const cardStyles = {
-  maxWidth: 200, 
-  height: 250, 
+  maxWidth: 200,
+  height: 250,
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
   alignItems: 'center',
   mx: 'auto',
-  boxShadow: 0, 
+  boxShadow: 0,
   borderRadius: 2,
-  p: 0.1, 
+  p: 0.1,
   '@media (max-width: 600px)': {
     maxWidth: '100%',
     height: 'auto',
@@ -66,21 +66,9 @@ const Home = () => {
     <>
       <Navbar />
       <Container maxWidth="xl" sx={{ mt: 1, mb: 4 }}>
-        {/* Paquetes Carrusel */}
-        <Box sx={sectionStyles.wrapper}>
-          <Box sx={sectionStyles.headerContainer}>
-            <Title text="Conoce nuestros paquetes de Viaje" />
-            <Box sx={sectionStyles.description}>
-              <Descripcion1
-                text="Explora nuestros paquetes exclusivos para hacer tu próximo viaje inolvidable."
-                margin="0"
-              />
-            </Box>
-          </Box>
-          <Box sx={sectionStyles.carouselWrapper}>
-            <HomeCards sx={cardStyles} />
-          </Box>
-        </Box>
+        <MainSection>
+          <MainTitle text="Conoce nuestros paquetes de Viaje" align="center" />
+        </MainSection>
 
         {/* Promociones Carrusel */}
         <Box sx={sectionStyles.wrapper}>

@@ -45,7 +45,7 @@ const ItinerariesDetail = () => {
       setItinerary(itineraryResponse.data);
 
       const cityResponse = await axios.get(
-        `${process.env.REACT_APP_API_URL}/cities/${itineraryResponse.data.cityId}`,
+        `${process.env.REACT_APP_API_URL}/cities`,
         getAxiosConfig()
       );
       setCity(cityResponse.data);

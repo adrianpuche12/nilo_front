@@ -15,6 +15,7 @@ import Title from './Utiles/Title';
 import Descripcion1 from './Utiles/Descripcion1';
 import GenericButton from './Utiles/GenericButton';
 import { CreateButton, EditButton, CloseButton, DeleteButton } from './Utiles/ActionButtons';
+import { MainTitle, MainDescription1 } from './Utiles/MainComponents';
 
 // Variables de entorno para URL y token
 const API_URL = process.env.REACT_APP_API_URL;
@@ -264,7 +265,7 @@ const Cities = () => {
     <div>
       {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
       <Box sx={{ padding: '10px' }}>
-        <Grid container spacing={1}>
+        <Grid container spacing={1} sx={{ mt: 4, px: 2 }}>
           <Grid item xs={12}>
             {isMobile ? (
               // Vista mobile del encabezado
@@ -274,15 +275,7 @@ const Cities = () => {
                 alignItems="center"
                 sx={{ marginBottom: '-40px', width: '100%' }}
               >
-                <Title
-                  text="Gestión de Ciudades"
-                  variant="h4"
-                  sx={{
-                    marginBottom: '10px',
-                    textAlign: 'left',
-                    width: '100%',
-                  }}
-                />
+                <MainTitle text="Gestión de Ciudades" align="left" />
                 <CreateButton
                   onClick={handleOpen}
                   componentName="Ciudad"
@@ -292,7 +285,7 @@ const Cities = () => {
             ) : (
               // Vista desktop del encabezado
               <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Title text="Gestión de Ciudades" variant="h4" />
+                <MainTitle text="Gestión de Ciudades" align="left" />
                 <CreateButton
                   onClick={handleOpen}
                   componentName="Ciudad"
@@ -310,10 +303,7 @@ const Cities = () => {
               alignItems="center"
               sx={{ mt: 2 }}
             >
-              <Descripcion1
-                text="Esta pantalla permite gestionar las ciudades relacionadas con los itinerarios y actividades. Aquí puede crear, editar o eliminar ciudades y asociarlas a una provincia."
-                sx={{ mt: 10 }}
-              />
+              <MainDescription1 text="Esta pantalla permite gestionar las ciudades relacionadas con los itinerarios y actividades. Aquí puede crear, editar o eliminar ciudades y asociarlas a una provincia." />
             </Grid>
           </Grid>
 

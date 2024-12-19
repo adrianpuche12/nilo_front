@@ -5,6 +5,7 @@ import Subtitulo1 from '../Utiles/Subtitulo1';
 import Descripcion1 from '../Utiles/Descripcion1';
 import Navbar from '../NavBar';  
 import Footer from '../Footer'; 
+import { MainTitle } from '../Utiles/MainComponents';
 
 const Contactos = () => {
   const [formData, setFormData] = useState({
@@ -29,11 +30,9 @@ const Contactos = () => {
   return (
     <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
       <Navbar />
-      <Container maxWidth="md" sx={{ py: 1 }}>
+      <Container maxWidth="md" sx={{ py: 4, flex: 1 }}>
         {/* Título principal */}
-        <Title text="Contáctanos" 
-            align="center"
-        />
+        <MainTitle text="Contáctanos"  align='center'/>
 
         {/* Sección: Teléfonos */}
         <section>

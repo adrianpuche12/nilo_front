@@ -5,6 +5,7 @@ import Footer from '../Footer';
 import Title from '../Utiles/Title';
 import Subtitulo1 from '../Utiles/Subtitulo1';
 import Descripcion1 from '../Utiles/Descripcion1';
+import { MainTitle } from '../Utiles/MainComponents';
 
 const AboutUs = () => {
   return (
@@ -13,9 +14,9 @@ const AboutUs = () => {
       <Navbar />
 
       {/* Contenido principal */}
-      <Container maxWidth="md" sx={{ py: 1 }}>
+      <Container maxWidth="md" sx={{ py: 4, flex: 1 }}>
         {/* Título principal */}
-        <Title text="Acerca de Nosotros" />
+        <MainTitle text="Acerca de Nosotros" align='center'/>
 
         {/* Sección: Historia */}
         <section>

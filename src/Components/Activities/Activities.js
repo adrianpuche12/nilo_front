@@ -12,6 +12,7 @@ import Title from '../Utiles/Title';
 import Descripcion1 from '../Utiles/Descripcion1';
 import GenericButton from '../Utiles/GenericButton';
 import { CreateButton, EditButton, CloseButton, DeleteButton } from '../Utiles/ActionButtons';
+import { MainTitle, MainDescription1 } from '../Utiles/MainComponents';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -245,12 +246,12 @@ const Activities = () => {
     <div>
       {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
       <Box sx={{ padding: '10px' }}>
-        <Grid container spacing={1}>
+        <Grid container spacing={1} sx={{ mt: 4, px: 2 }}>
           <Grid item xs={12}>
             {isMobile ? (
               // Vista mobile del encabezado
               <Stack spacing={2}>
-                <Title text="Gestión de Actividades" variant="h4" />
+                <MainTitle text="Gestión de Actividades" align="left" />
                 <CreateButton
                   onClick={handleOpen}
                   componentName="Actividad"
@@ -260,7 +261,7 @@ const Activities = () => {
             ) : (
               // Vista desktop del encabezado
               <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Title text="Gestión de Actividades" variant="h4" />
+                <MainTitle text="Gestión de Actividades" align="left" />
                 <CreateButton
                   onClick={handleOpen}
                   componentName="Actividad"
@@ -277,10 +278,7 @@ const Activities = () => {
               alignItems="center"
               sx={{ mt: 2 }}
             >
-              <Descripcion1
-                text="Esta pantalla facilita la gestión de actividades, permitiendo su creación, edición y eliminación, así como la integración con ciudades."
-                sx={{ mt: 10 }}
-              />
+              <MainDescription1 text="Esta pantalla facilita la gestión de actividades, permitiendo su creación, edición y eliminación, así como la integración con ciudades." />
             </Grid>
           </Grid>
 

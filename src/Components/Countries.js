@@ -16,6 +16,8 @@ import Title from './Utiles/Title';
 import Descripcion1 from './Utiles/Descripcion1'
 import GenericButton from './Utiles/GenericButton';
 import { CreateButton, EditButton, CloseButton, DeleteButton } from './Utiles/ActionButtons';
+import { MainTitle, MainDescription1 } from './Utiles/MainComponents';
+import { Margin } from '@mui/icons-material';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -207,11 +209,13 @@ const Countries = () => {
     <div>
       {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
       <Box sx={{ padding: '10px' }}>
-        <Grid container spacing={1}>
+        <Grid container spacing={1} sx={{ mt: 4, px: 2 }}>
           <Grid item xs={12}>
             {isMobile ? (
               <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Title text="Gestión de Países" variant="h4" />
+
+                <MainTitle text="Gestión de Países" align="left" />
+
                 <CreateButton
                   onClick={handleOpen}
                   componentName="País"
@@ -220,7 +224,9 @@ const Countries = () => {
               </Stack>
             ) : (
               <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Title text="Gestión de Países" variant="h4" />
+
+                <MainTitle text="Gestión de Países" align="left" />
+
                 <CreateButton
                   onClick={handleOpen}
                   componentName="País"
@@ -231,9 +237,7 @@ const Countries = () => {
           </Grid>
 
           <Grid item xs={12} container justifyContent="left" alignItems="center" sx={{ mt: 2 }}>
-            <Descripcion1
-              text="Esta pantalla permite gestionar los países, incluyendo su creación, edición y eliminación."
-            />
+            <MainDescription1 text="Esta pantalla permite gestionar los países, incluyendo su creación, edición y eliminación." />
           </Grid>
 
           {isMobile && (

@@ -16,6 +16,7 @@ import Descripcion1 from '../Utiles/Descripcion1';
 import GenericButton from '../Utiles/GenericButton';
 import Subtitulo2 from '../Utiles/Subtitulo2'
 import { CreateButton, EditButton, CloseButton, DeleteButton } from '../Utiles/ActionButtons';
+import { MainTitle, MainDescription1 } from '../Utiles/MainComponents';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -308,12 +309,12 @@ const Itineraries = () => {
         <div>
             {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
             <Box sx={{ padding: '10px' }}>
-                <Grid container spacing={1}>
+                <Grid container spacing={1} sx={{ mt: 4, px: 2 }}>
                     <Grid item xs={12}>
                         {isMobile ? (
                             // Vista mobile del encabezado
                             <Stack direction="row" justifyContent="space-between" alignItems="center">
-                                <Title text="Gestión de Itinerarios" variant="h4" />
+                                <MainTitle text="Gestión de Itinerarios" align="left" />
                                 <CreateButton
                                     onClick={handleOpen}
                                     componentName="Itinerario"
@@ -323,7 +324,7 @@ const Itineraries = () => {
                         ) : (
                             // Vista desktop del encabezado
                             <Stack direction="row" justifyContent="space-between" alignItems="center">
-                                <Title text="Gestión de Itinerarios" variant="h4" />
+                                <MainTitle text="Gestión de Itinerarios" align="left" />
                                 <CreateButton
                                     onClick={handleOpen}
                                     componentName="Itinerario"
@@ -340,10 +341,7 @@ const Itineraries = () => {
                             alignItems="center"
                             sx={{ mt: 2 }}
                         >
-                            <Descripcion1
-                                text="Esta pantalla permite gestionar los itinerarios, incluyendo su creación, edición y eliminación, además de sincronizarlos con actividades y ciudades."
-                                sx={{ mt: 10 }}
-                            />
+                            <MainDescription1 text="Esta pantalla permite gestionar los itinerarios, incluyendo su creación, edición y eliminación, además de sincronizarlos con actividades y ciudades." />
                         </Grid>
                     </Grid>
 

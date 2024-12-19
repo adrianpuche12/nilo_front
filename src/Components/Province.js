@@ -17,7 +17,7 @@ import Title from './Utiles/Title';
 import Descripcion1 from './Utiles/Descripcion1';
 import GenericButton from './Utiles/GenericButton';
 import { CreateButton, EditButton, CloseButton, DeleteButton } from './Utiles/ActionButtons';
-
+import { MainTitle, MainDescription1 } from './Utiles/MainComponents';
 
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -263,11 +263,11 @@ const Province = () => {
     <div>
       {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
       <Box sx={{ padding: '10px' }}>
-        <Grid container spacing={1}>
+        <Grid container spacing={1} sx={{ mt: 4, px: 2 }}>
           <Grid item xs={12}>
             {isMobile ? (
               <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Title text="Gestión de Provincias" variant="h4" />
+                <MainTitle text="Gestión de Provincias" align="left" />
                 <CreateButton
                   onClick={handleOpen}
                   componentName="Provincia"
@@ -276,7 +276,7 @@ const Province = () => {
               </Stack>
             ) : (
               <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Title text="Gestión de Provincias" variant="h4" />
+                <MainTitle text="Gestión de Provincias" align="left" />
                 <CreateButton
                   onClick={handleOpen}
                   componentName="Provincia"
@@ -287,9 +287,7 @@ const Province = () => {
           </Grid>
 
           <Grid item xs={12} container justifyContent="left" alignItems="center" sx={{ mt: 2 }}>
-            <Descripcion1
-              text="Esta pantalla permite gestionar las provincias, incluyendo su creación, edición y eliminación."
-            />
+            <MainDescription1 text="Esta pantalla permite gestionar las provincias, incluyendo su creación, edición y eliminación." />
           </Grid>
 
           {isMobile && (

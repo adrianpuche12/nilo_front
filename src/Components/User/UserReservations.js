@@ -10,6 +10,7 @@ import Navbar from '../NavBar';
 import Footer from '../Footer';
 import AdminNavbar from '../Admin/AdminNavbar';
 import Pagination from '@mui/material/Pagination';
+import { MainTitle } from '../Utiles/MainComponents';
 
 const reservations = [
   { id: 1,  activity: "Excursión a Machu Picchu", date: "2024-12-15", status: "Confirmada", details: "2 personas" },
@@ -39,7 +40,7 @@ function UserReservations() {
     <div>
       {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
       <Box sx={{ padding: 4 }}>
-        <Title text={`Reservas de ${userName || 'Usuario'}`} />
+        <MainTitle text={`Reservas de ${userName || 'Usuario'}`} align='center'/>
         <Box
           display="flex"
           flexWrap="wrap"
