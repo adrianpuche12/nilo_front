@@ -27,11 +27,18 @@ import AboutUs from '../Components/Pages/AboutUs'
 import Contactos from '../Components/Pages/Contactos'
 import CompanyPolicies from '../Components/Pages/CompanyPolicies';
 
+import CRUDManager from '../Components/CRUDs/CRUDManager.js'
+import CRUDFrom from '../Components/CRUDs/CRUDForm.js'
+
 
 const AppRoutes = () => {
   return (
     <AuthProvider>
       <Routes>
+
+        <Route path="/CRUDManager" element={<ProtectedRoute> <CRUDManager/> </ProtectedRoute>}/>
+        <Route path="/CRUDFrom" element={<ProtectedRoute> <CRUDFrom/> </ProtectedRoute>}/>
+
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
