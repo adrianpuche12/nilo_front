@@ -7,22 +7,24 @@ import GenericButton from '../Utiles/GenericButton';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../Footer';
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL_USER;
 
 const UserProfile = () => {
-    const { accessToken } = useAuth();
+    const { accessToken, userId } = useAuth();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [userProfile, setUserProfile] = useState({
-        name: '',
+        username: '',
+        firstName: '',
+        lastName: '',
         email: '',
-        phone: '',
     });
     const [isEditing, setIsEditing] = useState(false);
     const [editForm, setEditForm] = useState({
-        name: '',
+        username: '',
+        firstName: '',
+        lastName: '',
         email: '',
-        phone: ''
     });
 
     const navigate = useNavigate();
@@ -36,17 +38,24 @@ const UserProfile = () => {
     const fetchUserProfile = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${API_URL}/users`, getAxiosConfig());
-            const user = response.data[0];
+            // Usa el userId en la URL o en la configuración de la solicitud
+            const response = await axios.get(`${API_URL}/user/${userId}`, getAxiosConfig());
+            
+            const user = response.data;
+            
+            // Actualiza el estado con los datos del usuario
             setUserProfile(user);
             setEditForm(user);
             setError(null);
         } catch (err) {
+            // Maneja errores
             setError('Error al cargar el perfil: ' + err.message);
         } finally {
             setLoading(false);
         }
     };
+    
+    
 
     useEffect(() => {
         if (accessToken) {
@@ -81,16 +90,32 @@ const UserProfile = () => {
     const handleSaveChanges = async () => {
         try {
             setLoading(true);
-            await axios.put(`${API_URL}/users`, editForm, getAxiosConfig());
+    
+            // Crear un objeto con solo los campos que se quieren actualizar
+            const updatedData = {
+                username: editForm.username,
+                firstName: editForm.firstName,
+                lastName: editForm.lastName,
+                email: editForm.email,
+            };
+    
+            // Hacer la petición para actualizar el perfil
+            await axios.put(`${API_URL}/user`, updatedData, getAxiosConfig());
+    
+            // Refrescar el perfil del usuario
             await fetchUserProfile();
+    
+            // Cambiar el estado de edición y resetear errores
             setIsEditing(false);
             setError(null);
         } catch (err) {
+            // Manejo de errores
             setError('Error al actualizar el perfil: ' + err.message);
         } finally {
             setLoading(false);
         }
     };
+    
 
     if (loading && !isEditing) {
         return (
@@ -180,7 +205,7 @@ const UserProfile = () => {
                                     fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
                                 }}
                             >
-                                {userProfile.name?.charAt(0)}
+                                {userProfile.username?.charAt(0)}
                             </Avatar>
                         </Grid>
 
@@ -192,14 +217,17 @@ const UserProfile = () => {
                                     gap: 2,
                                     width: '100%'
                                 }}>
-                                    <Typography variant="h5" component="h1">
-                                        {userProfile.name}
+                                    <Typography variant="body2" color="textSecondary">
+                                        Usuario: {userProfile.username}
                                     </Typography>
-                                    <Typography variant="body1" color="textSecondary">
-                                        {userProfile.email}
+                                    <Typography variant="body2" color="textSecondary">
+                                        Nombre: {userProfile.firstName}
                                     </Typography>
-                                    <Typography variant="body1" color="textSecondary">
-                                        {userProfile.phone}
+                                    <Typography variant="body2" color="textSecondary">
+                                        Apellido: {userProfile.lastName}
+                                    </Typography>
+                                    <Typography variant="body2" color="textSecondary">
+                                        Email: {userProfile.email}
                                     </Typography>
                                     <Box 
                                         sx={{
@@ -225,10 +253,30 @@ const UserProfile = () => {
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         <TextField
-                                            label="Nombre"
-                                            name="name"
+                                            label="Usuario"
+                                            name="username"
                                             variant="outlined"
-                                            value={editForm.name}
+                                            value={editForm.username}
+                                            onChange={handleInputChange}
+                                            fullWidth
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            label="Nombre"
+                                            name="firstName"
+                                            variant="outlined"
+                                            value={editForm.firstName}
+                                            onChange={handleInputChange}
+                                            fullWidth
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            label="Apellido"
+                                            name="lastName"
+                                            variant="outlined"
+                                            value={editForm.lastName}
                                             onChange={handleInputChange}
                                             fullWidth
                                         />
@@ -239,16 +287,6 @@ const UserProfile = () => {
                                             name="email"
                                             variant="outlined"
                                             value={editForm.email}
-                                            onChange={handleInputChange}
-                                            fullWidth
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            label="Teléfono"
-                                            name="phone"
-                                            variant="outlined"
-                                            value={editForm.phone}
                                             onChange={handleInputChange}
                                             fullWidth
                                         />

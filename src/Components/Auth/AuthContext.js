@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 export const AuthContext = createContext();
 
@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
     expiresIn: null,
     roles: [],
     userName: null,
+    userId: null, 
     loading: true,
     error: null,
   });
@@ -74,12 +75,12 @@ export const AuthProvider = ({ children }) => {
 
       const { access_token, refresh_token, expires_in } = response.data;
 
-      const roles = decodeRoles(access_token);
-      const userName = decodeUserName(access_token);
+      const { userName, userId } = decodeUserDetails(access_token); // Obtener userName e userId
 
       localStorage.setItem('accessToken', access_token);
       localStorage.setItem('refreshToken', refresh_token);
       localStorage.setItem('expiresIn', expires_in);
+      localStorage.setItem('userId', userId); // Guardar el ID del usuario
 
       setAxiosAuthHeader(access_token);
       setAuthState((prev) => ({
@@ -87,8 +88,9 @@ export const AuthProvider = ({ children }) => {
         accessToken: access_token,
         refreshToken: refresh_token,
         expiresIn: expires_in,
-        roles,
+        roles: decodeRoles(access_token),
         userName,
+        userId, // Establecer el userId
       }));
 
       return response.data;
@@ -97,6 +99,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Función para decodificar roles
   const decodeRoles = (token) => {
     try {
       const decoded = jwtDecode(token);
@@ -106,17 +109,16 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const decodeUserName = (token) => {
+  // Función para decodificar el nombre de usuario y el ID del usuario
+  const decodeUserDetails = (token) => {
     try {
       const decoded = jwtDecode(token);
-      return (
-        decoded.preferred_username ||
-        decoded.name ||
-        decoded.sub ||
-        "Usuario desconocido"
-      );
+      return {
+        userName: decoded.preferred_username || decoded.name || decoded.sub || "Usuario desconocido",
+        userId: decoded.sub || null, // Obtener el ID del usuario en el JWT
+      };
     } catch {
-      return "Usuario desconocido";
+      return { userName: "Usuario desconocido", userId: null };
     }
   };
 
@@ -125,13 +127,14 @@ export const AuthProvider = ({ children }) => {
       const accessToken = localStorage.getItem('accessToken');
       const refreshToken = localStorage.getItem('refreshToken');
       const expiresIn = localStorage.getItem('expiresIn');
+      const userId = localStorage.getItem('userId'); // Recuperar el ID del usuario
 
       if (accessToken && refreshToken) {
         if (isTokenExpiringSoon(accessToken)) {
           refreshAccessToken().catch(logout);
         } else {
           const roles = decodeRoles(accessToken);
-          const userName = decodeUserName(accessToken);
+          const userName = decodeUserDetails(accessToken).userName;
           setAxiosAuthHeader(accessToken);
           setAuthState({
             accessToken,
@@ -139,6 +142,7 @@ export const AuthProvider = ({ children }) => {
             expiresIn: parseInt(expiresIn, 10),
             roles,
             userName,
+            userId, // Establecer el userId
             loading: false,
             error: null,
           });
@@ -164,20 +168,21 @@ export const AuthProvider = ({ children }) => {
 
       const { access_token, refresh_token, expires_in } = response.data;
 
-      const roles = decodeRoles(access_token);
-      const userName = decodeUserName(access_token);
+      const { userName, userId } = decodeUserDetails(access_token); // Obtener userName e userId
 
       localStorage.setItem('accessToken', access_token);
       localStorage.setItem('refreshToken', refresh_token);
       localStorage.setItem('expiresIn', expires_in);
+      localStorage.setItem('userId', userId); // Guardar el ID del usuario
 
       setAxiosAuthHeader(access_token);
       setAuthState({
         accessToken: access_token,
         refreshToken: refresh_token,
         expiresIn: expires_in,
-        roles,
+        roles: decodeRoles(access_token),
         userName,
+        userId, // Establecer el userId
         loading: false,
         error: null,
       });
@@ -196,6 +201,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('expiresIn');
+    localStorage.removeItem('userId'); // Eliminar el ID del usuario
     setAxiosAuthHeader(null);
     setAuthState({
       accessToken: null,
@@ -203,6 +209,7 @@ export const AuthProvider = ({ children }) => {
       expiresIn: null,
       roles: [],
       userName: null,
+      userId: null, // Restablecer el userId
       loading: false,
       error: null,
     });
@@ -214,6 +221,7 @@ export const AuthProvider = ({ children }) => {
         accessToken: authState.accessToken,
         roles: authState.roles,
         userName: authState.userName,
+        userId: authState.userId, // Exponer el userId
         loading: authState.loading,
         error: authState.error,
         login,

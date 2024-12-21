@@ -1,161 +1,192 @@
-import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // Importar useNavigate
-import users from '../../jsons/users';
-import Title from '../Utiles/Title';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom'; // Para obtener el ID desde la URL
+import Axios from 'axios';
+import { useAuth } from '../Auth/AuthContext';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button'; // Importar Button
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import Navbar from '../NavBar';
 import Footer from '../Footer';
 import AdminNavbar from '../Admin/AdminNavbar';
-import { useAuth } from '../Auth/AuthContext';
-import GenericButton from '../Utiles/GenericButton';
+import { Button, Card, CardContent, Grid, List, ListItem, ListItemText, Divider, Avatar } from '@mui/material';
+
+const API_URL = process.env.REACT_APP_API_URL_USER;
 
 function UserDetail() {
-  const { id } = useParams();
-  const navigate = useNavigate(); // Instancia de useNavigate
-  const { roles } = useAuth(); 
-  const user = users.find((user) => user.id === parseInt(id, 10));
+  const { id } = useParams(); // Obtiene el ID del usuario desde la URL
+  const navigate = useNavigate(); 
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { roles, accessToken } = useAuth();
 
-  const [avatarImage, setAvatarImage] = useState(null);
+  useEffect(() => {
+    const fetchUserDetail = async () => {
+      if (!accessToken) {
+        setError('No se encontró un token de acceso. Por favor, inicia sesión.');
+        setLoading(false);
+        return;
+      }
 
-  // Función para manejar la carga de imágenes
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatarImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+      try {
+        setLoading(true);
+        const response = await Axios.get(`${API_URL}/user/${id}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        setUser(response.data);
+        setError(null);
+      } catch (err) {
+        if (err.response?.status === 403) {
+          setError('No tienes permisos para acceder a esta información.');
+        } else {
+          setError('Hubo un problema al cargar los detalles del usuario. Inténtalo más tarde.');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserDetail();
+  }, [accessToken, id]);
 
   // Función para manejar el cierre del Card
   const handleClose = () => {
-    navigate('/users'); // Redirigir a la página principal o a la ruta deseada
+    navigate('/users'); // Redirigir a la página de usuarios
   };
 
-  // Si no se encuentra el usuario, mostramos un mensaje de error
-  if (!user) {
-    return (
-      <Typography 
-        variant="h5" 
-        color="error" 
-        sx={{ textAlign: 'center', marginTop: 2 }}
-      >
-        Usuario no encontrado
-      </Typography>
-    );
-  }
-
+  // Función para obtener la primera letra del nombre del usuario
+  const getAvatarInitial = (name) => {
+    return name ? name.charAt(0).toUpperCase() : '';
+  };
 
   return (
     <div>
-        {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
-        <Box sx={{ padding: 4 }}>
-          <Title text="Detalle del Usuario" />
-          <Card
-            variant="outlined"
-            sx={{
-              maxWidth: 400,
-              margin: '0 auto',
-              boxShadow: 3,
-              borderRadius: 2,
-              paddingBottom: 2, // Añadimos espacio inferior para el botón
-            }}
-          >
-            <CardContent>
-              {/* Caja del Avatar */}
-              <Box 
-                sx={{
-                  display: 'flex', 
-                  justifyContent: 'center', 
-                  marginBottom: 3,
-                  position: 'relative'
-                }}
-              >
-                {/* Avatar del usuario */}
-                <Avatar
-                  alt={user.name}
-                  src={avatarImage || ''}
-                  sx={{
-                    width: 120,
-                    height: 120,
-                    fontSize: 50,
-                    backgroundColor: '#1976d2',
-                    border: '3px solid white',
-                    boxShadow: 3,
-                  }}
-                >
-                  {!avatarImage && user.name.charAt(0)}
-                </Avatar>
+      {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
+      <Box sx={{ padding: 4, display: 'flex', justifyContent: 'center' }}>
+        {loading ? (
+          <Typography variant="h6" align="center">
+            Cargando detalles del usuario...
+          </Typography>
+        ) : error ? (
+          <Typography variant="h6" color="error" align="center">
+            {error}
+          </Typography>
+        ) : (
+          user && (
+            <Card sx={{
+              maxWidth: 900, width: '100%', boxShadow: 6, borderRadius: 2, 
+              bgcolor: 'background.paper', padding: 2, marginBottom: 4
+            }}>
+              <CardContent>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: 4 }}>
+                  <Typography variant="h4" align="center" sx={{ fontWeight: 'bold', color: 'primary.main', marginBottom: 2 }}>
+                    Detalles del Usuario
+                  </Typography>
 
-                {/* Botón para subir imagen */}
-                <input
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  id="avatar-upload"
-                  type="file"
-                  onChange={handleImageChange}
-                />
-                <label htmlFor="avatar-upload">
-                  <IconButton
-                    color="primary"
-                    aria-label="upload picture"
-                    component="span"
-                    sx={{
-                      position: 'absolute',
-                      bottom: 0,
-                      right: 0,
-                      transform: 'translate(25%, 25%)',
-                      backgroundColor: 'white',
-                      borderRadius: '50%',
-                      padding: 0.5,
-                      boxShadow: 2,
-                      '&:hover': {
-                        backgroundColor: '#e3f2fd',
-                      },
-                    }}
-                  >
-                    <PhotoCameraIcon />
-                  </IconButton>
-                </label>
-              </Box>
-            
+                  {/* Avatar o inicial */}
+                  <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 3 }}>
+                    <Avatar sx={{ width: 100, height: 100, fontSize: 40, bgcolor: 'primary.main' }}>
+                      {getAvatarInitial(user.firstName)}
+                    </Avatar>
+                  </Box>
 
-            {/* Información del Usuario */}
-            <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-              ID: {user.id}
-            </Typography>
-            <Typography variant="body1" color="textPrimary" sx={{ textAlign: 'center', marginBottom: 1 }}>
-              Nombre: {user.name}
-            </Typography>
-            <Typography variant="body1" color="textPrimary" sx={{ textAlign: 'center', marginBottom: 1 }}>
-              Email: {user.email}
-            </Typography>
-            <Typography variant="body1" color="textPrimary" sx={{ textAlign: 'center', marginBottom: 1 }}>
-              Teléfono: {user.phone}
-            </Typography>
-            <Typography variant="body1" color="textPrimary" sx={{ textAlign: 'center', marginBottom: 1 }}>
-              Roles: {user.roles.join(', ') || 'Sin roles'}
-            </Typography>
-          </CardContent>
+                  <Grid container spacing={3} justifyContent="center" textAlign="center">
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Nombre:</Typography>
+                      <Typography variant="body1" sx={{ color: 'text.primary' }}>{user.firstName}</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Apellido:</Typography>
+                      <Typography variant="body1" sx={{ color: 'text.primary' }}>{user.lastName}</Typography>
+                    </Grid>
+                  </Grid>
 
-          {/* Botón Cerrar */}
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', padding: 2 }}>
-            <GenericButton
-              text="Cerrar"
-              color="secondary"
-              onClick={handleClose}
-            />
-          </Box>
-        </Card>
+                  <Grid container spacing={3} justifyContent="center" textAlign="center">
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Email:</Typography>
+                      <Typography variant="body1" sx={{ color: 'text.primary' }}>{user.email}</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Estado:</Typography>
+                      <Typography variant="body1" sx={{ color: 'text.primary' }}>
+                        {user.enabled ? 'Habilitado' : 'Deshabilitado'}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Correo Verificado:</Typography>
+                      <Typography variant="body1" sx={{ color: 'text.primary' }}>
+                        {user.emailVerified ? 'Sí' : 'No'}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>TOTP:</Typography>
+                      <Typography variant="body1" sx={{ color: 'text.primary' }}>
+                        {user.totp ? 'Activado' : 'Desactivado'}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Fecha de Creación:</Typography>
+                      <Typography variant="body1" sx={{ color: 'text.primary' }}>
+                        {new Date(user.createdTimestamp).toLocaleString()}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+
+                  <Divider sx={{ marginY: 3, width: '100%' }} />
+
+                  <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary', marginBottom: 2, textAlign: 'center' }}>Roles:</Typography>
+                  <List sx={{ padding: 0, textAlign: 'center' }}>
+                    {[{ label: 'Gestión de miembros', value: user.access?.manageGroupMembership },
+                      { label: 'Ver', value: user.access?.view },
+                      { label: 'Asignar roles', value: user.access?.mapRoles },
+                      { label: 'Suplantar', value: user.access?.impersonate },
+                      { label: 'Administrar', value: user.access?.manage }]
+                      .map((role, index) => (
+                        <ListItem key={index}>
+                          <ListItemText
+                            primary={
+                              <Typography variant="body1" sx={{ color: 'text.primary' }}>
+                                <strong>{role.label}</strong>: {role.value ? 'Sí' : 'No'}
+                              </Typography>
+                            }
+                          />
+                        </ListItem>
+                    ))}
+                  </List>
+
+                  <Divider sx={{ marginY: 3, width: '100%' }} />
+
+                  <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Federation Link:</Typography>
+                  <Typography variant="body1" sx={{ color: 'text.primary' }}>{user.federationLink || 'No disponible'}</Typography>
+
+                  <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Client ID:</Typography>
+                  <Typography variant="body1" sx={{ color: 'text.primary' }}>{user.serviceAccountClientId || 'No disponible'}</Typography>
+
+                  <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Credentials:</Typography>
+                  <Typography variant="body1" sx={{ color: 'text.primary' }}>{user.credentials ? JSON.stringify(user.credentials) : 'No disponible'}</Typography>
+
+                  <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Attributes:</Typography>
+                  <Typography variant="body1" sx={{ color: 'text.primary' }}>{user.attributes ? JSON.stringify(user.attributes) : 'No disponible'}</Typography>
+
+                  <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Disableable Credential Types:</Typography>
+                  <Typography variant="body1" sx={{ color: 'text.primary' }}>
+                    {user.disableableCredentialTypes.length > 0 ? user.disableableCredentialTypes.join(', ') : 'Ninguno'}
+                  </Typography>
+
+                  <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Service Account:</Typography>
+                  <Typography variant="body1" sx={{ color: 'text.primary' }}>
+                    {user.serviceAccount ? 'Sí' : 'No'}
+                  </Typography>
+
+                  <Button variant="contained" color="primary" onClick={handleClose} sx={{ marginTop: 3 }}>
+                    Volver a Usuarios
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
+          )
+        )}
       </Box>
       <Footer />
     </div>

@@ -1,25 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
+import TextField from '@mui/material/TextField';
 import Title from '../Utiles/Title';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActionArea from '@mui/material/CardActionArea';
+import AddIcon from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Navbar from '../NavBar';
 import Footer from '../Footer';
 import AdminNavbar from '../Admin/AdminNavbar';
 import { useAuth } from '../Auth/AuthContext';
+import Button from '@mui/material/Button'; 
+import { CreateButton, EditButton, CloseButton, DeleteButton } from '../Utiles/ActionButtons';
+
+const API_URL = process.env.REACT_APP_API_URL_USER;
 
 function AllUsers() {
   const navigate = useNavigate();
-  const [users, setUsers] = useState([]); // Estado para almacenar usuarios
-  const [loading, setLoading] = useState(true); // Estado para manejar la carga
-  const [error, setError] = useState(null); // Estado para manejar errores
-  const { roles, accessToken } = useAuth(); // Obtenemos roles y accessToken desde AuthContext
+  const [users, setUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(''); // Estado para la barra de búsqueda
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { roles, accessToken } = useAuth();
+  
+  const handleUserClick = (id) => {
+    navigate(`/user/${id}`);
+  };
 
-  // Cargar los usuarios al montar el componente
+  const handleCreateUserClick = () => {
+    navigate('/create-user'); // Ruta para crear un nuevo usuario
+  };
+
   useEffect(() => {
     const fetchUsers = async () => {
       if (!accessToken) {
@@ -29,39 +43,68 @@ function AllUsers() {
       }
 
       try {
-        setLoading(true); // Inicia el estado de carga
-        const response = await Axios.get(`${process.env.REACT_APP_API_URL_USER}/user`, {
+        setLoading(true);
+        const response = await Axios.get(`${API_URL}/user`, {
           headers: {
-            Authorization: `Bearer ${accessToken}`, // Usamos el token del contexto
+            Authorization: `Bearer ${accessToken}`,
           },
         });
-        setUsers(response.data); // Almacenar usuarios en el estado
-        setError(null); // Limpiar errores
+        setUsers(response.data);
+        setError(null);
       } catch (err) {
-        console.error('Error fetching users:', err);
         if (err.response?.status === 403) {
           setError('No tienes permisos para acceder a esta información.');
         } else {
           setError('Hubo un problema al cargar los usuarios. Inténtalo más tarde.');
         }
       } finally {
-        setLoading(false); // Finaliza la carga
+        setLoading(false);
       }
     };
 
     fetchUsers();
-  }, [accessToken]); // Dependemos de accessToken para evitar errores de sincronización
+  }, [accessToken]);
 
-  // Manejar clic en un usuario
-  const handleUserClick = (id) => {
-    navigate(`/user/${id}`);
-  };
+  // Filtrar usuarios según la barra de búsqueda
+  const filteredUsers = users.filter(
+    (user) =>
+      user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.username.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div>
       {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
       <Box sx={{ padding: 4 }}>
         <Title text="Usuarios" />
+        
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
+          <TextField
+            variant="outlined"
+            size="small" // Tamaño más pequeño
+            placeholder="Buscar por nombre, apellido o usuario"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            sx={{
+              width: { xs: '100%', sm: '70%', md: '60%' }, // Responsive width
+              maxWidth: '100%',
+              '& .MuiInputBase-root': {
+                borderRadius: 2,
+              },
+            }}
+          />
+          {/* Botón "Crear nuevo usuario */}   
+
+            
+            <CreateButton
+                //onClick={handleOpen}
+                componentName="Usuario"
+                startIcon={<AddIcon />}
+            />
+          
+        </Box>
+        
         {loading ? (
           <Typography variant="h6" align="center">
             Cargando usuarios...
@@ -77,7 +120,7 @@ function AllUsers() {
             gap={2}
             justifyContent="center"
           >
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <Card
                 key={user.id}
                 variant="outlined"
@@ -99,7 +142,10 @@ function AllUsers() {
                       Usuario: {user.username}
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
-                      Nombre: {user.firstName} {user.lastName}
+                      Nombre: {user.firstName}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Apellido: {user.lastName}
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
                       Email: {user.email}
