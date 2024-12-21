@@ -3,13 +3,11 @@ import { Container, Box } from '@mui/material';
 import { useAuth } from './Auth/AuthContext';
 import ActivitiesCard from './Activities/ActivitiesCard';
 import ItinerariesCard from './Itineraries/ItinerariesCard';
-import Navbar from './NavBar';
 import Footer from './Footer';
 import Subtitulo1 from './Utiles/Subtitulo1';
 import Descripcion1 from './Utiles/Descripcion1';
-import Title from './Utiles/Title';
 import PromotionsCard from './Promotions/PromotionCard';
-import { MainTitle, MainSubtitle, MainDescription1, MainDescription2, MainSection } from './Utiles/MainComponents';
+import { MainTitle, MainSection } from './Utiles/MainComponents';
 
 const sectionStyles = {
   wrapper: {
@@ -40,7 +38,6 @@ const sectionStyles = {
   },
 };
 
-// Estilos unificados para las cards
 const cardStyles = {
   maxWidth: 200,
   height: 250,
@@ -58,13 +55,9 @@ const cardStyles = {
   },
 };
 
-
 const Home = () => {
-  const { logout } = useAuth();
-
   return (
     <>
-      <Navbar />
       <Container maxWidth="xl" sx={{ mt: 1, mb: 4 }}>
         <MainSection>
           <MainTitle text="Conoce nuestros paquetes de Viaje" align="center" />

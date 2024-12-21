@@ -5,9 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
-import Navbar from '../NavBar';
 import Footer from '../Footer';
-import AdminNavbar from '../Admin/AdminNavbar';
 import Title from '../Utiles/Title';
 import Descripcion1 from '../Utiles/Descripcion1';
 import GenericButton from '../Utiles/GenericButton';
@@ -244,7 +242,6 @@ const Activities = () => {
 
   return (
     <div>
-      {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
       <Box sx={{ padding: '10px' }}>
         <Grid container spacing={1} sx={{ mt: 4, px: 2 }}>
           <Grid item xs={12}>

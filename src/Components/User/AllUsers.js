@@ -9,9 +9,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import AddIcon from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Navbar from '../NavBar';
 import Footer from '../Footer';
-import AdminNavbar from '../Admin/AdminNavbar';
 import { useAuth } from '../Auth/AuthContext';
 import Button from '@mui/material/Button'; 
 import { CreateButton, EditButton, CloseButton, DeleteButton } from '../Utiles/ActionButtons';
@@ -75,7 +73,6 @@ function AllUsers() {
 
   return (
     <div>
-      {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
       <Box sx={{ padding: 4 }}>
         <Title text="Usuarios" />
         

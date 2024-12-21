@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Box, Container,TextField, Button,} from '@mui/material';
-import Title from '../Utiles/Title';
+import { Box, Container, TextField, Button, } from '@mui/material';
 import Subtitulo1 from '../Utiles/Subtitulo1';
 import Descripcion1 from '../Utiles/Descripcion1';
-import Navbar from '../NavBar';  
-import Footer from '../Footer'; 
+import Footer from '../Footer';
 import { MainTitle } from '../Utiles/MainComponents';
 
 const Contactos = () => {
@@ -29,56 +27,55 @@ const Contactos = () => {
 
   return (
     <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
-      <Navbar />
       <Container maxWidth="md" sx={{ py: 4, flex: 1 }}>
         {/* Título principal */}
-        <MainTitle text="Contáctanos"  align='center'/>
+        <MainTitle text="Contáctanos" align='center' />
 
         {/* Sección: Teléfonos */}
         <section>
-        <Subtitulo1
+          <Subtitulo1
             text="Teléfonos"
-            align="center" 
-            color="primary"  
-        />
-          <Descripcion1 text="+123 456 789" 
             align="center"
             color="primary"
           />
-          <Descripcion1 text="+987 654 321" 
+          <Descripcion1 text="+123 456 789"
+            align="center"
+            color="primary"
+          />
+          <Descripcion1 text="+987 654 321"
             align="center"
           />
         </section>
 
         {/* Sección: Dirección */}
         <section>
-          <Subtitulo1 text="Dirección" 
+          <Subtitulo1 text="Dirección"
             align="center"
             color="primary"
           />
-          <Descripcion1 text="Calle Ficticia 123, Ciudad, País" 
+          <Descripcion1 text="Calle Ficticia 123, Ciudad, País"
             align="center"
           />
         </section>
 
         {/* Sección: Correo Electrónico */}
         <section>
-          <Subtitulo1 text="Correo Electrónico" 
+          <Subtitulo1 text="Correo Electrónico"
             align="center"
             color="primary"
           />
-          <Descripcion1 text="contacto@empresa.com" 
+          <Descripcion1 text="contacto@empresa.com"
             align="center"
           />
         </section>
 
         {/* Sección: Formulario de Contacto */}
         <section>
-          <Subtitulo1 text="Formulario de Contacto" 
+          <Subtitulo1 text="Formulario de Contacto"
             align="center"
             color="primary"
           />
-          <Descripcion1 text="Si prefieres, puedes dejarnos un mensaje a través de nuestro formulario de contacto." 
+          <Descripcion1 text="Si prefieres, puedes dejarnos un mensaje a través de nuestro formulario de contacto."
             align="center"
           />
 
@@ -124,7 +121,7 @@ const Contactos = () => {
             </Button>
           </form>
         </section>
-      </Container>      
+      </Container>
 
       <Footer />
     </Box>

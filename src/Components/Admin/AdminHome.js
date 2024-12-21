@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { Container,  Box, useTheme } from '@mui/material';
+import { Container, Box, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../Auth/AuthContext';
 
 import Title from '../Utiles/Title';
-//import HomeCards from './HomeCards/HomeCards';
-import AdminNavbar from './AdminNavbar';
 import Footer from '../Footer';
 
 
@@ -46,9 +44,8 @@ function AdminHome() {
 
   return (
     <>
-      <AdminNavbar />
       <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
-        <Title text="Bienvenido al panel de administración" />        
+        <Title text="Bienvenido al panel de administración" />
       </Container>
       <Footer />
     </>

@@ -14,7 +14,6 @@ import {
 import { ArrowBack } from '@mui/icons-material';
 import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
-import Navbar from '../NavBar';
 import Footer from '../Footer';
 import Subtitulo1 from '../Utiles/Subtitulo1';
 import Descripcion1 from '../Utiles/Descripcion1';
@@ -92,7 +91,6 @@ const ItinerariesDetail = () => {
 
   return (
     <>
-      <Navbar />
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Box mb={4}>
           <Button

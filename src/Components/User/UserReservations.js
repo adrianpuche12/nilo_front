@@ -13,13 +13,13 @@ import Pagination from '@mui/material/Pagination';
 import { MainTitle } from '../Utiles/MainComponents';
 
 const reservations = [
-  { id: 1,  activity: "Excursión a Machu Picchu", date: "2024-12-15", status: "Confirmada", details: "2 personas" },
-  { id: 2,  activity: "Tour en barco por el Caribe", date: "2024-12-20", status: "Pendiente", details: "3 personas" },
-  { id: 3,  activity: "Escapada a París", date: "2024-12-10", status: "Cancelada", details: "1 persona" },
-  { id: 4,  activity: "Safari en Kenia", date: "2024-12-22", status: "Confirmada", details: "4 personas" },
-  { id: 5,  activity: "Tour por Tokio", date: "2024-12-18", status: "Pendiente", details: "2 personas" },
-  { id: 6,  activity: "Crucero por el Mediterráneo", date: "2024-12-25", status: "Confirmada", details: "3 personas" },
-  { id: 7,  activity: "Trekking en los Andes", date: "2024-12-30", status: "Confirmada", details: "5 personas" },
+  { id: 1, activity: "Excursión a Machu Picchu", date: "2024-12-15", status: "Confirmada", details: "2 personas" },
+  { id: 2, activity: "Tour en barco por el Caribe", date: "2024-12-20", status: "Pendiente", details: "3 personas" },
+  { id: 3, activity: "Escapada a París", date: "2024-12-10", status: "Cancelada", details: "1 persona" },
+  { id: 4, activity: "Safari en Kenia", date: "2024-12-22", status: "Confirmada", details: "4 personas" },
+  { id: 5, activity: "Tour por Tokio", date: "2024-12-18", status: "Pendiente", details: "2 personas" },
+  { id: 6, activity: "Crucero por el Mediterráneo", date: "2024-12-25", status: "Confirmada", details: "3 personas" },
+  { id: 7, activity: "Trekking en los Andes", date: "2024-12-30", status: "Confirmada", details: "5 personas" },
 ];
 
 function UserReservations() {
@@ -38,9 +38,8 @@ function UserReservations() {
 
   return (
     <div>
-      {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
       <Box sx={{ padding: 4 }}>
-        <MainTitle text={`Reservas de ${userName || 'Usuario'}`} align='center'/>
+        <MainTitle text={`Reservas de ${userName || 'Usuario'}`} align='center' />
         <Box
           display="flex"
           flexWrap="wrap"
@@ -49,37 +48,37 @@ function UserReservations() {
         >
           {currentReservations.map((reservation) => (
             <Card
-                key={reservation.id}
-                variant="outlined"
-                sx={{
-                width: 400, 
-                height: 250, 
+              key={reservation.id}
+              variant="outlined"
+              sx={{
+                width: 400,
+                height: 250,
                 cursor: 'pointer',
                 boxShadow: 3,
                 transition: 'transform 0.2s, box-shadow 0.2s',
                 '&:hover': {
-                    transform: 'scale(1.05)',
-                    boxShadow: 6,
+                  transform: 'scale(1.05)',
+                  boxShadow: 6,
                 },
-                }}
+              }}
             >
               <CardActionArea>
-                <CardContent sx={{ padding: 4 }}> 
-                    <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
+                <CardContent sx={{ padding: 4 }}>
+                  <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
                     Nombre de Usuario: {userName}
-                    </Typography>
-                    <Typography variant="body1" color="textSecondary">
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
                     Actividad/Itinerario Reservado: {reservation.activity}
-                    </Typography>
-                    <Typography variant="body1" color="textSecondary">
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
                     Fecha de la Reserva: {reservation.date}
-                    </Typography>
-                    <Typography variant="body1" color="textSecondary">
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
                     Estado: {reservation.status}
-                    </Typography>
-                    <Typography variant="body1" color="textSecondary">
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
                     Detalles: {reservation.details}
-                    </Typography>
+                  </Typography>
                 </CardContent>
               </CardActionArea>
             </Card>

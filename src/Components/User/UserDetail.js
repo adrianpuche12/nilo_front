@@ -4,9 +4,7 @@ import Axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Navbar from '../NavBar';
 import Footer from '../Footer';
-import AdminNavbar from '../Admin/AdminNavbar';
 import { Button, Card, CardContent, Grid, List, ListItem, ListItemText, Divider, Avatar } from '@mui/material';
 
 const API_URL = process.env.REACT_APP_API_URL_USER;
@@ -62,7 +60,6 @@ function UserDetail() {
 
   return (
     <div>
-      {roles.includes('admin') ? <AdminNavbar /> : <Navbar />}
       <Box sx={{ padding: 4, display: 'flex', justifyContent: 'center' }}>
         {loading ? (
           <Typography variant="h6" align="center">

@@ -4,7 +4,6 @@ import { Container, Paper, Typography, Box, Grid, Chip, CircularProgress, Button
 import { ArrowBack } from '@mui/icons-material';
 import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
-import Navbar from '../NavBar';
 import Footer from '../Footer';
 import Subtitulo1 from '../Utiles/Subtitulo1';
 import Descripcion1 from '../Utiles/Descripcion1';
@@ -25,7 +24,7 @@ const ActivityDetail = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/activities/${id}`, 
+        `${process.env.REACT_APP_API_URL}/activities/${id}`,
         getAxiosConfig()
       );
       setActivity(response.data);
@@ -46,10 +45,10 @@ const ActivityDetail = () => {
 
   if (loading) {
     return (
-      <Box 
-        display="flex" 
-        justifyContent="center" 
-        alignItems="center" 
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
         minHeight="100vh"
       >
         <CircularProgress />
@@ -59,17 +58,17 @@ const ActivityDetail = () => {
 
   if (error || !activity) {
     return (
-      <Box 
-        display="flex" 
-        flexDirection="column" 
-        alignItems="center" 
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
         py={4}
       >
         <Typography color="error" gutterBottom>
           {error || 'Actividad no encontrada'}
         </Typography>
-        <Button 
-          variant="contained" 
+        <Button
+          variant="contained"
           onClick={() => navigate('/')}
         >
           Volver al inicio
@@ -80,7 +79,6 @@ const ActivityDetail = () => {
 
   return (
     <>
-      <Navbar />
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Box mb={4}>
           <Button
@@ -94,22 +92,22 @@ const ActivityDetail = () => {
           <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
             <Grid container spacing={4}>
               <Grid item xs={12} md={6}>
-                <Box 
+                <Box
                   sx={{
                     backgroundColor: 'grey.300', // Fondo gris
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    height: '100%', 
+                    height: '100%',
                     borderRadius: '16px',
                   }}
                 >
                   <CardMedia
                     component="img"
-                    image={activity.image || 'https://images.unsplash.com/photo-1548574505-5e239809ee19'} 
+                    image={activity.image || 'https://images.unsplash.com/photo-1548574505-5e239809ee19'}
                     alt={activity.name}
-                    sx={{ 
-                      objectFit: 'cover', 
+                    sx={{
+                      objectFit: 'cover',
                       width: '100%', // La imagen debe ocupar el 100% del ancho
                       height: '100%', // La imagen debe ocupar el 100% de la altura del contenedor
                       maxHeight: '500px', // Limita la altura máxima de la imagen
@@ -125,7 +123,7 @@ const ActivityDetail = () => {
                   margin="0 0 1rem 0"
                 />
 
-                <Chip 
+                <Chip
                   label={activity.location || 'Ubicación no disponible'}
                   color="primary"
                   sx={{ mb: 2 }}

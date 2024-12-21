@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Paper, Typography, Avatar, Grid, Box, TextField, CircularProgress, Alert } from '@mui/material';
 import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
-import Navbar from '../NavBar';
 import GenericButton from '../Utiles/GenericButton';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../Footer';
@@ -126,7 +125,6 @@ const UserProfile = () => {
                     flexDirection: 'column'
                 }}
             >
-                <Navbar />
                 <Box 
                     sx={{ 
                         flex: 1,
@@ -151,7 +149,6 @@ const UserProfile = () => {
                 backgroundColor: 'background.default'
             }}
         >
-            <Navbar />
             <Box 
                 sx={{ 
                     flex: 1,

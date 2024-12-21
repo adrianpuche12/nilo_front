@@ -10,23 +10,28 @@ import {
   List,
   ListItem,
   ListItemText,
-  useMediaQuery
+  useMediaQuery,
+  Tooltip
 } from '@mui/material';
 import { LogOut, User, Menu } from 'lucide-react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import { useAuth } from '../Auth/AuthContext';
 import { ThemeContext } from '../Utiles/Theme/ThemeProvider';
+import { LanguageContext } from '../../Contexts/LanguageContext';
+import { translations } from '../../Contexts/Translations';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import HomeIcon from '@mui/icons-material/Home'; 
+import HomeIcon from '@mui/icons-material/Home';
+import { US, ES } from 'country-flag-icons/react/3x2';
 
-const AdminNavbar = () => {
+const AdminNavBar = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = useState(false);
   const { themeMode, toggleTheme } = useContext(ThemeContext);
+  const { currentLanguage, toggleLanguage } = useContext(LanguageContext);
 
   const handleLogout = () => {
     logout();
@@ -34,14 +39,36 @@ const AdminNavbar = () => {
   };
 
   const navLinks = [
-    { to: "/countries", label: "Countries" },
-    { to: "/users", label: "Users" },
-    { to: "/activities", label: "Activities" },
-    { to: "/province", label: "Province" },
-    { to: "/itineraries", label: "Itineraries" },
-    { to: "/cities", label: "Cities" },
-    { to: "/userReservations", label: "Reservas" },
+    { to: "/countries", label: translations[currentLanguage].countries },
+    { to: "/users", label: translations[currentLanguage].users },
+    { to: "/activities", label: translations[currentLanguage].activities },
+    { to: "/province", label: translations[currentLanguage].province },
+    { to: "/itineraries", label: translations[currentLanguage].itineraries },
+    { to: "/cities", label: translations[currentLanguage].cities },
+    { to: "/userReservations", label: translations[currentLanguage].reservations }
   ];
+
+  const LanguageIcon = () => {
+    const tooltipText = currentLanguage === 'en' ? 'Cambiar a Español' : 'Switch to English';
+
+    return (
+      <Tooltip title={tooltipText}>
+        <IconButton
+          color="inherit"
+          onClick={toggleLanguage}
+          sx={{
+            padding: '8px',
+            '& svg': {
+              width: '24px',
+              height: '16px',
+            }
+          }}
+        >
+          {currentLanguage === 'en' ? <US title="US Flag" /> : <ES title="Spanish Flag" />}
+        </IconButton>
+      </Tooltip>
+    );
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -71,7 +98,7 @@ const AdminNavbar = () => {
           sx={{ justifyContent: 'flex-start' }}
           startIcon={<User />}
         >
-          Profile
+          {translations[currentLanguage].profile}
         </Button>
       </ListItem>
       <ListItem>
@@ -82,7 +109,7 @@ const AdminNavbar = () => {
           sx={{ justifyContent: 'flex-start' }}
           startIcon={<LogOut />}
         >
-          Logout
+          {translations[currentLanguage].logout}
         </Button>
       </ListItem>
     </List>
@@ -102,21 +129,26 @@ const AdminNavbar = () => {
             <Menu />
           </IconButton>
         )}
-        
-        <Box 
-          display={{ xs: 'none', md: 'flex' }} 
-          alignItems="center" 
+
+        <Box
+          display={{ xs: 'none', md: 'flex' }}
+          alignItems="center"
           flexGrow={1}
         >
           {navLinks.map((link) => (
-            <NavigationLink key={link.to} to={link.to}>
+            <Button
+              key={link.to}
+              component={NavLink}
+              to={link.to}
+              color="inherit"
+              sx={{ marginRight: theme.spacing(2) }}
+            >
               {link.label}
-            </NavigationLink>
+            </Button>
           ))}
         </Box>
 
-        <Box display={{ xs: 'flex', md: 'flex' }} alignItems="center">
-          {/* Ícono de Home visible en dispositivos móviles */}
+        <Box display="flex" alignItems="center" gap={1}>
           <IconButton
             color="inherit"
             onClick={() => navigate('/admin/adminhome', { replace: true })}
@@ -124,16 +156,16 @@ const AdminNavbar = () => {
             <HomeIcon />
           </IconButton>
 
+          <LanguageIcon />
 
-          {/* Icono de cambio de tema */}
           <IconButton onClick={toggleTheme} color="inherit">
             {themeMode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
           </IconButton>
 
-          {/* Íconos de perfil y logout */}
           <IconButton color="inherit" component={NavLink} to="/profile">
             <User />
           </IconButton>
+
           <IconButton color="inherit" onClick={handleLogout}>
             <LogOut />
           </IconButton>
@@ -146,13 +178,13 @@ const AdminNavbar = () => {
         open={mobileOpen}
         onClose={handleDrawerToggle}
         ModalProps={{
-          keepMounted: true, 
+          keepMounted: true,
         }}
         sx={{
           display: { xs: 'block', md: 'none' },
-          '& .MuiDrawer-paper': { 
-            boxSizing: 'border-box', 
-            width: 240 
+          '& .MuiDrawer-paper': {
+            boxSizing: 'border-box',
+            width: 240
           },
         }}
       >
@@ -162,18 +194,4 @@ const AdminNavbar = () => {
   );
 };
 
-const NavigationLink = ({ to, children }) => {
-  const theme = useTheme();
-  return (
-    <Button 
-      component={NavLink} 
-      to={to} 
-      color="inherit" 
-      sx={{ marginRight: theme.spacing(2) }}
-    >
-      {children}
-    </Button>
-  );
-};
-
-export default AdminNavbar;
+export default AdminNavBar;
