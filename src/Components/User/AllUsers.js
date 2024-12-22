@@ -11,25 +11,24 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Footer from '../Footer';
 import { useAuth } from '../Auth/AuthContext';
-import Button from '@mui/material/Button'; 
-import { CreateButton, EditButton, CloseButton, DeleteButton } from '../Utiles/ActionButtons';
+import { CreateButton } from '../Utiles/ActionButtons';
 
 const API_URL = process.env.REACT_APP_API_URL_USER;
 
 function AllUsers() {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(''); // Estado para la barra de búsqueda
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { roles, accessToken } = useAuth();
-  
+
   const handleUserClick = (id) => {
     navigate(`/user/${id}`);
   };
 
-  const handleCreateUserClick = () => {
-    navigate('/create-user'); // Ruta para crear un nuevo usuario
+  const handleOpen = () => {
+    navigate('/user-registration'); 
   };
 
   useEffect(() => {
@@ -63,7 +62,6 @@ function AllUsers() {
     fetchUsers();
   }, [accessToken]);
 
-  // Filtrar usuarios según la barra de búsqueda
   const filteredUsers = users.filter(
     (user) =>
       user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -79,27 +77,23 @@ function AllUsers() {
         <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
           <TextField
             variant="outlined"
-            size="small" // Tamaño más pequeño
+            size="small"
             placeholder="Buscar por nombre, apellido o usuario"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             sx={{
-              width: { xs: '100%', sm: '70%', md: '60%' }, // Responsive width
+              width: { xs: '100%', sm: '70%', md: '60%' },
               maxWidth: '100%',
               '& .MuiInputBase-root': {
                 borderRadius: 2,
               },
             }}
           />
-          {/* Botón "Crear nuevo usuario */}   
-
-            
-            <CreateButton
-                //onClick={handleOpen}
-                componentName="Usuario"
-                startIcon={<AddIcon />}
-            />
-          
+          <CreateButton
+            onClick={handleOpen}
+            componentName="Usuario"
+            startIcon={<AddIcon />}
+          />
         </Box>
         
         {loading ? (

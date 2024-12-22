@@ -1,14 +1,15 @@
 import { useNavigate, useLocation, matchPath } from 'react-router-dom';
 import { useAuth } from './AuthContext';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, roles, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [isRouteValidated, setIsRouteValidated] = useState(false); 
 
   useEffect(() => {
-    if (loading) return; // No hagas nada hasta que se complete la carga
+    if (loading) return; // No hacer nada mientras se cargan los datos
 
     if (!isAuthenticated) {
       navigate('/login', { replace: true });
@@ -25,21 +26,25 @@ export const ProtectedRoute = ({ children }) => {
         '/cities',
         '/itineraries',
         '/profile',
-        '/userReservations'
+        '/userReservations',
+        '/user-registration',
       ];
 
       if (!isRouteAllowed(location.pathname, adminAllowedRoutes)) {
         navigate('/admin/adminhome', { replace: true });
+        return; 
       }
     }
-    // No es necesario actualizar `isVerified` aquí, porque `children` será mostrado automáticamente
+
+    setIsRouteValidated(true); 
   }, [isAuthenticated, roles, loading, navigate, location.pathname]);
 
-  if (loading) {
+  if (loading || !isRouteValidated) {
+    // Mostrar un indicador de carga mientras se valida la ruta
     return <div>Cargando...</div>;
   }
 
-  return children;
+  return children; // Renderiza los hijos solo si la validación está completa
 };
 
 const isRouteAllowed = (path, allowedRoutes) => {

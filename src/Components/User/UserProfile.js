@@ -83,7 +83,7 @@ const UserProfile = () => {
     const handleClose = () => {
         setIsEditing(false);
         setEditForm(userProfile);
-        navigate('/');
+        navigate('/admin/adminhome');
     };
 
     const handleSaveChanges = async () => {
