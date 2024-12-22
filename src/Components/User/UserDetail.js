@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // Para obtener el ID desde la URL
+import { useParams, useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Footer from '../Footer';
-import { Button, Card, CardContent, Grid, List, ListItem, ListItemText, Divider, Avatar } from '@mui/material';
+import { Button, Card, CardContent, Grid, List, ListItem, ListItemText, Divider, Avatar, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import Title from '../Utiles/Title';
 
 const API_URL = process.env.REACT_APP_API_URL_USER;
 
@@ -15,6 +16,7 @@ function UserDetail() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false); // Control del diálogo de confirmación
   const { roles, accessToken } = useAuth();
 
   useEffect(() => {
@@ -48,9 +50,40 @@ function UserDetail() {
     fetchUserDetail();
   }, [accessToken, id]);
 
-  // Función para manejar el cierre del Card
-  const handleClose = () => {
-    navigate('/users'); // Redirigir a la página de usuarios
+  // Función para abrir el diálogo de confirmación
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  // Función para cerrar el diálogo de confirmación
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  // Función para manejar la eliminación del usuario
+  const handleDelete = async () => {
+    if (!accessToken) {
+      setError('No se encontró un token de acceso. Por favor, inicia sesión.');
+      return;
+    }
+
+    try {
+      await Axios.delete(`${API_URL}/user/${id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      alert('Usuario eliminado con éxito.');
+      navigate('/users'); // Redirigir a la lista de usuarios
+    } catch (err) {
+      if (err.response?.status === 403) {
+        setError('No tienes permisos para eliminar este usuario.');
+      } else {
+        setError('Hubo un problema al eliminar el usuario. Inténtalo más tarde.');
+      }
+    } finally {
+      setOpenDialog(false); // Cerrar el diálogo después de completar la acción
+    }
   };
 
   // Función para obtener la primera letra del nombre del usuario
@@ -77,9 +110,7 @@ function UserDetail() {
             }}>
               <CardContent>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: 4 }}>
-                  <Typography variant="h4" align="center" sx={{ fontWeight: 'bold', color: 'primary.main', marginBottom: 2 }}>
-                    Detalles del Usuario
-                  </Typography>
+                  <Title text= "Detalles del Usuario"  />              
 
                   {/* Avatar o inicial */}
                   <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 3 }}>
@@ -176,15 +207,48 @@ function UserDetail() {
                     {user.serviceAccount ? 'Sí' : 'No'}
                   </Typography>
 
-                  <Button variant="contained" color="primary" onClick={handleClose} sx={{ marginTop: 3 }}>
-                    Volver a Usuarios
-                  </Button>
+                  <Divider sx={{ marginY: 3, width: '100%' }} />
+
+                  {/* Botón para eliminar usuario */}
+                  <Box sx={{ display: 'flex', gap: 2 }}>
+                    <Button variant="contained" color="error" onClick={handleOpenDialog} sx={{ marginTop: 3 }}>
+                      Eliminar Usuario
+                    </Button>
+
+                    <Button variant="contained" color="primary" onClick={() => navigate('/users')} sx={{ marginTop: 3 }}>
+                      Volver a Usuarios
+                    </Button>
+                  </Box>
                 </Box>
               </CardContent>
             </Card>
           )
         )}
       </Box>
+
+      {/* Diálogo de confirmación */}
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="confirm-dialog-title"
+        aria-describedby="confirm-dialog-description"
+      >
+        <DialogTitle id="confirm-dialog-title">Confirmar Eliminación</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="confirm-dialog-description">
+            ¿Estás seguro de que deseas eliminar este usuario? <strong>Esta acción es irreversible</strong>.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cancelar
+          </Button>
+          <Button onClick={handleDelete} color="error">
+            Eliminar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Footer />
     </div>
   );

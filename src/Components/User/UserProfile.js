@@ -210,7 +210,7 @@ const UserProfile = () => {
                                     fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
                                 }}
                             >
-                                {userProfile.username?.charAt(0)}
+                                {userProfile.username?.charAt(0).toUpperCase()}
                             </Avatar>
                         </Grid>
 
@@ -243,15 +243,15 @@ const UserProfile = () => {
                                         }}
                                     >
                                         <GenericButton
-                                            text="Cerrar"
+                                            text="Volver"
                                             color="secondary"
                                             onClick={handleClose}
                                         />
-                                        <GenericButton
+                                       {/*  <GenericButton
                                             text="Editar Perfil"
                                             color="primary"
                                             onClick={handleEdit}
-                                        />
+                                        /> */}
                                         <GenericButton 
                                             text="Ver Historia" 
                                             color="primary" 
