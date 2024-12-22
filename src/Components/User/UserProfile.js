@@ -5,6 +5,7 @@ import { useAuth } from '../Auth/AuthContext';
 import GenericButton from '../Utiles/GenericButton';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../Footer';
+import Historia from './Historia';
 
 const API_URL = process.env.REACT_APP_API_URL_USER;
 
@@ -25,6 +26,8 @@ const UserProfile = () => {
         lastName: '',
         email: '',
     });
+
+    const [showHistoria, setShowHistoria] = useState(false); // Estado para mostrar Historia
 
     const navigate = useNavigate();
 
@@ -113,6 +116,11 @@ const UserProfile = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    // Función para mostrar/ocultar el componente Historia
+    const toggleHistoria = () => {
+        setShowHistoria(!showHistoria);
     };
     
 
@@ -244,6 +252,10 @@ const UserProfile = () => {
                                             color="primary"
                                             onClick={handleEdit}
                                         />
+                                        <GenericButton 
+                                            text="Ver Historia" 
+                                            color="primary" 
+                                            onClick={toggleHistoria} /> {/* Botón Historia */}
                                     </Box>
                                 </Box>
                             ) : (
@@ -317,6 +329,7 @@ const UserProfile = () => {
                         </Grid>
                     </Grid>
                 </Paper>
+                {showHistoria && <Historia />} {/* Mostrar componente Historia */}
             </Box>
             <Footer />
         </Box>

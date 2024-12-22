@@ -23,6 +23,7 @@ import AboutUs from '../Components/Pages/AboutUs'
 import Contactos from '../Components/Pages/Contactos'
 import CompanyPolicies from '../Components/Pages/CompanyPolicies';
 import UserRegistration from '../Components/User/UserRegistration.js';
+import Historia from '../Components/User/Historia.js';
 
 const AppRoutes = () => {
   return (
@@ -30,7 +31,8 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path='/user-registration' element={<UserRegistration/>} />      
+        <Route path='/user-registration' element={<UserRegistration/>} />  
+        <Route path='/Historia' element={<Historia/>} />            
 
         <Route path="/" element={<ProtectedRoute><Layout><Home /></Layout></ProtectedRoute>} />
         <Route path="/user/:id" element={<ProtectedRoute><Layout><UserDetail /></Layout></ProtectedRoute>} />
