@@ -1,28 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
-import { TextField, Button, Card, CardContent, Typography, Box, Grid } from "@mui/material";
-import { useAuth } from "../Auth/AuthContext"; // Importar contexto de autenticación
+import { TextField, Card, CardContent, Box, Grid } from "@mui/material";
+import { useAuth } from "../Auth/AuthContext"; 
 import dayjs from "dayjs";
-import AdminNavbar from "../Admin/AdminNavbar"; // Importar el AdminNavbar
-import Footer from "../Footer"; // Importar el Footer
+import AdminNavbar from "../Admin/AdminNavbar"; 
+import Footer from "../Footer"; 
 import GenericButton from "../Utiles/GenericButton";
 import { CloseButton } from "../Utiles/ActionButtons";
-import { MainTitle } from "../Utiles/MainComponents";
 import Title from "../Utiles/Title";
 
 const API_URL = process.env.REACT_APP_API_URL_USER;
 
 function UserRegistrationCard() {
   const navigate = useNavigate();
-  const { accessToken } = useAuth(); // Obtener token desde el contexto de autenticación
+  const { accessToken } = useAuth(); 
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     birthDate: "",
-    username: "", // Agregar campo de usuario
-    password: "", // Agregar campo de contraseña
+    username: "", 
+    password: "", 
   });
 
   const [errors, setErrors] = useState({
@@ -30,8 +29,8 @@ function UserRegistrationCard() {
     lastName: false,
     email: false,
     birthDate: false,
-    username: false, // Validación para username
-    password: false, // Validación para password
+    username: false, 
+    password: false, 
   });
 
   const [isValid, setIsValid] = useState(false);
@@ -44,7 +43,7 @@ function UserRegistrationCard() {
 
   // Función para manejar el botón de "Volver"
   const handleGoBack = () => {
-    navigate("/users"); // Cambia la ruta a donde desees regresar
+    navigate("/users"); 
   };
 
   // Validación de los campos
@@ -55,8 +54,8 @@ function UserRegistrationCard() {
       lastName: !lastName.trim(),
       email: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
       birthDate: !birthDate || dayjs().diff(dayjs(birthDate), "year") < 18,
-      username: !username.trim(), // Validación para el username
-      password: password.length < 6, // La contraseña debe tener al menos 6 caracteres
+      username: !username.trim(), 
+      password: password.length < 6, 
     };
     setErrors(newErrors);
     setIsValid(!Object.values(newErrors).includes(true));
@@ -77,11 +76,11 @@ function UserRegistrationCard() {
           firstName,
           lastName,
           email,
-          username, // Usar el username proporcionado
-          password, // Incluir la contraseña en los datos
+          username, 
+          password, 
           enabled: true,
           emailVerified: true,
-          realmRoles: ["user"], // Asignar el rol de 'user'
+          realmRoles: ["User"], // Asignar el rol de 'user'
         };
 
         // Llamada a la API con el token de autenticación
@@ -91,9 +90,8 @@ function UserRegistrationCard() {
           },
         });
         alert("Usuario registrado con éxito");
-        navigate("/users"); // Redirige al listado de usuarios o la página que prefieras
+        navigate("/users"); 
       } catch (error) {
-        console.error("Error al registrar el usuario:", error);
         alert("Hubo un error al registrar el usuario.");
       }
     }
