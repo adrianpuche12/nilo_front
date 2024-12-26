@@ -10,7 +10,7 @@ import Historia from './Historia';
 const API_URL = process.env.REACT_APP_API_URL_USER;
 
 const UserProfile = () => {
-    const { accessToken, userId } = useAuth();
+    const { accessToken, userId, roles } = useAuth();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [userProfile, setUserProfile] = useState({
@@ -86,7 +86,11 @@ const UserProfile = () => {
     const handleClose = () => {
         setIsEditing(false);
         setEditForm(userProfile);
-        navigate('/admin/adminhome');
+        if (roles.includes('admin')) {
+            navigate('/admin/adminhome');
+        } else {
+            navigate('/');
+        }
     };
 
     const handleSaveChanges = async () => {
