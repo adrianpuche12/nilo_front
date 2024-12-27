@@ -28,7 +28,8 @@ export const ProtectedRoute = ({ children }) => {
         '/profile',
         '/userReservations',
         '/user-registration',
-        '/Historia'
+        '/Historia',
+        '/services'
       ];
 
       if (!isRouteAllowed(location.pathname, adminAllowedRoutes)) {

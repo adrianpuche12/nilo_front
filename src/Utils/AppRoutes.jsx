@@ -24,6 +24,7 @@ import Contactos from '../Components/Pages/Contactos'
 import CompanyPolicies from '../Components/Pages/CompanyPolicies';
 import UserRegistration from '../Components/User/UserRegistration.js';
 import Historia from '../Components/User/Historia.js';
+import ServicesDashboard from '../Components/Admin/ServicesDashboard'
 
 const AppRoutes = () => {
   return (
@@ -38,6 +39,7 @@ const AppRoutes = () => {
         <Route path="/user/:id" element={<ProtectedRoute><Layout><UserDetail /></Layout></ProtectedRoute>} />
         <Route path="/countries" element={<ProtectedRoute><Layout><Countries /></Layout></ProtectedRoute>} />
         <Route path="/users" element={<ProtectedRoute><Layout><AllUsers /></Layout></ProtectedRoute>} />
+        <Route path="/services" element={<ProtectedRoute><Layout><ServicesDashboard /></Layout></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Layout><UserProfile /></Layout></ProtectedRoute>} />
         <Route path="/activities" element={<ProtectedRoute><Layout><Activities /></Layout></ProtectedRoute>} />
         <Route path="/province" element={<ProtectedRoute><Layout><Province /></Layout></ProtectedRoute>} />

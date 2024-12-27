@@ -15,7 +15,8 @@ export const translations = {
     promotions: "Promotions",
     promoMountain: "Mountain Adventure",
     promoCaribbean: "Caribbean Cruise",
-    promoCity: "Urban Tour"
+    promoCity: "Urban Tour",
+    services: "Services"
   },
   es: {
     countries: "Países",
@@ -33,6 +34,7 @@ export const translations = {
     promotions: "Promociones",
     promoMountain: "Aventura en la Montaña",
     promoCaribbean: "Crucero por el Caribe",
-    promoCity: "Tour Urbano"
+    promoCity: "Tour Urbano",
+    services: "Servicios"
     }
   };

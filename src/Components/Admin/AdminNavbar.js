@@ -39,6 +39,7 @@ const AdminNavBar = () => {
   };
 
   const navLinks = [
+    { to: "/services", label: translations[currentLanguage].services },
     { to: "/countries", label: translations[currentLanguage].countries },
     { to: "/users", label: translations[currentLanguage].users },
     { to: "/activities", label: translations[currentLanguage].activities },
