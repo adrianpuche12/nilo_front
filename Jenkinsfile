@@ -6,7 +6,7 @@ pipeline {
     }
     environment {
         REACT_APP_NAME = "Travel Agency"
-        DOCKER_IMAGE = "Frontend/TravelAgency"
+        DOCKER_IMAGE = "frontend-travel-agency"
         DOCKER_TAG = "latest"
     }
 
