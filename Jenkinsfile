@@ -5,8 +5,8 @@ pipeline {
         nodejs('22.12.0')
     }
     environment {
-        REACT_APP_NILO = "mi-react-app"
-        DOCKER_IMAGE = "miusuario/mi-react-app"
+        REACT_APP_NAME = "Travel Agency"
+        DOCKER_IMAGE = "Frontend/TravelAgency"
         DOCKER_TAG = "latest"
     }
 
@@ -60,7 +60,7 @@ pipeline {
                 sh '''
                 docker stop ${REACT_APP_NAME} || true
                 docker rm ${REACT_APP_NAME} || true
-                docker run -p 9001:80 -d ${DOCKER_IMAGE}:${DOCKER_TAG}
+                docker run --restart unless-stopped -p 9001:80 -d ${DOCKER_IMAGE}:${DOCKER_TAG}
                 docker ps
                 '''
             }
