@@ -59,7 +59,8 @@ pipeline {
                 echo 'Desplegando en Docker...'
                 sh """
                 docker stop ${CONTAINER_NAME} || true
-                docker rm ${CONTAINER_NAME} || true
+                docker rm -f ${CONTAINER_NAME} || true
+
                 docker run -d \
                 --restart unless-stopped \
                 --name ${CONTAINER_NAME}
