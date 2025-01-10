@@ -63,7 +63,7 @@ pipeline {
 
                 docker run -d \
                 --restart unless-stopped \
-                --name ${CONTAINER_NAME}
+                --name ${CONTAINER_NAME} \
                 -p 9001:80 \
                 ${DOCKER_IMAGE}:${DOCKER_TAG}
                 """
