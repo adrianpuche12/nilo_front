@@ -5,9 +5,9 @@ pipeline {
         nodejs('22.12.0')
     }
     environment {
-        REACT_APP_NAME = "Travel Agency"
         DOCKER_IMAGE = "frontend-travel-agency"
         DOCKER_TAG = "latest"
+        CONTAINER_NAME = "travel-agency"
     }
 
     stages {
@@ -57,12 +57,15 @@ pipeline {
         stage('Desplegar en Docker') {
             steps {
                 echo 'Desplegando en Docker...'
-                sh '''
-                docker stop ${REACT_APP_NAME} || true
-                docker rm ${REACT_APP_NAME} || true
-                docker run --restart unless-stopped -p 9001:80 -d ${DOCKER_IMAGE}:${DOCKER_TAG}
-                docker ps
-                '''
+                sh """
+                docker stop ${CONTAINER_NAME} || true
+                docker rm ${CONTAINER_NAME} || true
+                docker run -d \
+                --restart unless-stopped \
+                --name ${CONTAINER_NAME}
+                -p 9001:80 \
+                ${DOCKER_IMAGE}:${DOCKER_TAG}
+                """
             }
         }
     }
