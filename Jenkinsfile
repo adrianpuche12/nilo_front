@@ -64,6 +64,7 @@ pipeline {
                 docker run -d \
                 --restart unless-stopped \
                 --name ${CONTAINER_NAME} \
+                --network=backend_default \
                 -p 9001:80 \
                 ${DOCKER_IMAGE}:${DOCKER_TAG}
                 """
