@@ -1,11 +1,20 @@
-import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from './Auth/AuthContext';
-import { TextField, Button, Alert, AlertTitle, Container, Paper, Typography,Box } from '@mui/material';
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "./Auth/AuthContext";
+import {
+  TextField,
+  Button,
+  Alert,
+  AlertTitle,
+  Container,
+  Paper,
+  Typography,
+  Box,
+} from "@mui/material";
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { login, error } = useAuth();
   const navigate = useNavigate();
@@ -34,7 +43,7 @@ const Login = () => {
           <Typography variant="h5" component="h1" gutterBottom align="center">
             Inicio de sesión
           </Typography>
-          
+
           <form onSubmit={handleLogin}>
             {error && (
               <Alert severity="error" sx={{ mb: 2 }}>
@@ -42,7 +51,7 @@ const Login = () => {
                 {error}
               </Alert>
             )}
-            
+
             <TextField
               fullWidth
               margin="normal"
@@ -52,7 +61,7 @@ const Login = () => {
               disabled={isSubmitting}
               required
             />
-            
+
             <TextField
               fullWidth
               margin="normal"
@@ -63,7 +72,7 @@ const Login = () => {
               disabled={isSubmitting}
               required
             />
-            
+
             <Button
               fullWidth
               variant="contained"
@@ -71,9 +80,25 @@ const Login = () => {
               disabled={isSubmitting}
               sx={{ mt: 3 }}
             >
-              {isSubmitting ? 'Iniciando sesión...' : 'Iniciar sesión'}
+              {isSubmitting ? "Iniciando sesión..." : "Iniciar sesión"}
             </Button>
           </form>
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{
+              mt: 2,
+              backgroundColor: "#FFB74D", // Cambia esto a tu color preferido
+              "&:hover": {
+                backgroundColor: "#FF9800", // Puedes cambiar el color de hover si lo deseas
+              },
+            }}
+            disabled={isSubmitting}
+            component="a"
+            href="/register"
+          >
+            Registrarse
+          </Button>
         </Paper>
       </Box>
     </Container>
