@@ -149,11 +149,9 @@ const Register = () => {
           enabled: true,
           emailVerified: true,
           roles: ["Client"], // Rol Client para que solo tenga acceso a la visualizacion
-          realmRoles: ["Client"], // No se ingresan - Posible configuracion BackEnd
         };
 
         //  Realizar login para hacer obtener token
-        //login("admindev", "admin");
         await login("admindev", "admin"); // Espera a que se obtenga el accessToken
         const accessToken = localStorage.getItem("accessToken");
 
