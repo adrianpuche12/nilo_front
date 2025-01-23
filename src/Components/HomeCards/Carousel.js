@@ -29,7 +29,7 @@ const carouselStyles = {
   },
 };
 
-export const HomeCarousel = ({ children, className = 'home-cards-swiper' }) => {
+export const HomeCarousel = ({ children, className = 'home-cards-swiper', id = 'home-carousel' }) => {
   const swiperRef = useRef(null);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export const HomeCarousel = ({ children, className = 'home-cards-swiper' }) => {
   }, []);
 
   return (
-    <Box sx={carouselStyles.container}>
+    <Box sx={carouselStyles.container} id={id}>
       <Swiper
         ref={swiperRef}
         modules={[Pagination, Autoplay]}
@@ -60,14 +60,14 @@ export const HomeCarousel = ({ children, className = 'home-cards-swiper' }) => {
         }}
       >
         {children}
-        <div className={`${className}-pagination swiper-pagination`}></div>
+        <div id={`${id}-pagination`} className={`${className}-pagination swiper-pagination`}></div> 
       </Swiper>
     </Box>
   );
 };
 
-export const ActivityCarousel = ({ children }) => (
-  <Box sx={carouselStyles.container}>
+export const ActivityCarousel = ({ children, id = 'activity-carousel' }) => (
+  <Box sx={carouselStyles.container} id={id}>
     <Swiper
       modules={[Pagination, Autoplay]}
       spaceBetween={20}
@@ -87,13 +87,13 @@ export const ActivityCarousel = ({ children }) => (
       }}
     >
       {children}
-      <div className="activities-swiper-pagination swiper-pagination"></div>
+      <div id={`${id}-pagination`} className="activities-swiper-pagination swiper-pagination"></div>
     </Swiper>
   </Box>
 );
 
-export const ItineraryCarousel = ({ children }) => (
-  <Box sx={carouselStyles.container}>
+export const ItineraryCarousel = ({ children, id = 'itinerary-carousel' }) => (
+  <Box sx={carouselStyles.container} id={id}>
     <Swiper
       modules={[Pagination, Autoplay]}
       spaceBetween={20}
@@ -113,7 +113,7 @@ export const ItineraryCarousel = ({ children }) => (
       }}
     >
       {children}
-      <div className="itineraries-swiper-pagination swiper-pagination"></div>
+      <div id={`${id}-pagination`} className="itineraries-swiper-pagination swiper-pagination"></div>
     </Swiper>
   </Box>
 );

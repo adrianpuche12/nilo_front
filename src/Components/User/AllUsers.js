@@ -70,12 +70,16 @@ function AllUsers() {
   );
 
   return (
-    <div>
-      <Box sx={{ padding: 4 }}>
-        <Title text="Usuarios" />
-        
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
+    <div id="all-users-page">
+      <Box id="users-container" sx={{ padding: 4 }}>
+        <Title id="users-title" text="Usuarios" />
+
+        <Box
+          id="search-and-create-container"
+          sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}
+        >
           <TextField
+            id="user-search-field"
             variant="outlined"
             size="small"
             placeholder="Buscar por nombre, apellido o usuario"
@@ -90,22 +94,24 @@ function AllUsers() {
             }}
           />
           <CreateButton
+            id="create-user-button"
             onClick={handleOpen}
             componentName="Usuario"
             startIcon={<AddIcon />}
           />
         </Box>
-        
+
         {loading ? (
-          <Typography variant="h6" align="center">
+          <Typography id="loading-message" variant="h6" align="center">
             Cargando usuarios...
           </Typography>
         ) : error ? (
-          <Typography variant="h6" color="error" align="center">
+          <Typography id="error-message" variant="h6" color="error" align="center">
             {error}
           </Typography>
         ) : (
           <Box
+            id="users-list"
             display="flex"
             flexWrap="wrap"
             gap={2}
@@ -114,6 +120,7 @@ function AllUsers() {
             {filteredUsers.map((user) => (
               <Card
                 key={user.id}
+                id={`user-card-${user.id}`}
                 variant="outlined"
                 sx={{
                   width: 300,
@@ -127,27 +134,27 @@ function AllUsers() {
                 }}
                 onClick={() => handleUserClick(user.id)}
               >
-                <CardActionArea>
-                  <CardContent>
-                    <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
+                <CardActionArea id={`user-card-action-${user.id}`}>
+                  <CardContent id={`user-card-content-${user.id}`}>
+                    <Typography id={`user-username-${user.id}`} variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
                       Usuario: {user.username}
                     </Typography>
-                    <Typography variant="body2" color="textSecondary">
+                    <Typography id={`user-firstname-${user.id}`} variant="body2" color="textSecondary">
                       Nombre: {user.firstName}
                     </Typography>
-                    <Typography variant="body2" color="textSecondary">
+                    <Typography id={`user-lastname-${user.id}`} variant="body2" color="textSecondary">
                       Apellido: {user.lastName}
                     </Typography>
-                    <Typography variant="body2" color="textSecondary">
+                    <Typography id={`user-email-${user.id}`} variant="body2" color="textSecondary">
                       Email: {user.email}
                     </Typography>
-                    <Typography variant="body2" color="textSecondary">
+                    <Typography id={`user-status-${user.id}`} variant="body2" color="textSecondary">
                       Estado: {user.enabled ? 'Habilitado' : 'Deshabilitado'}
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
                       Acceso:
                     </Typography>
-                    <ul style={{ margin: 0, paddingLeft: '20px' }}>
+                    <ul id={`user-access-${user.id}`} style={{ margin: 0, paddingLeft: '20px' }}>
                       <li>Gestión de miembros: {user.access?.manageGroupMembership ? 'Sí' : 'No'}</li>
                       <li>Ver: {user.access?.view ? 'Sí' : 'No'}</li>
                       <li>Asignar roles: {user.access?.mapRoles ? 'Sí' : 'No'}</li>

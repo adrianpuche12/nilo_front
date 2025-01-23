@@ -23,11 +23,11 @@ function CreateCountry() {
     };
 
     return (
-        <Box sx={{ p: 3, maxWidth: '400px', margin: '0 auto' }}>
-            <Typography variant="h4" component="h2" align="center" gutterBottom>
+        <Box sx={{ p: 3, maxWidth: '400px', margin: '0 auto' }} id="create-country-container">
+            <Typography variant="h4" component="h2" align="center" gutterBottom id="create-country-title">
                 Create New Country
             </Typography>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} id="create-country-form">
                 <TextField
                     label="Country Name"
                     variant="outlined"
@@ -36,6 +36,7 @@ function CreateCountry() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
+                    id="country-name-input"
                 />
                 <TextField
                     label="Description"
@@ -45,8 +46,9 @@ function CreateCountry() {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     required
+                    id="country-description-input"
                 />
-                <Button type="submit" variant="contained" color="primary" fullWidth>
+                <Button type="submit" variant="contained" color="primary" fullWidth id="submit-button">
                     Add Country
                 </Button>
             </form>

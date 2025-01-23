@@ -44,8 +44,8 @@ function AdminHome() {
 
   return (
     <>
-      <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
-        <Title text="Bienvenido al panel de administración" />
+      <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }} id="admin-home-container">
+        <Title text="Bienvenido al panel de administración" id="admin-home-title"/>
       </Container>
       <Footer />
     </>

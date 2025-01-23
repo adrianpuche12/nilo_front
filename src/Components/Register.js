@@ -195,6 +195,7 @@ const Register = () => {
                     </Alert>
                   )}
                   <TextField
+                    id="full-name"
                     label="Nombre Completo"
                     variant="outlined"
                     fullWidth
@@ -208,6 +209,7 @@ const Register = () => {
                     helperText={touched.fullName && formErrors.fullName}
                   />
                   <TextField
+                    id="username"
                     label="Usuario"
                     variant="outlined"
                     fullWidth
@@ -221,6 +223,7 @@ const Register = () => {
                     helperText={touched.username && formErrors.username}
                   />
                   <TextField
+                    id="email"
                     label="Email"
                     variant="outlined"
                     fullWidth
@@ -235,6 +238,7 @@ const Register = () => {
                     helperText={touched.email && formErrors.email}
                   />
                   <TextField
+                    id="password"
                     label="Contraseña"
                     variant="outlined"
                     type="password"
@@ -249,6 +253,7 @@ const Register = () => {
                     helperText={touched.password && formErrors.password}
                   />
                   <TextField
+                    id="confirm-password"
                     label="Confirmar Contraseña"
                     variant="outlined"
                     type="password"
@@ -273,6 +278,7 @@ const Register = () => {
                     fullWidth
                     size="large"
                     disabled={isSubmitting || !isValid}
+                    id="register-button"
                   >
                     {isSubmitting ? "Registrando..." : "Registrar"}
                   </Button>
@@ -290,6 +296,7 @@ const Register = () => {
                 }}
                 component="a"
                 href="/login"
+                id="login-button"
               >
                 Iniciar Sesión
               </Button>

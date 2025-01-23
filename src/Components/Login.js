@@ -53,6 +53,7 @@ const Login = () => {
             )}
 
             <TextField
+              id="username"
               fullWidth
               margin="normal"
               label="Nombre de usuario"
@@ -63,6 +64,7 @@ const Login = () => {
             />
 
             <TextField
+              id="password"
               fullWidth
               margin="normal"
               label="Contraseña"
@@ -79,6 +81,7 @@ const Login = () => {
               type="submit"
               disabled={isSubmitting}
               sx={{ mt: 3 }}
+              id="login-button"
             >
               {isSubmitting ? "Iniciando sesión..." : "Iniciar sesión"}
             </Button>
@@ -96,6 +99,7 @@ const Login = () => {
             disabled={isSubmitting}
             component="a"
             href="/register"
+            id="register-button"
           >
             Registrarse
           </Button>

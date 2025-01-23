@@ -37,7 +37,7 @@ const PromotionsCard = ({ sx }) => {
   };
 
   return (
-    <HomeCarousel sx={sx}>
+    <HomeCarousel sx={sx} id="promotions-carousel">
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         navigation
@@ -54,9 +54,10 @@ const PromotionsCard = ({ sx }) => {
         loop
         style={{ padding: 'auto' }}
         ref={swiperRef}
+        id="swiper-component"
       >
         {promotionsData.map((promotion) => (
-          <SwiperSlide key={promotion.id}>
+          <SwiperSlide key={promotion.id} id={`promotion-slide-${promotion.id}`}>
             <Card
               sx={{
                 maxWidth: 450,
@@ -75,6 +76,7 @@ const PromotionsCard = ({ sx }) => {
                 },
               }}
               onClick={() => handlePromotionClick(promotion.id)}
+              id={`promotion-card-${promotion.id}`}
             >
               <Box
                 component="img"
@@ -87,6 +89,7 @@ const PromotionsCard = ({ sx }) => {
                   borderRadius: 2,
                   backgroundColor: promotion.image ? 'transparent' : 'grey.300', // Fondo gris si no hay imagen
                 }}
+                id={`promotion-image-${promotion.id}`}
               />
               <CardContent
                 sx={{
@@ -97,6 +100,7 @@ const PromotionsCard = ({ sx }) => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}
+                id={`promotion-card-content-${promotion.id}`}
               >
                 <Typography
                   variant="h6"
@@ -108,6 +112,7 @@ const PromotionsCard = ({ sx }) => {
                     whiteSpace: 'nowrap',
                     maxHeight: '3.6em',
                   }}
+                  id={`promotion-title-${promotion.id}`}
                 >
                   {truncateText(promotion.title)}
                 </Typography>
@@ -122,6 +127,7 @@ const PromotionsCard = ({ sx }) => {
                     whiteSpace: 'nowrap',
                     maxHeight: '3em',
                   }}
+                  id={`promotion-description-${promotion.id}`}
                 >
                   {truncateText(promotion.description)}
                 </Typography>
@@ -132,6 +138,7 @@ const PromotionsCard = ({ sx }) => {
                     justifyContent: 'center',
                     width: '100%',
                   }}
+                  id={`view-more-box-${promotion.id}`}
                 >
                   <ViewMoreButton
                     onClick={() => handlePromotionClick(promotion.id)}
@@ -141,6 +148,7 @@ const PromotionsCard = ({ sx }) => {
                       width: "150px",
                       height: "40px",
                     }}
+                    id={`view-more-button-${promotion.id}`}
                   />
                 </Box>
               </CardContent>

@@ -99,30 +99,28 @@ const ServicesDashboard = () => {
     return Math.ceil(totalItems / itemsPerPage);
   };
 
-
-
   const ServiceCard = ({ item, type }) => {
     const renderAttributes = () => {
       switch (type) {
         case 'activity':
           return (
             <List dense>
-              <ListItem>
+              <ListItem id={`activity-id-${item.id}`}>
                 <ListItemText primary="ID" secondary={item.id} />
               </ListItem>
-              <ListItem>
+              <ListItem id={`activity-name-${item.id}`}>
                 <ListItemText primary="Nombre" secondary={item.name} />
               </ListItem>
-              <ListItem>
+              <ListItem id={`activity-type-${item.id}`}>
                 <ListItemText primary="Tipo" secondary={item.type || 'N/A'} />
               </ListItem>
-              <ListItem>
+              <ListItem id={`activity-duration-${item.id}`}>
                 <ListItemText primary="Duración" secondary={`${item.duration || 'N/A'} minutos`} />
               </ListItem>
-              <ListItem>
+              <ListItem id={`activity-city-${item.id}`}>
                 <ListItemText primary="Ciudad ID" secondary={item.cityId || 'N/A'} />
               </ListItem>
-              <ListItem>
+              <ListItem id={`activity-description-${item.id}`}>
                 <ListItemText 
                   primary="Descripción" 
                   secondary={item.description || 'Sin descripción'} 
@@ -135,16 +133,16 @@ const ServicesDashboard = () => {
         case 'itinerary':
           return (
             <List dense>
-              <ListItem>
+              <ListItem id={`itinerary-id-${item.id}`}>
                 <ListItemText primary="ID" secondary={item.id} />
               </ListItem>
-              <ListItem>
+              <ListItem id={`itinerary-name-${item.id}`}>
                 <ListItemText primary="Nombre" secondary={item.name} />
               </ListItem>
-              <ListItem>
+              <ListItem id={`itinerary-city-${item.id}`}>
                 <ListItemText primary="Ciudad ID" secondary={item.cityId || 'N/A'} />
               </ListItem>
-              <ListItem>
+              <ListItem id={`itinerary-activities-${item.id}`}>
                 <ListItemText 
                   primary="Actividades" 
                   secondary={item.activities?.length > 0 ? 
@@ -152,7 +150,7 @@ const ServicesDashboard = () => {
                     'Sin actividades'} 
                 />
               </ListItem>
-              <ListItem>
+              <ListItem id={`itinerary-description-${item.id}`}>
                 <ListItemText 
                   primary="Descripción" 
                   secondary={item.description || 'Sin descripción'} 
@@ -165,23 +163,23 @@ const ServicesDashboard = () => {
         case 'promotion':
           return (
             <List dense>
-              <ListItem>
+              <ListItem id={`promotion-id-${item.id}`}>
                 <ListItemText primary="ID" secondary={item.id} />
               </ListItem>
-              <ListItem>
+              <ListItem id={`promotion-title-${item.id}`}>
                 <ListItemText primary="Título" secondary={item.title} />
               </ListItem>
-              <ListItem>
+              <ListItem id={`promotion-shortDesc-${item.id}`}>
                 <ListItemText primary="Descripción Corta" secondary={item.shortDescription} />
               </ListItem>
-              <ListItem>
+              <ListItem id={`promotion-fullDesc-${item.id}`}>
                 <ListItemText 
                   primary="Descripción Completa" 
                   secondary={item.fullDescription || 'Sin descripción'} 
                   sx={{ wordBreak: 'break-word' }}
                 />
               </ListItem>
-              <ListItem>
+              <ListItem id={`promotion-includes-${item.id}`}>
                 <ListItemText 
                   primary="Incluye" 
                   secondary={
@@ -201,6 +199,7 @@ const ServicesDashboard = () => {
 
     return (
       <Card 
+        id={`service-card-${type}-${item.id}`}
         sx={{ 
           height: '100%',
           display: 'flex',
@@ -220,32 +219,32 @@ const ServicesDashboard = () => {
 
   return (
     <>
-      <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+      <Container id="services-dashboard" maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
         <MainTitle text="Panel de Servicios" />
         <MainDescription1 text="Gestión centralizada de todos los servicios ofrecidos por la agencia." />
 
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+        <Box id="services-tabs" sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
           <Tabs 
             value={currentTab} 
             onChange={handleTabChange}
             variant={isMobile ? "scrollable" : "fullWidth"}
             scrollButtons={isMobile ? "auto" : false}
           >
-            <Tab label={`Actividades (${activities.length})`} />
-            <Tab label={`Itinerarios (${itineraries.length})`} />
-            <Tab label={`Promociones (${promotionsData.length})`} />
+            <Tab id="tab-activities" label={`Actividades (${activities.length})`} />
+            <Tab id="tab-itineraries" label={`Itinerarios (${itineraries.length})`} />
+            <Tab id="tab-promotions" label={`Promociones (${promotionsData.length})`} />
           </Tabs>
         </Box>
 
         {loading ? (
-          <Typography>Cargando servicios...</Typography>
+          <Typography id="loading-services">Cargando servicios...</Typography>
         ) : error ? (
-          <Typography color="error">{error}</Typography>
+          <Typography id="error-services" color="error">{error}</Typography>
         ) : (
           <>
-            <Grid container spacing={3}>
+            <Grid id="services-grid" container spacing={3}>
               {getCurrentItems().map((item) => (
-                <Grid item xs={12} sm={6} md={4} key={item.id}>
+                <Grid id={`service-grid-item-${item.id}`} item xs={12} sm={6} md={4} key={item.id}>
                   <ServiceCard 
                     item={item} 
                     type={currentTab === 0 ? 'activity' : currentTab === 1 ? 'itinerary' : 'promotion'} 
@@ -254,7 +253,7 @@ const ServicesDashboard = () => {
               ))}
             </Grid>
             
-            <Stack spacing={2} alignItems="center" sx={{ mt: 4 }}>
+            <Stack id="services-pagination" spacing={2} alignItems="center" sx={{ mt: 4 }}>
               <Pagination 
                 count={getTotalPages()}
                 page={page}

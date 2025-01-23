@@ -16,9 +16,9 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 // Vista móvil en tarjetas
 const MobileView = ({ activities, selectedActivity, handleSelectionChange, getCityName }) => (
-  <Grid container spacing={3}>
+  <Grid container spacing={3} id="mobile-view">
     {activities.map((activity) => (
-      <Grid item xs={12} key={activity.id}>
+      <Grid item xs={12} key={activity.id} id={`mobile-card-${activity.id}`}>
         <Card
           sx={{
             height: '100%',
@@ -27,26 +27,28 @@ const MobileView = ({ activities, selectedActivity, handleSelectionChange, getCi
             borderColor: 'primary.main'
           }}
           onClick={() => handleSelectionChange(activity.id)}
+          id={`card-${activity.id}`}
         >
           <CardContent>
-            <Stack direction="row" alignItems="center" spacing={2} mb={2}>
+            <Stack direction="row" alignItems="center" spacing={2} mb={2} id={`stack-${activity.id}`}>
               <Radio
                 checked={selectedActivity === activity.id}
                 onChange={() => handleSelectionChange(activity.id)}
+                id={`radio-${activity.id}`}
               />
-              <Typography variant="h6" component="div">
+              <Typography variant="h6" component="div" id={`activity-name-${activity.id}`}>
                 {activity.name}
               </Typography>
             </Stack>
 
-            <Box sx={{ pl: 4 }}>
-              <Typography color="text.secondary" gutterBottom>
+            <Box sx={{ pl: 4 }} id={`activity-details-${activity.id}`}>
+              <Typography color="text.secondary" gutterBottom id={`activity-id-${activity.id}`}>
                 <strong>ID:</strong> {activity.id}
               </Typography>
-              <Typography color="text.secondary" gutterBottom>
+              <Typography color="text.secondary" gutterBottom id={`activity-type-${activity.id}`}>
                 <strong>Tipo:</strong> {activity.type}
               </Typography>
-              <Typography color="text.secondary">
+              <Typography color="text.secondary" id={`activity-city-${activity.id}`}>
                 <strong>Ciudad:</strong> {getCityName(activity.cityId)}
               </Typography>
             </Box>
@@ -59,32 +61,34 @@ const MobileView = ({ activities, selectedActivity, handleSelectionChange, getCi
 
 // Vista desktop en tabla
 const DesktopView = ({ activities, handleEdit, handleDelete, getCityName }) => (
-  <TableContainer component={Paper}>
+  <TableContainer component={Paper} id="desktop-table-container">
     <Table>
       <TableHead>
         <TableRow>
-          <TableCell>ID</TableCell>
-          <TableCell>Nombre</TableCell>
-          <TableCell>Tipo</TableCell>
-          <TableCell>Ciudad</TableCell>
-          <TableCell>Acciones</TableCell>
+          <TableCell id="table-id-header">ID</TableCell>
+          <TableCell id="table-name-header">Nombre</TableCell>
+          <TableCell id="table-type-header">Tipo</TableCell>
+          <TableCell id="table-city-header">Ciudad</TableCell>
+          <TableCell id="table-actions-header">Acciones</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
         {activities.map((activity) => (
-          <TableRow key={activity.id}>
-            <TableCell>{activity.id}</TableCell>
-            <TableCell>{activity.name}</TableCell>
-            <TableCell>{activity.type}</TableCell>
-            <TableCell>{getCityName(activity.cityId)}</TableCell>
-            <TableCell>
+          <TableRow key={activity.id} id={`table-row-${activity.id}`}>
+            <TableCell id={`table-id-${activity.id}`}>{activity.id}</TableCell>
+            <TableCell id={`table-name-${activity.id}`}>{activity.name}</TableCell>
+            <TableCell id={`table-type-${activity.id}`}>{activity.type}</TableCell>
+            <TableCell id={`table-city-${activity.id}`}>{getCityName(activity.cityId)}</TableCell>
+            <TableCell id={`table-actions-${activity.id}`}>
               <EditButton
                 onClick={() => handleEdit(activity)}
                 size="small"
+                id={`edit-button-${activity.id}`}
               />
               <IconButton
                 color="error"
                 onClick={() => handleDelete(activity.id)}
+                id={`delete-button-${activity.id}`}
               >
                 <DeleteIcon />
               </IconButton>
@@ -242,27 +246,29 @@ const Activities = () => {
 
   return (
     <div>
-      <Box sx={{ padding: '10px' }}>
-        <Grid container spacing={1} sx={{ mt: 4, px: 2 }}>
-          <Grid item xs={12}>
+      <Box sx={{ padding: '10px' }} id="activities-box">
+        <Grid container spacing={1} sx={{ mt: 4, px: 2 }} id="activities-grid">
+          <Grid item xs={12} id="activities-header">
             {isMobile ? (
               // Vista mobile del encabezado
-              <Stack spacing={2}>
-                <MainTitle text="Gestión de Actividades" align="left" />
+              <Stack spacing={2} id="mobile-header-stack">
+                <MainTitle text="Gestión de Actividades" align="left" id="mobile-main-title" />
                 <CreateButton
                   onClick={handleOpen}
                   componentName="Actividad"
                   startIcon={<AddIcon />}
+                  id="create-button-mobile"
                 />
               </Stack>
             ) : (
               // Vista desktop del encabezado
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <MainTitle text="Gestión de Actividades" align="left" />
+              <Stack direction="row" justifyContent="space-between" alignItems="center" id="desktop-header-stack">
+                <MainTitle text="Gestión de Actividades" align="left" id="desktop-main-title" />
                 <CreateButton
                   onClick={handleOpen}
                   componentName="Actividad"
                   startIcon={<AddIcon />}
+                  id="create-button-desktop"
                 />
               </Stack>
             )}
@@ -275,12 +281,12 @@ const Activities = () => {
               alignItems="center"
               sx={{ mt: 2 }}
             >
-              <MainDescription1 text="Esta pantalla facilita la gestión de actividades, permitiendo su creación, edición y eliminación, así como la integración con ciudades." />
+              <MainDescription1 text="Esta pantalla facilita la gestión de actividades, permitiendo su creación, edición y eliminación, así como la integración con ciudades." id="description"/>
             </Grid>
           </Grid>
 
           {isMobile && (
-            <Grid item xs={12}>
+            <Grid item xs={12} id="mobile-actions">
               <Stack
                 direction="row"
                 spacing={2}
@@ -291,28 +297,32 @@ const Activities = () => {
                   py: 2,
                   mb: 2
                 }}
+                id="mobile-actions-stack"
               >
                 <EditButton
                   onClick={handleEditSelected}
                   disabled={!selectedActivity}
                   fullWidth
+                  id="edit-selected-button"
                 />
                 <DeleteButton
                   onClick={handleDeleteSelected}
                   disabled={!selectedActivity}
                   fullWidth
+                  id="delete-selected-button"
                 />
               </Stack>
             </Grid>
           )}
 
-          <Grid item xs={12}>
+          <Grid item xs={12} id="activities-list">
             {isMobile ? (
               <MobileView
                 activities={activities}
                 selectedActivity={selectedActivity}
                 handleSelectionChange={handleSelectionChange}
                 getCityName={getCityName}
+                id="mobile-view-component"
               />
             ) : (
               <DesktopView
@@ -320,27 +330,29 @@ const Activities = () => {
                 handleEdit={handleEdit}
                 handleDelete={handleDelete}
                 getCityName={getCityName}
+                id="desktop-view-component"
               />
             )}
           </Grid>
         </Grid>
 
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog open={open} onClose={handleClose} id="activity-dialog">
           <DialogTitle>
-            {editMode ? <Title text="Editar Actividad" /> : <Title text="Nueva Actividad" />}
+            {editMode ? <Title text="Editar Actividad" id="dialog-title-edit" /> : <Title text="Nueva Actividad" id="dialog-title-create" />}
           </DialogTitle>
           <DialogContent>
-            <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={12}>
+            <Grid container spacing={2} sx={{ mt: 1 }} id="dialog-content-grid">
+              <Grid item xs={12} id="dialog-name-field">
                 <TextField
                   name="name"
                   label="Nombre"
                   fullWidth
                   value={currentActivity.name}
                   onChange={handleChange}
+                  id="name-field"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} id="dialog-type-field">
                 <TextField
                   name="type"
                   select
@@ -348,15 +360,16 @@ const Activities = () => {
                   fullWidth
                   value={currentActivity.type}
                   onChange={handleChange}
+                  id="type-field"
                 >
                   {activityTypes.map((type) => (
-                    <MenuItem key={type} value={type}>
+                    <MenuItem key={type} value={type} id={`type-option-${type}`}>
                       {type}
                     </MenuItem>
                   ))}
                 </TextField>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} id="dialog-city-field">
                 <TextField
                   name="cityId"
                   select
@@ -364,9 +377,10 @@ const Activities = () => {
                   fullWidth
                   value={currentActivity.cityId}
                   onChange={handleChange}
+                  id="city-field"
                 >
                   {cities.map((city) => (
-                    <MenuItem key={city.id} value={city.id}>
+                    <MenuItem key={city.id} value={city.id} id={`city-option-${city.id}`}>
                       {city.name}
                     </MenuItem>
                   ))}
@@ -374,16 +388,18 @@ const Activities = () => {
               </Grid>
             </Grid>
           </DialogContent>
-          <DialogActions>
+          <DialogActions id="dialog-actions">
             <CloseButton
               onClick={handleClose}
               fullWidth
+              id="dialog-close-button"
             />
             <GenericButton
               text={editMode ? 'Actualizar' : 'Crear'}
               color="primary"
               onClick={editMode ? handleUpdate : handleCreate}
               fullWidth
+              id="dialog-generic-button"
             />
           </DialogActions>
         </Dialog>

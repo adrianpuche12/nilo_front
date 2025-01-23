@@ -22,9 +22,9 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 // Vista móvil en tarjetas
 const MobileView = ({ provinces, selectedProvince, handleSelectionChange, getCountryName }) => (
-  <Grid container spacing={3}>
+  <Grid container spacing={3} id="mobile-view">
     {provinces.map((province) => (
-      <Grid item xs={12} key={province.id}>
+      <Grid item xs={12} key={province.id} id={`province-card-${province.id}`}>
         <Card
           sx={{
             height: '100%',
@@ -33,26 +33,28 @@ const MobileView = ({ provinces, selectedProvince, handleSelectionChange, getCou
             borderColor: 'primary.main'
           }}
           onClick={() => handleSelectionChange(province.id)}
+          id={`card-${province.id}`}
         >
           <CardContent>
-            <Stack direction="row" alignItems="center" spacing={2} mb={2}>
+            <Stack direction="row" alignItems="center" spacing={2} mb={2} id={`stack-${province.id}`}>
               <Radio
                 checked={selectedProvince === province.id}
                 onChange={() => handleSelectionChange(province.id)}
+                id={`radio-${province.id}`}
               />
-              <Typography variant="h6" component="div">
+              <Typography variant="h6" component="div" id={`province-name-${province.id}`}>
                 {province.name}
               </Typography>
             </Stack>
 
-            <Box sx={{ pl: 4 }}>
-              <Typography color="text.secondary" gutterBottom>
+            <Box sx={{ pl: 4 }} id={`box-${province.id}`}>
+              <Typography color="text.secondary" gutterBottom id={`province-id-${province.id}`}>
                 <strong>ID:</strong> {province.id}
               </Typography>
-              <Typography color="text.secondary" gutterBottom>
+              <Typography color="text.secondary" gutterBottom id={`province-description-${province.id}`}>
                 <strong>Descripción:</strong> {province.description}
               </Typography>
-              <Typography color="text.secondary" gutterBottom>
+              <Typography color="text.secondary" gutterBottom id={`province-country-${province.id}`}>
                 <strong>País:</strong> {getCountryName(province.country)}
               </Typography>
             </Box>
@@ -65,7 +67,7 @@ const MobileView = ({ provinces, selectedProvince, handleSelectionChange, getCou
 
 // Vista desktop en tabla
 const DesktopView = ({ provinces, handleEdit, handleDelete, getCountryName }) => (
-  <TableContainer component={Paper}>
+  <TableContainer component={Paper} id="desktop-view">
     <Table>
       <TableHead>
         <TableRow>
@@ -78,17 +80,18 @@ const DesktopView = ({ provinces, handleEdit, handleDelete, getCountryName }) =>
       </TableHead>
       <TableBody>
         {provinces.map((province) => (
-          <TableRow key={province.id}>
-            <TableCell>{province.id}</TableCell>
-            <TableCell>{province.name}</TableCell>
-            <TableCell>{province.description}</TableCell>
-            <TableCell>{getCountryName(province.country)}</TableCell>
-            <TableCell>
+          <TableRow key={province.id} id={`table-row-${province.id}`}>
+            <TableCell id={`table-cell-id-${province.id}`}>{province.id}</TableCell>
+            <TableCell id={`table-cell-name-${province.id}`}>{province.name}</TableCell>
+            <TableCell id={`table-cell-description-${province.id}`}>{province.description}</TableCell>
+            <TableCell id={`table-cell-country-${province.id}`}>{getCountryName(province.country)}</TableCell>
+            <TableCell id={`table-cell-actions-${province.id}`}>
               <EditButton
                 onClick={() => handleEdit(province)}
                 size="small"
+                id={`edit-button-${province.id}`}
               />
-              <IconButton color="error" onClick={() => handleDelete(province.id)}>
+              <IconButton color="error" onClick={() => handleDelete(province.id)} id={`delete-button-${province.id}`}>
                 <DeleteIcon />
               </IconButton>
             </TableCell>
@@ -259,36 +262,38 @@ const Province = () => {
 
   return (
     <div>
-      <Box sx={{ padding: '10px' }}>
-        <Grid container spacing={1} sx={{ mt: 4, px: 2 }}>
-          <Grid item xs={12}>
+      <Box sx={{ padding: '10px' }} id="province-box">
+        <Grid container spacing={1} sx={{ mt: 4, px: 2 }} id="province-grid">
+          <Grid item xs={12} id="title-grid">
             {isMobile ? (
               <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <MainTitle text="Gestión de Provincias" align="left" />
+                <MainTitle text="Gestión de Provincias" align="left" id="main-title" />
                 <CreateButton
                   onClick={handleOpen}
                   componentName="Provincia"
                   startIcon={<AddIcon />}
+                  id="create-button"
                 />
               </Stack>
             ) : (
               <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <MainTitle text="Gestión de Provincias" align="left" />
+                <MainTitle text="Gestión de Provincias" align="left" id="main-title" />
                 <CreateButton
                   onClick={handleOpen}
                   componentName="Provincia"
                   startIcon={<AddIcon />}
+                  id="create-button"
                 />
               </Stack>
             )}
           </Grid>
 
-          <Grid item xs={12} container justifyContent="left" alignItems="center" sx={{ mt: 2 }}>
-            <MainDescription1 text="Esta pantalla permite gestionar las provincias, incluyendo su creación, edición y eliminación." />
+          <Grid item xs={12} container justifyContent="left" alignItems="center" sx={{ mt: 2 }} id="description-grid">
+            <MainDescription1 text="Esta pantalla permite gestionar las provincias, incluyendo su creación, edición y eliminación." id="main-description" />
           </Grid>
 
           {isMobile && (
-            <Grid item xs={12}>
+            <Grid item xs={12} id="mobile-actions">
               <Stack
                 direction="row"
                 spacing={2}
@@ -299,22 +304,25 @@ const Province = () => {
                   py: 2,
                   mb: 2,
                 }}
+                id="mobile-actions-stack"
               >
                 <EditButton
                   onClick={handleEditSelected}
                   disabled={!selectedProvince}
                   fullWidth
+                  id="edit-selected-button"
                 />
                 <DeleteButton
                   onClick={handleDeleteSelected}
                   disabled={!selectedProvince}
                   fullWidth
+                  id="delete-selected-button"
                 />
               </Stack>
             </Grid>
           )}
 
-          <Grid item xs={12}>
+          <Grid item xs={12} id="provinces-grid">
             {isMobile ? (
               <MobileView
                 provinces={provinces}
@@ -333,22 +341,23 @@ const Province = () => {
           </Grid>
         </Grid>
 
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>
+        <Dialog open={open} onClose={handleClose} id="province-dialog">
+          <DialogTitle id="dialog-title">
             {editMode ? <Title text="Editar Provincia" /> : <Title text="Nueva Provincia" />}
           </DialogTitle>
           <DialogContent>
-            <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={12}>
+            <Grid container spacing={2} sx={{ mt: 1 }} id="dialog-content">
+              <Grid item xs={12} id="name-grid">
                 <TextField
                   name="name"
                   label="Nombre"
                   fullWidth
                   value={currentProvince.name}
                   onChange={handleChange}
+                  id="name-input"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} id="description-grid">
                 <TextField
                   name="description"
                   label="Descripción"
@@ -357,9 +366,10 @@ const Province = () => {
                   rows={3}
                   value={currentProvince.description}
                   onChange={handleChange}
+                  id="description-input"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} id="country-grid">
                 <TextField
                   name="country"
                   select
@@ -368,9 +378,10 @@ const Province = () => {
                   value={currentProvince.country?.id}
                   onChange={handleChange}
                   disabled={editMode}
+                  id="country-select"
                 >
                   {countries.map((country) => (
-                    <MenuItem key={country.id} value={country.id}>
+                    <MenuItem key={country.id} value={country.id} id={`country-item-${country.id}`}>
                       {country.name}
                     </MenuItem>
                   ))}
@@ -378,16 +389,18 @@ const Province = () => {
               </Grid>
             </Grid>
           </DialogContent>
-          <DialogActions>
+          <DialogActions id="dialog-actions">
             <CloseButton
               onClick={handleClose}
               fullWidth
+              id="close-button"
             />
             <GenericButton
               text={editMode ? 'Actualizar' : 'Crear'}
               color="primary"
               onClick={editMode ? handleUpdate : handleCreate}
               fullWidth
+              id="generic-button"
             />
           </DialogActions>
         </Dialog>

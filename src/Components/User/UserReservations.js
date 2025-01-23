@@ -37,19 +37,21 @@ function UserReservations() {
   };
 
   return (
-    <div>
+    <div id="user-reservations-container">
       <Box sx={{ padding: 4 }}>
-        <MainTitle text={`Reservas de ${userName || 'Usuario'}`} align='center' />
+        <MainTitle text={`Reservas de ${userName || 'Usuario'}`} align='center' id="reservations-main-title" />
         <Box
           display="flex"
           flexWrap="wrap"
           gap={3}
           justifyContent="center"
+          id="reservations-list"
         >
           {currentReservations.map((reservation) => (
             <Card
               key={reservation.id}
               variant="outlined"
+              id={`reservation-card-${reservation.id}`}
               sx={{
                 width: 400,
                 height: 250,
@@ -62,21 +64,42 @@ function UserReservations() {
                 },
               }}
             >
-              <CardActionArea>
-                <CardContent sx={{ padding: 4 }}>
-                  <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
+              <CardActionArea id={`reservation-action-${reservation.id}`}>
+                <CardContent sx={{ padding: 4 }} id={`reservation-content-${reservation.id}`}>
+                  <Typography
+                    variant="h6"
+                    component="div"
+                    sx={{ fontWeight: 'bold' }}
+                    id={`reservation-username-${reservation.id}`}
+                  >
                     Nombre de Usuario: {userName}
                   </Typography>
-                  <Typography variant="body1" color="textSecondary">
+                  <Typography
+                    variant="body1"
+                    color="textSecondary"
+                    id={`reservation-activity-${reservation.id}`}
+                  >
                     Actividad/Itinerario Reservado: {reservation.activity}
                   </Typography>
-                  <Typography variant="body1" color="textSecondary">
+                  <Typography
+                    variant="body1"
+                    color="textSecondary"
+                    id={`reservation-date-${reservation.id}`}
+                  >
                     Fecha de la Reserva: {reservation.date}
                   </Typography>
-                  <Typography variant="body1" color="textSecondary">
+                  <Typography
+                    variant="body1"
+                    color="textSecondary"
+                    id={`reservation-status-${reservation.id}`}
+                  >
                     Estado: {reservation.status}
                   </Typography>
-                  <Typography variant="body1" color="textSecondary">
+                  <Typography
+                    variant="body1"
+                    color="textSecondary"
+                    id={`reservation-details-${reservation.id}`}
+                  >
                     Detalles: {reservation.details}
                   </Typography>
                 </CardContent>
@@ -85,12 +108,13 @@ function UserReservations() {
           ))}
         </Box>
         {/* Paginación */}
-        <Box display="flex" justifyContent="center" mt={4}>
+        <Box display="flex" justifyContent="center" mt={4} id="pagination-container">
           <Pagination
             count={Math.ceil(reservations.length / itemsPerPage)}
             page={currentPage}
             onChange={handlePageChange}
             color="primary"
+            id="pagination-component"
           />
         </Box>
       </Box>

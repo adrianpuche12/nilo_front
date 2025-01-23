@@ -45,7 +45,7 @@ const ActivitiesCard = ({ sx }) => {
     text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
 
   return (
-    <HomeCarousel sx={sx}>
+    <HomeCarousel sx={sx} id="home-carousel">
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         navigation
@@ -61,9 +61,10 @@ const ActivitiesCard = ({ sx }) => {
         }}
         loop
         style={{ padding: 'auto' }}
+        id="swiper-component"
       >
         {activities.map((activity) => (
-          <SwiperSlide key={activity.id}>
+          <SwiperSlide key={activity.id} id={`swiper-slide-${activity.id}`}>
             <Card
               sx={{
                 maxWidth: 450,
@@ -82,6 +83,7 @@ const ActivitiesCard = ({ sx }) => {
                 },
               }}
               onClick={() => handleActivityClick(activity.id)} // Usar handleActivityClick
+              id={`card-${activity.id}`}
             >
               <Box
                 component="img"
@@ -94,6 +96,7 @@ const ActivitiesCard = ({ sx }) => {
                   borderRadius: 2,
                   backgroundColor: activity.image ? 'transparent' : 'grey.300',
                 }}
+                id={`image-${activity.id}`}
               />
               <CardContent
                 sx={{
@@ -104,6 +107,7 @@ const ActivitiesCard = ({ sx }) => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}
+                id={`card-content-${activity.id}`}
               >
                 <Typography
                   variant="h6"
@@ -115,10 +119,11 @@ const ActivitiesCard = ({ sx }) => {
                     whiteSpace: 'nowrap',
                     maxHeight: '3.6em',
                   }}
+                  id={`activity-name-${activity.id}`}
                 >
                   {truncateText(activity.name)}
                 </Typography>
-                <Divider sx={{ my: 1 }} />
+                <Divider sx={{ my: 1 }} id={`divider-${activity.id}`} />
                 <Typography
                   variant="body2"
                   sx={{
@@ -130,11 +135,12 @@ const ActivitiesCard = ({ sx }) => {
                     whiteSpace: 'nowrap',
                     maxHeight: '3em',
                   }}
+                  id={`activity-type-${activity.id}`}
                 >
                   {truncateText(activity.type)}
                 </Typography>
-                <Typography variant="body2">{activity.duration} min</Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                <Typography variant="body2" id={`activity-duration-${activity.id}`}>{activity.duration} min</Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }} id={`view-more-box-${activity.id}`}>
                   <ViewMoreButton
                     onClick={(e) => {
                       e.stopPropagation();
@@ -146,6 +152,7 @@ const ActivitiesCard = ({ sx }) => {
                       width: "150px",
                       height: "40px",
                     }}
+                    id={`view-more-button-${activity.id}`}
                   />
                 </Box>
               </CardContent>

@@ -137,6 +137,7 @@ const Countries = () => {
       {countries.map((country) => (
         <Grid item xs={12} key={country.id}>
           <Card
+            id={`country-card-${country.id}`}
             sx={{
               height: '100%',
               cursor: 'pointer',
@@ -148,6 +149,7 @@ const Countries = () => {
             <CardContent>
               <Stack direction="row" alignItems="center" spacing={2}>
                 <Radio
+                  id={`radio-${country.id}`}
                   checked={selectedCountry === country.id} // Marca el Radio cuando el país es seleccionado
                   onChange={() => handleSelectionChange(country.id)} // Cambia la selección del país al hacer clic
                 />
@@ -189,10 +191,15 @@ const Countries = () => {
               <TableCell>{country.region}</TableCell>
               <TableCell>
                 <EditButton
+                  id={`edit-button-${country.id}`}
                   onClick={() => handleEdit(country)}
                   size="small"
                 />
-                <IconButton color="error" onClick={() => handleDelete(country.id)}>
+                <IconButton
+                  id={`delete-button-${country.id}`}
+                  color="error"
+                  onClick={() => handleDelete(country.id)}
+                >
                   <DeleteIcon />
                 </IconButton>
               </TableCell>
@@ -207,13 +214,15 @@ const Countries = () => {
     <div>
       <Box sx={{ padding: '10px' }}>
         <Grid container spacing={1} sx={{ mt: 4, px: 2 }}>
+
           <Grid item xs={12}>
             {isMobile ? (
               <Stack direction="row" justifyContent="space-between" alignItems="center">
 
-                <MainTitle text="Gestión de Países" align="left" />
+                <MainTitle id="main-title" text="Gestión de Países" align="left" /> {/* ID agregado */}
 
                 <CreateButton
+                  id="create-button" // ID agregado
                   onClick={handleOpen}
                   componentName="País"
                   startIcon={<AddIcon />}
@@ -222,9 +231,10 @@ const Countries = () => {
             ) : (
               <Stack direction="row" justifyContent="space-between" alignItems="center">
 
-                <MainTitle text="Gestión de Países" align="left" />
+                <MainTitle id="main-title" text="Gestión de Países" align="left" />
 
                 <CreateButton
+                  id="create-button"
                   onClick={handleOpen}
                   componentName="País"
                   startIcon={<AddIcon />}
@@ -234,7 +244,7 @@ const Countries = () => {
           </Grid>
 
           <Grid item xs={12} container justifyContent="left" alignItems="center" sx={{ mt: 2 }}>
-            <MainDescription1 text="Esta pantalla permite gestionar los países, incluyendo su creación, edición y eliminación." />
+            <MainDescription1 id="main-description" text="Esta pantalla permite gestionar los países, incluyendo su creación, edición y eliminación." />
           </Grid>
 
           {isMobile && (
@@ -251,11 +261,13 @@ const Countries = () => {
                 }}
               >
                 <EditButton
+                  id="edit-selected-button"
                   onClick={handleEdit}
                   disabled={!selectedCountry}
                   fullWidth
                 />
                 <DeleteButton
+                  id="delete-selected-button"
                   onClick={handleDeleteSelected}
                   disabled={!selectedCountry}
                   fullWidth
@@ -294,6 +306,7 @@ const Countries = () => {
                     fullWidth
                     value={currentCountry.name}
                     onChange={handleChange}
+                    id="input-name"
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -304,6 +317,7 @@ const Countries = () => {
                     fullWidth
                     value={currentCountry.population}
                     onChange={handleChange}
+                    id="input-population"
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -313,6 +327,7 @@ const Countries = () => {
                     fullWidth
                     value={currentCountry.region}
                     onChange={handleChange}
+                    id="input-region"
                   />
                 </Grid>
               </Grid>
@@ -321,12 +336,14 @@ const Countries = () => {
               <CloseButton
                 onClick={handleClose}
                 fullWidth
+                id="close-button"
               />
               <GenericButton
                 text={editMode ? 'Actualizar' : 'Crear'}
                 color="primary"
                 onClick={editMode ? handleUpdate : handleCreate}
                 fullWidth
+                id="generic-button"
               />
             </DialogActions>
           </Dialog>

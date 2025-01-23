@@ -10,16 +10,40 @@ const Historia = () => {
     ];
 
     return (
-        <Box sx={{ mt: 4 }}>
-                <Title text="Historia de Servicios Adquiridos"/> 
-            <Grid container spacing={3}>
+        <Box sx={{ mt: 4 }} id="history-services">
+            <Title text="Historia de Servicios Adquiridos" id="history-services-title" />
+            <Grid container spacing={3} id="services-grid">
                 {servicios.map((servicio) => (
-                    <Grid item xs={12} sm={6} md={4} key={servicio.id}>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6">{servicio.nombre}</Typography>
-                                <Typography variant="body2" color="textSecondary">Fecha: {servicio.fecha}</Typography>
-                                <Typography variant="body2" color="textSecondary">Precio: {servicio.precio}</Typography>
+                    <Grid 
+                        item 
+                        xs={12} 
+                        sm={6} 
+                        md={4} 
+                        key={servicio.id} 
+                        id={`service-grid-item-${servicio.id}`}
+                    >
+                        <Card variant="outlined" id={`service-card-${servicio.id}`}>
+                            <CardContent id={`service-card-content-${servicio.id}`}>
+                                <Typography 
+                                    variant="h6" 
+                                    id={`service-name-${servicio.id}`}
+                                >
+                                    {servicio.nombre}
+                                </Typography>
+                                <Typography 
+                                    variant="body2" 
+                                    color="textSecondary" 
+                                    id={`service-date-${servicio.id}`}
+                                >
+                                    Fecha: {servicio.fecha}
+                                </Typography>
+                                <Typography 
+                                    variant="body2" 
+                                    color="textSecondary" 
+                                    id={`service-price-${servicio.id}`}
+                                >
+                                    Precio: {servicio.precio}
+                                </Typography>
                             </CardContent>
                         </Card>
                     </Grid>

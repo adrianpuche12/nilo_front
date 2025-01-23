@@ -91,7 +91,7 @@ const ItinerariesCard = ({ sx }) => {
     text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
 
   return (
-    <HomeCarousel sx={{}}>
+    <HomeCarousel sx={{}} id="itinerary-carousel">
       <Swiper
         modules={[Navigation, SwiperPagination, Autoplay]}
         navigation
@@ -106,9 +106,10 @@ const ItinerariesCard = ({ sx }) => {
           1440: { slidesPerView: 4 },
         }}
         loop
+        id="itinerary-swiper"
       >
         {currentItineraries.map((itinerary) => (
-          <SwiperSlide key={itinerary.id}>
+          <SwiperSlide key={itinerary.id} id={`itinerary-slide-${itinerary.id}`}>
             <Card
               sx={{
                 maxWidth: 450,
@@ -127,6 +128,7 @@ const ItinerariesCard = ({ sx }) => {
                 },
               }}
               onClick={() => handleItineraryClick(itinerary.id)}
+              id={`itinerary-card-${itinerary.id}`}
             >
               <Box
                 component="img"
@@ -139,6 +141,7 @@ const ItinerariesCard = ({ sx }) => {
                   borderRadius: 2,
                   backgroundColor: itinerary.image ? 'transparent' : 'grey.300', // Fondo gris si no hay imagen
                 }}
+                id={`itinerary-image-${itinerary.id}`}
               />
 
               <CardContent
@@ -150,6 +153,7 @@ const ItinerariesCard = ({ sx }) => {
                   justifyContent: "space-between",
                   alignItems: "center",
                 }}
+                id={`itinerary-card-content-${itinerary.id}`}
               >
                 <Typography
                   variant="h6"
@@ -161,10 +165,11 @@ const ItinerariesCard = ({ sx }) => {
                     whiteSpace: "nowrap",
                     maxHeight: "3.6em",
                   }}
+                  id={`itinerary-title-${itinerary.id}`}
                 >
                   {truncateText(itinerary.name)}
                 </Typography>
-                <Divider sx={{ my: 1 }} />
+                <Divider sx={{ my: 1 }} id={`itinerary-divider-${itinerary.id}`} />
                 <Typography
                   variant="body2"
                   sx={{
@@ -176,10 +181,11 @@ const ItinerariesCard = ({ sx }) => {
                     whiteSpace: "nowrap",
                     maxHeight: "3em",
                   }}
+                  id={`itinerary-description-${itinerary.id}`}
                 >
                   {truncateText(itinerary.description)}
                 </Typography>
-                <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+                <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }} id={`view-more-box-${itinerary.id}`}>
                   <ViewMoreButton
                     onClick={() => handleItineraryClick(itinerary.id)}
                     sx={{
@@ -188,6 +194,7 @@ const ItinerariesCard = ({ sx }) => {
                       width: "150px",
                       height: "40px",
                     }}
+                    id={`view-more-button-${itinerary.id}`}
                   />
                 </Box>
               </CardContent>
@@ -197,26 +204,28 @@ const ItinerariesCard = ({ sx }) => {
       </Swiper>
 
       {/* Modal para detalle */}
-      <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="sm">
-        <DialogContent>
+      <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="sm" id="itinerary-modal">
+        <DialogContent id="itinerary-modal-content">
           {selectedItinerary && (
-            <Box>
-              <Subtitulo1 text={selectedItinerary.name} />
-              <Typography variant="body2">{selectedItinerary.description}</Typography>
+            <Box id="modal-detail-box">
+              <Subtitulo1 text={selectedItinerary.name} id={`modal-subtitulo-${selectedItinerary.id}`} />
+              <Typography variant="body2" id={`modal-description-${selectedItinerary.id}`}>{selectedItinerary.description}</Typography>
             </Box>
           )}
         </DialogContent>
-        <DialogActions>
+        <DialogActions id="modal-actions">
           <GenericButton
             text="Cerrar"
             variant="contained"
             color="secondary"
             onClick={handleCloseModal}
+            id="modal-close-button"
           />
           <GenericButton
             text="Reservar"
             variant="contained"
             color="primary"
+            id="modal-reserve-button"
           />
         </DialogActions>
       </Dialog>

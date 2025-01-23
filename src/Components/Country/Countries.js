@@ -1,4 +1,4 @@
-import React from 'react'; 
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import countries from '../../jsons/countries';
 import Card from '@mui/material/Card';
@@ -16,6 +16,7 @@ function Countries() {
 
   return (
     <Box
+      id="countries-container"
       sx={{
         display: 'flex',
         flexDirection: 'row',
@@ -29,6 +30,7 @@ function Countries() {
       {countries.map((country) => (
         <Card
           key={country.id}
+          id={`country-card-${country.id}`}
           sx={{
             width: 240,
             cursor: 'pointer',
@@ -38,17 +40,19 @@ function Countries() {
           }}
           onClick={() => handleCountriesClick(country.id)}
         >
-          <CardContent>
+          <CardContent id={`country-card-content-${country.id}`}>
             <Typography
               variant="h5"
               component="div"
               sx={{ textAlign: 'center', color: 'primary.main', fontWeight: 'bold' }}
+              id={`country-name-${country.id}`}
             >
               {country.name}
             </Typography>
             <Typography
               variant="body2"
               sx={{ textAlign: 'center', color: 'text.secondary', mt: 1 }}
+              id={`country-description-${country.id}`}
             >
               {country.description}
             </Typography>

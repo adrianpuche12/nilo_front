@@ -3,7 +3,6 @@ import {
   AppBar,
   Toolbar,
   Button,
-  Menu,
   MenuItem,
   IconButton,
   Box,
@@ -43,7 +42,7 @@ const UserNavBar = () => {
   const [promotions, setPromotions] = useState([
     { id: 1, title: translations[currentLanguage].promoMountain },
     { id: 2, title: translations[currentLanguage].promoCaribbean },
-    { id: 3, title: translations[currentLanguage].promoCity }
+    { id: 3, title: translations[currentLanguage].promoCity },
   ]);
 
   const getAxiosConfig = useCallback(() => ({
@@ -76,19 +75,21 @@ const UserNavBar = () => {
   };
 
   const LanguageIcon = () => {
-    const tooltipText = currentLanguage === 'en' ? 'Cambiar a Español' : 'Switch to English';
-    
+    const tooltipText =
+      currentLanguage === 'en' ? 'Cambiar a Español' : 'Switch to English';
+
     return (
       <Tooltip title={tooltipText}>
         <IconButton
           color="inherit"
           onClick={toggleLanguage}
+          id="language-toggle-button"
           sx={{
             padding: '8px',
             '& svg': {
               width: '24px',
               height: '16px',
-            }
+            },
           }}
         >
           {currentLanguage === 'en' ? <US title="US Flag" /> : <ES title="Spanish Flag" />}
@@ -121,22 +122,25 @@ const UserNavBar = () => {
       onMouseLeave={handleMenuLeave}
       sx={{ position: 'relative', display: 'inline-block' }}
     >
-      <Button 
+      <Button
         color="inherit"
-        sx={{ 
-          backgroundColor: hoveredMenu === menuName ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+        id={`menu-button-${menuName.toLowerCase()}`}
+        sx={{
+          backgroundColor:
+            hoveredMenu === menuName ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
           height: '100%',
           display: 'flex',
           alignItems: 'center',
           '&:hover': {
-            backgroundColor: 'rgba(255, 255, 255, 0.1)'
-          }
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          },
         }}
       >
         {translations[currentLanguage][menuName.toLowerCase()]}
       </Button>
       {hoveredMenu === menuName && (
         <Paper
+          id={`menu-paper-${menuName.toLowerCase()}`}
           sx={{
             position: 'absolute',
             top: '100%',
@@ -144,17 +148,18 @@ const UserNavBar = () => {
             minWidth: '200px',
             zIndex: 1000,
             mt: 0,
-            borderTop: '4px solid transparent'
+            borderTop: '4px solid transparent',
           }}
         >
           {items.map((item) => (
             <MenuItem
               key={item.id}
+              id={`${menuName.toLowerCase()}-item-${item.id}`}
               onClick={() => handleItemClick(type, item.id)}
               sx={{
                 '&:hover': {
-                  backgroundColor: 'action.hover'
-                }
+                  backgroundColor: 'action.hover',
+                },
               }}
             >
               {item.name || item.title}
@@ -169,19 +174,31 @@ const UserNavBar = () => {
     <List>
       {['Activities', 'Itineraries', 'Promotions'].map((section) => (
         <React.Fragment key={section}>
-          <ListItem button onClick={() => handleMenuEnter(section)}>
-            <ListItemText primary={translations[currentLanguage][section.toLowerCase()]} />
+          <ListItem
+            button
+            id={`drawer-menu-${section.toLowerCase()}`}
+            onClick={() => handleMenuEnter(section)}
+          >
+            <ListItemText
+              primary={translations[currentLanguage][section.toLowerCase()]}
+            />
           </ListItem>
           {hoveredMenu === section && (
             <List>
-              {(section === 'Activities' ? activities :
-                section === 'Itineraries' ? itineraries :
-                promotions).map((item) => (
+              {(section === 'Activities'
+                ? activities
+                : section === 'Itineraries'
+                ? itineraries
+                : promotions
+              ).map((item) => (
                 <ListItem
                   button
                   key={item.id}
+                  id={`drawer-item-${section.toLowerCase()}-${item.id}`}
                   sx={{ pl: 4 }}
-                  onClick={() => handleItemClick(section.toLowerCase().slice(0, -1), item.id)}
+                  onClick={() =>
+                    handleItemClick(section.toLowerCase().slice(0, -1), item.id)
+                  }
                 >
                   <ListItemText primary={item.name || item.title} />
                 </ListItem>
@@ -203,6 +220,7 @@ const UserNavBar = () => {
               aria-label="open drawer"
               edge="start"
               onClick={() => setMobileOpen(!mobileOpen)}
+              id="mobile-menu-button"
             >
               <MenuIcon />
             </IconButton>
@@ -210,6 +228,7 @@ const UserNavBar = () => {
               anchor="left"
               open={mobileOpen}
               onClose={() => setMobileOpen(false)}
+              id="mobile-drawer"
             >
               {drawerContent}
             </Drawer>
@@ -217,27 +236,48 @@ const UserNavBar = () => {
         ) : (
           <Box display="flex" gap={2}>
             <MenuComponent items={activities} type="activity" menuName="Activities" />
-            <MenuComponent items={itineraries} type="itinerary" menuName="Itineraries" />
-            <MenuComponent items={promotions} type="promotion" menuName="Promotions" />
+            <MenuComponent
+              items={itineraries}
+              type="itinerary"
+              menuName="Itineraries"
+            />
+            <MenuComponent
+              items={promotions}
+              type="promotion"
+              menuName="Promotions"
+            />
           </Box>
         )}
 
         <Box sx={{ marginLeft: 'auto' }} display="flex" alignItems="center" gap={1}>
-          <IconButton color="inherit" component={NavLink} to="/">
+          <IconButton color="inherit" component={NavLink} to="/" id="home-button">
             <HomeIcon />
           </IconButton>
 
           <LanguageIcon />
 
-          <IconButton onClick={toggleTheme} color="inherit">
+          <IconButton
+            onClick={toggleTheme}
+            color="inherit"
+            id="theme-toggle-button"
+          >
             {themeMode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
           </IconButton>
 
-          <IconButton color="inherit" component={NavLink} to="/profile">
+          <IconButton
+            color="inherit"
+            component={NavLink}
+            to="/profile"
+            id="profile-button"
+          >
             <User />
           </IconButton>
 
-          <IconButton color="inherit" onClick={handleLogout}>
+          <IconButton
+            color="inherit"
+            onClick={handleLogout}
+            id="logout-button"
+          >
             <LogOut />
           </IconButton>
         </Box>

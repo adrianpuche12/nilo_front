@@ -70,19 +70,20 @@ const ItinerariesDetail = () => {
         justifyContent="center"
         alignItems="center"
         minHeight="100vh"
+        id="loading-spinner"
       >
-        <CircularProgress />
+        <CircularProgress id="loading-spinner-icon" />
       </Box>
     );
   }
 
   if (error || !itinerary) {
     return (
-      <Box display="flex" flexDirection="column" alignItems="center" py={4}>
-        <Typography color="error" gutterBottom>
+      <Box display="flex" flexDirection="column" alignItems="center" py={4} id="error-message-box">
+        <Typography color="error" gutterBottom id="error-message">
           {error || 'Itinerario no encontrado'}
         </Typography>
-        <Button variant="contained" onClick={() => navigate('/')}>
+        <Button variant="contained" onClick={() => navigate('/')} id="back-home-button">
           Volver al inicio
         </Button>
       </Box>
@@ -91,19 +92,20 @@ const ItinerariesDetail = () => {
 
   return (
     <>
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Box mb={4}>
+      <Container maxWidth="lg" sx={{ py: 4 }} id="itinerary-detail-container">
+        <Box mb={4} id="itinerary-back-box">
           <Button
             startIcon={<ArrowBack />}
             onClick={() => navigate('/')}
             sx={{ mb: 2 }}
+            id="back-button"
           >
             Volver
           </Button>
 
-          <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
-            <Grid container spacing={4}>
-              <Grid item xs={12} md={6}>
+          <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }} id="itinerary-detail-paper">
+            <Grid container spacing={4} id="itinerary-grid">
+              <Grid item xs={12} md={6} id="itinerary-image-grid">
                 <Box
                   sx={{
                     backgroundColor: 'grey.300', // Fondo gris
@@ -113,6 +115,7 @@ const ItinerariesDetail = () => {
                     height: '100%',
                     borderRadius: '16px',
                   }}
+                  id="itinerary-image-box"
                 >
                   <CardMedia
                     component="img"
@@ -125,49 +128,53 @@ const ItinerariesDetail = () => {
                       maxHeight: '500px', // Limita la altura máxima
                       borderRadius: '16px',
                     }}
+                    id="itinerary-image"
                   />
                 </Box>
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={6} id="itinerary-details-grid">
                 <Subtitulo1
                   text={itinerary.name}
                   color="primary.main"
                   margin="0 0 1rem 0"
+                  id="itinerary-title"
                 />
 
                 <Chip
                   label={city?.name || 'Ciudad no disponible'}
                   color="primary"
                   sx={{ mb: 2 }}
+                  id="itinerary-city-chip"
                 />
 
-                <Descripcion1 text={itinerary.description} margin="1rem 0" />
+                <Descripcion1 text={itinerary.description} margin="1rem 0" id="itinerary-description" />
 
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h6" gutterBottom id="itinerary-details-header">
                   Detalles del Itinerario
                 </Typography>
-                <Box>
-                  <Typography variant="subtitle1">
+                <Box id="itinerary-details-box">
+                  <Typography variant="subtitle1" id="itinerary-duration">
                     <strong>Duración:</strong> {itinerary.duration || 'N/A'}
                   </Typography>
-                  <Typography variant="subtitle1">
+                  <Typography variant="subtitle1" id="itinerary-type">
                     <strong>Tipo:</strong> {itinerary.type || 'N/A'}
                   </Typography>
-                  <Typography variant="subtitle1">
+                  <Typography variant="subtitle1" id="itinerary-cost">
                     <strong>Costo:</strong> {itinerary.cost || 'N/A'}
                   </Typography>
-                  <Typography variant="subtitle1">
+                  <Typography variant="subtitle1" id="itinerary-recommendations">
                     <strong>Recomendaciones:</strong>{' '}
                     {itinerary.recommendations || 'N/A'}
                   </Typography>
                 </Box>
 
-                <Box display="flex" justifyContent="flex-end" sx={{ mt: 4 }}>
+                <Box display="flex" justifyContent="flex-end" sx={{ mt: 4 }} id="reservation-button-box">
                   <Button
                     variant="contained"
                     color="primary"
                     size="large"
                     sx={{ py: 1.5, fontSize: '1.1rem' }}
+                    id="reservation-button"
                   >
                     Reservar Ahora
                   </Button>

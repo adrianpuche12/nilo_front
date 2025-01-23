@@ -131,6 +131,7 @@ const UserProfile = () => {
     if (loading && !isEditing) {
         return (
             <Box 
+                id="loading-container"
                 sx={{
                     minHeight: '100vh',
                     display: 'flex',
@@ -138,6 +139,7 @@ const UserProfile = () => {
                 }}
             >
                 <Box 
+                    id="loading-spinner"
                     sx={{ 
                         flex: 1,
                         display: 'flex',
@@ -154,6 +156,7 @@ const UserProfile = () => {
 
     return (
         <Box 
+            id="user-profile-container"
             sx={{
                 minHeight: '100vh',
                 display: 'flex',
@@ -162,6 +165,7 @@ const UserProfile = () => {
             }}
         >
             <Box 
+                id="user-profile-content"
                 sx={{ 
                     flex: 1,
                     display: 'flex',
@@ -173,11 +177,12 @@ const UserProfile = () => {
                 }}
             >
                 {error && (
-                    <Alert severity="error" sx={{ mb: 2, width: '100%' }}>
+                    <Alert id="error-alert" severity="error" sx={{ mb: 2, width: '100%' }}>
                         {error}
                     </Alert>
                 )}
                 <Paper 
+                    id="user-profile-card"
                     variant="outlined" 
                     sx={{ 
                         p: { xs: 2, sm: 4 },
@@ -191,11 +196,13 @@ const UserProfile = () => {
                     }}
                 >
                     <Grid 
+                        id="user-profile-grid"
                         container 
                         spacing={3} 
                         alignItems="start"
                     >
                         <Grid 
+                            id="avatar-container"
                             item 
                             xs={12} 
                             sm={4}
@@ -207,6 +214,7 @@ const UserProfile = () => {
                             }}
                         >
                             <Avatar
+                                id="user-avatar"
                                 sx={{
                                     width: { xs: 80, sm: 100, md: 120 },
                                     height: { xs: 80, sm: 100, md: 120 },
@@ -220,25 +228,26 @@ const UserProfile = () => {
 
                         <Grid item xs={12} sm={8}>
                             {!isEditing ? (
-                                <Box sx={{ 
+                                <Box id="user-info" sx={{ 
                                     display: 'flex', 
                                     flexDirection: 'column', 
                                     gap: 2,
                                     width: '100%'
                                 }}>
-                                    <Typography variant="body2" color="textSecondary">
+                                    <Typography id="username-text" variant="body2" color="textSecondary">
                                         Usuario: {userProfile.username}
                                     </Typography>
-                                    <Typography variant="body2" color="textSecondary">
+                                    <Typography id="firstname-text" variant="body2" color="textSecondary">
                                         Nombre: {userProfile.firstName}
                                     </Typography>
-                                    <Typography variant="body2" color="textSecondary">
+                                    <Typography id="lastname-text" variant="body2" color="textSecondary">
                                         Apellido: {userProfile.lastName}
                                     </Typography>
-                                    <Typography variant="body2" color="textSecondary">
+                                    <Typography id="email-text" variant="body2" color="textSecondary">
                                         Email: {userProfile.email}
                                     </Typography>
                                     <Box 
+                                        id="buttons-container"
                                         sx={{
                                             display: 'flex',
                                             gap: 2,
@@ -247,24 +256,27 @@ const UserProfile = () => {
                                         }}
                                     >
                                         <GenericButton
+                                            id="back-button"
                                             text="Volver"
                                             color="secondary"
                                             onClick={handleClose}
                                         />
                                        {/*  <GenericButton
+                                            id="edit-button"
                                             text="Editar Perfil"
                                             color="primary"
                                             onClick={handleEdit}
                                         /> */}
                                         <GenericButton 
+                                            id="history-button"
                                             text="Ver Historia" 
                                             color="primary" 
                                             onClick={toggleHistoria} /> {/* Botón Historia */}
                                     </Box>
                                 </Box>
                             ) : (
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12}>
+                                <Grid id="edit-form" container spacing={2}>
+                                    <Grid id="edit-username" item xs={12}>
                                         <TextField
                                             label="Usuario"
                                             name="username"
@@ -274,7 +286,7 @@ const UserProfile = () => {
                                             fullWidth
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid id="edit-firstname" item xs={12}>
                                         <TextField
                                             label="Nombre"
                                             name="firstName"
@@ -284,7 +296,7 @@ const UserProfile = () => {
                                             fullWidth
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid id="edit-lastname" item xs={12}>
                                         <TextField
                                             label="Apellido"
                                             name="lastName"
@@ -294,7 +306,7 @@ const UserProfile = () => {
                                             fullWidth
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid id="edit-email" item xs={12}>
                                         <TextField
                                             label="Email"
                                             name="email"
@@ -304,7 +316,7 @@ const UserProfile = () => {
                                             fullWidth
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid id="edit-buttons" item xs={12}>
                                         <Box 
                                             sx={{
                                                 display: 'flex',
@@ -315,12 +327,14 @@ const UserProfile = () => {
                                             }}
                                         >
                                             <GenericButton
+                                                id="cancel-button"
                                                 text="Cancelar"
                                                 color="secondary"
                                                 disabled={loading}
                                                 onClick={handleCancel}
                                             />
                                             <GenericButton
+                                                id="save-button"
                                                 text="Guardar Cambios"
                                                 color="primary"
                                                 onClick={handleSaveChanges}
@@ -333,7 +347,7 @@ const UserProfile = () => {
                         </Grid>
                     </Grid>
                 </Paper>
-                {showHistoria && <Historia />} {/* Mostrar componente Historia */}
+                {showHistoria && <Historia id="user-history" />} {/* Mostrar componente Historia */}
             </Box>
             <Footer />
         </Box>

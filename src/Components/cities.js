@@ -20,10 +20,11 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 // Vista móvil en tarjetas
 const MobileView = ({ cities, selectedCity, handleSelectionChange, getProvinceName }) => (
-  <Grid container spacing={3}>
+  <Grid container spacing={3} id="mobile-view-container">
     {cities.map((city) => (
-      <Grid item xs={12} key={city.id}>
+      <Grid item xs={12} key={city.id} id={`city-card-${city.id}`}>
         <Card
+          id={`card-${city.id}`}
           sx={{
             height: '100%',
             cursor: 'pointer',
@@ -32,25 +33,26 @@ const MobileView = ({ cities, selectedCity, handleSelectionChange, getProvinceNa
           }}
           onClick={() => handleSelectionChange(city.id)}
         >
-          <CardContent>
+          <CardContent id={`card-content-${city.id}`}>
             <Stack direction="row" alignItems="center" spacing={2} mb={2}>
               <Radio
+                id={`radio-${city.id}`}
                 checked={selectedCity === city.id}
                 onChange={() => handleSelectionChange(city.id)}
               />
-              <Typography variant="h6" component="div">
+              <Typography id={`city-name-${city.id}`} variant="h6" component="div">
                 {city.name}
               </Typography>
             </Stack>
 
-            <Box sx={{ pl: 4 }}>
-              <Typography color="text.secondary" gutterBottom>
+            <Box id={`city-details-${city.id}`} sx={{ pl: 4 }}>
+              <Typography id={`city-id-${city.id}`} color="text.secondary" gutterBottom>
                 <strong>ID:</strong> {city.id}
               </Typography>
-              <Typography color="text.secondary" gutterBottom>
+              <Typography id={`city-description-${city.id}`} color="text.secondary" gutterBottom>
                 <strong>Descripción:</strong> {city.description}
               </Typography>
-              <Typography color="text.secondary">
+              <Typography id={`city-province-${city.id}`} color="text.secondary">
                 <strong>Provincia:</strong> {getProvinceName(city.province)}
               </Typography>
             </Box>
@@ -63,10 +65,10 @@ const MobileView = ({ cities, selectedCity, handleSelectionChange, getProvinceNa
 
 // Vista desktop en tabla
 const DesktopView = ({ cities, handleEdit, handleDelete, getProvinceName }) => (
-  <TableContainer component={Paper}>
-    <Table>
+  <TableContainer component={Paper} id="desktop-view-table">
+    <Table id="city-table">
       <TableHead>
-        <TableRow>
+        <TableRow id="table-header">
           <TableCell>ID</TableCell>
           <TableCell>Nombre</TableCell>
           <TableCell>Descripción</TableCell>
@@ -74,19 +76,21 @@ const DesktopView = ({ cities, handleEdit, handleDelete, getProvinceName }) => (
           <TableCell>Acciones</TableCell>
         </TableRow>
       </TableHead>
-      <TableBody>
+      <TableBody id="table-body">
         {cities.map((city) => (
-          <TableRow key={city.id}>
-            <TableCell>{city.id}</TableCell>
-            <TableCell>{city.name}</TableCell>
-            <TableCell>{city.description}</TableCell>
-            <TableCell>{getProvinceName(city.province)}</TableCell>
-            <TableCell>
+          <TableRow key={city.id} id={`row-${city.id}`}>
+            <TableCell id={`cell-id-${city.id}`}>{city.id}</TableCell>
+            <TableCell id={`cell-name-${city.id}`}>{city.name}</TableCell>
+            <TableCell id={`cell-description-${city.id}`}>{city.description}</TableCell>
+            <TableCell id={`cell-province-${city.id}`}>{getProvinceName(city.province)}</TableCell>
+            <TableCell id={`cell-actions-${city.id}`}>
               <EditButton
+                id={`edit-button-${city.id}`}
                 onClick={() => handleEdit(city)}
                 size="small"
               />
               <IconButton
+                id={`delete-button-${city.id}`}
                 color="error"
                 onClick={() => handleDelete(city.id)}
               >
@@ -260,10 +264,10 @@ const Cities = () => {
   const { roles } = useAuth();
 
   return (
-    <div>
-      <Box sx={{ padding: '10px' }}>
-        <Grid container spacing={1} sx={{ mt: 4, px: 2 }}>
-          <Grid item xs={12}>
+    <div id="cities-container">
+      <Box sx={{ padding: '10px' }} id="box-container">
+        <Grid container spacing={1} sx={{ mt: 4, px: 2 }} id="grid-container">
+          <Grid item xs={12} id="grid-header">
             {isMobile ? (
               // Vista mobile del encabezado
               <Stack
@@ -271,22 +275,25 @@ const Cities = () => {
                 justifyContent="space-between"
                 alignItems="center"
                 sx={{ marginBottom: '-40px', width: '100%' }}
+                id="mobile-header"
               >
-                <MainTitle text="Gestión de Ciudades" align="left" />
+                <MainTitle text="Gestión de Ciudades" align="left" id="main-title-mobile" />
                 <CreateButton
                   onClick={handleOpen}
                   componentName="Ciudad"
                   startIcon={<AddIcon />}
+                  id="create-button-mobile"
                 />
               </Stack>
             ) : (
               // Vista desktop del encabezado
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <MainTitle text="Gestión de Ciudades" align="left" />
+              <Stack direction="row" justifyContent="space-between" alignItems="center" id="desktop-header">
+                <MainTitle text="Gestión de Ciudades" align="left" id="main-title-desktop" />
                 <CreateButton
                   onClick={handleOpen}
                   componentName="Ciudad"
                   startIcon={<AddIcon />}
+                  id="create-button-desktop"
                 />
               </Stack>
             )}
@@ -299,14 +306,15 @@ const Cities = () => {
               justifyContent="left"
               alignItems="center"
               sx={{ mt: 2 }}
+              id="description-grid"
             >
-              <MainDescription1 text="Esta pantalla permite gestionar las ciudades relacionadas con los itinerarios y actividades. Aquí puede crear, editar o eliminar ciudades y asociarlas a una provincia." />
+              <MainDescription1 text="Esta pantalla permite gestionar las ciudades relacionadas con los itinerarios y actividades. Aquí puede crear, editar o eliminar ciudades y asociarlas a una provincia." id="main-description" />
             </Grid>
           </Grid>
 
           {/* Botones de acción para mobile */}
           {isMobile && (
-            <Grid item xs={12}>
+            <Grid item xs={12} id="action-buttons-mobile">
               <Stack
                 direction="row"
                 spacing={2}
@@ -317,28 +325,32 @@ const Cities = () => {
                   py: 2,
                   mb: 2
                 }}
+                id="action-buttons-stack"
               >
                 <EditButton
                   onClick={handleEditSelected}
                   disabled={!selectedCity}
                   fullWidth
+                  id="edit-button-mobile"
                 />
                 <DeleteButton
                   onClick={handleDeleteSelected}
                   disabled={!selectedCity}
                   fullWidth
+                  id="delete-button-mobile"
                 />
               </Stack>
             </Grid>
           )}
 
-          <Grid item xs={12}>
+          <Grid item xs={12} id="cities-grid">
             {isMobile ? (
               <MobileView
                 cities={cities}
                 selectedCity={selectedCity}
                 handleSelectionChange={handleSelectionChange}
                 getProvinceName={getProvinceName}
+                id="mobile-view"
               />
             ) : (
               <DesktopView
@@ -346,28 +358,30 @@ const Cities = () => {
                 handleEdit={handleEdit}
                 handleDelete={handleDelete}
                 getProvinceName={getProvinceName}
+                id="desktop-view"
               />
             )}
           </Grid>
         </Grid>
 
         {/* Diálogo para crear/editar ciudad */}
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>
-            {editMode ? <Title text="Editar Ciudad" /> : <Title text="Nueva Ciudad" />}
+        <Dialog open={open} onClose={handleClose} id="dialog">
+          <DialogTitle id="dialog-title">
+            {editMode ? <Title text="Editar Ciudad" id="edit-title" /> : <Title text="Nueva Ciudad" id="create-title" />}
           </DialogTitle>
-          <DialogContent>
-            <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={12}>
+          <DialogContent id="dialog-content">
+            <Grid container spacing={2} sx={{ mt: 1 }} id="dialog-grid">
+              <Grid item xs={12} id="name-grid">
                 <TextField
                   name="name"
                   label="Nombre"
                   fullWidth
                   value={currentCity.name}
                   onChange={handleChange}
+                  id="name-textfield"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} id="description-grid">
                 <TextField
                   name="description"
                   label="Descripción"
@@ -376,9 +390,10 @@ const Cities = () => {
                   rows={3}
                   value={currentCity.description}
                   onChange={handleChange}
+                  id="description-textfield"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} id="province-grid">
                 <TextField
                   name="province"
                   select
@@ -387,9 +402,10 @@ const Cities = () => {
                   value={currentCity.province?.id}
                   onChange={handleChange}
                   disabled={editMode}
+                  id="province-select"
                 >
                   {provinces.map((province) => (
-                    <MenuItem key={province.id} value={province.id}>
+                    <MenuItem key={province.id} value={province.id} id={`province-option-${province.id}`}>
                       {province.name}
                     </MenuItem>
                   ))}
@@ -397,16 +413,18 @@ const Cities = () => {
               </Grid>
             </Grid>
           </DialogContent>
-          <DialogActions>
+          <DialogActions id="dialog-actions">
             <CloseButton
               onClick={handleClose}
               fullWidth
+              id="close-button"
             />
             <GenericButton
               text={editMode ? 'Actualizar' : 'Crear'}
               color="primary"
               onClick={editMode ? handleUpdate : handleCreate}
               fullWidth
+              id="generic-button"
             />
           </DialogActions>
         </Dialog>

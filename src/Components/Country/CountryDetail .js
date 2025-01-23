@@ -10,8 +10,8 @@ const CountryDetail = () => {
 
     if (!country) {
         return (
-            <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
-                <Typography variant="h6" color="error">País no encontrado</Typography>
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh" id="country-not-found-box">
+                <Typography variant="h6" color="error" id="country-not-found-message">País no encontrado</Typography>
             </Box>
         );
     }
@@ -25,12 +25,13 @@ const CountryDetail = () => {
             minHeight="80vh"
             bgcolor="#f9f9f9"
             p={3}
+            id="country-detail-container"
         >
-            <Paper elevation={3} sx={{ padding: 3, maxWidth: 600, width: '100%', textAlign: 'center' }}>
-                <Typography variant="h4" component="h1" gutterBottom color="primary">
+            <Paper elevation={3} sx={{ padding: 3, maxWidth: 600, width: '100%', textAlign: 'center' }} id="country-detail-paper">
+                <Typography variant="h4" component="h1" gutterBottom color="primary" id="country-name">
                     {country.name}
                 </Typography>
-                <Typography variant="body1" color="textSecondary">
+                <Typography variant="body1" color="textSecondary" id="country-description">
                     {country.description}
                 </Typography>
             </Paper>

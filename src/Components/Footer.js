@@ -6,6 +6,7 @@ const Footer = () => {
   return (
     <Box
       component="footer"
+      id="footer"
       sx={{
         mt: 'auto',
         py: 3,
@@ -21,8 +22,9 @@ const Footer = () => {
           alignItems="center"
           spacing={2}
         >
-          <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-start' } }}>
+          <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-start' } }} id="social-media-links">
             <IconButton
+              id="facebook-link"
               component={Link}
               href="https://www.facebook.com"
               target="_blank"
@@ -32,6 +34,7 @@ const Footer = () => {
               <Facebook />
             </IconButton>
             <IconButton
+              id="twitter-link"
               component={Link}
               href="https://www.twitter.com"
               target="_blank"
@@ -41,6 +44,7 @@ const Footer = () => {
               <Twitter />
             </IconButton>
             <IconButton
+              id="instagram-link"
               component={Link}
               href="https://www.instagram.com"
               target="_blank"
@@ -51,6 +55,7 @@ const Footer = () => {
             </IconButton>
           </Grid>
           <Grid 
+            id="footer-links"
             item 
             xs={12} 
             md={6}
@@ -62,6 +67,7 @@ const Footer = () => {
           >
             
             <Link
+              id="contact-us-link"
               href="/contactos"
               underline="none"
               color="text.primary"
@@ -70,6 +76,7 @@ const Footer = () => {
               Contactos
             </Link>
             <Link
+              id="about-us-link"
               href="/about-us"
               underline="none"
               color="text.primary"
@@ -78,6 +85,7 @@ const Footer = () => {
               Acerca de Nosotros
             </Link>
             <Link
+              id="company-policy-link"
               href="/politica"
               underline="none"
               color="text.primary"

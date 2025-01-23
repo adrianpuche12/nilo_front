@@ -60,67 +60,73 @@ const Home = () => {
     <>
       <Container maxWidth="xl" sx={{ mt: 1, mb: 4 }}>
         <MainSection>
-          <MainTitle text="Conoce nuestros paquetes de Viaje" align="center" />
+          <MainTitle id="main-title" text="Conoce nuestros paquetes de Viaje" align="center" />
         </MainSection>
 
         {/* Promociones Carrusel */}
-        <Box sx={sectionStyles.wrapper}>
-          <Box sx={sectionStyles.headerContainer}>
+        <Box sx={sectionStyles.wrapper} id="promotions-section">
+          <Box sx={sectionStyles.headerContainer} id="promotions-header">
             <Subtitulo1
+              id="promotions-subtitle"
               text="Promociones Especiales"
               color="primary.main"
               align="center"
               margin="0 0 16px 0"
             />
             <Descripcion1
+              id="promotions-description"
               text="Descubre nuestras mejores ofertas y aprovecha descuentos exclusivos."
               margin="0 0 24px 0"
             />
           </Box>
-          <Box sx={sectionStyles.carouselWrapper}>
-            <PromotionsCard sx={cardStyles} />
+          <Box sx={sectionStyles.carouselWrapper} id="promotions-carousel">
+            <PromotionsCard sx={cardStyles} id="promotions-card" />
           </Box>
         </Box>
 
         {/* Actividades Carrusel */}
-        <Box sx={sectionStyles.wrapper}>
-          <Box sx={sectionStyles.headerContainer}>
+        <Box sx={sectionStyles.wrapper} id="activities-section">
+          <Box sx={sectionStyles.headerContainer} id="activities-header">
             <Subtitulo1
+              id="activities-subtitle"
               text="Actividades Destacadas"
               color="primary.main"
               align="center"
               margin="0 0 1rem 0"
             />
-            <Box sx={sectionStyles.description}>
+            <Box sx={sectionStyles.description} id="activities-description">
               <Descripcion1
+                id="activities-description-text"
                 text="Descubre experiencias únicas y emocionantes en cada destino. Desde aventuras al aire libre hasta tours culturales."
                 margin="0"
               />
             </Box>
           </Box>
-          <Box sx={sectionStyles.carouselWrapper}>
-            <ActivitiesCard sx={cardStyles} />
+          <Box sx={sectionStyles.carouselWrapper} id="activities-carousel">
+            <ActivitiesCard sx={cardStyles} id="activities-card" />
           </Box>
         </Box>
 
         {/* Itinerarios Carrusel */}
-        <Box sx={sectionStyles.wrapper}>
-          <Box sx={sectionStyles.headerContainer}>
+        <Box sx={sectionStyles.wrapper} id="itineraries-section">
+          <Box sx={sectionStyles.headerContainer} id="itineraries-header">
             <Subtitulo1
+              id="itineraries-subtitle"
               text="Itinerarios Recomendados"
               color="primary.main"
               align="center"
               margin="0 0 1rem 0"
             />
-            <Box sx={sectionStyles.description}>
+            <Box sx={sectionStyles.description} id="itineraries-description">
               <Descripcion1
+                id="itineraries-description-text"
                 text="Planes completos y cuidadosamente diseñados para aprovechar al máximo tu tiempo. Encuentra el itinerario perfecto para tu próxima aventura."
                 margin="0"
               />
             </Box>
           </Box>
-          <Box sx={sectionStyles.carouselWrapper}>
-            <ItinerariesCard sx={cardStyles} />
+          <Box sx={sectionStyles.carouselWrapper} id="itineraries-carousel">
+            <ItinerariesCard sx={cardStyles} id="itineraries-card" />
           </Box>
         </Box>
       </Container>

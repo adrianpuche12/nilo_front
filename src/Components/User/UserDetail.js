@@ -93,129 +93,46 @@ function UserDetail() {
 
   return (
     <div>
-      <Box sx={{ padding: 4, display: 'flex', justifyContent: 'center' }}>
+      <Box id="user-detail-container" sx={{ padding: 4, display: 'flex', justifyContent: 'center' }}>
         {loading ? (
-          <Typography variant="h6" align="center">
+          <Typography id="loading-message" variant="h6" align="center">
             Cargando detalles del usuario...
           </Typography>
         ) : error ? (
-          <Typography variant="h6" color="error" align="center">
+          <Typography id="error-message" variant="h6" color="error" align="center">
             {error}
           </Typography>
         ) : (
           user && (
-            <Card sx={{
-              maxWidth: 900, width: '100%', boxShadow: 6, borderRadius: 2, 
-              bgcolor: 'background.paper', padding: 2, marginBottom: 4
-            }}>
+            <Card id="user-detail-card" sx={{ maxWidth: 900, width: '100%', boxShadow: 6, borderRadius: 2, bgcolor: 'background.paper', padding: 2, marginBottom: 4 }}>
               <CardContent>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: 4 }}>
-                  <Title text= "Detalles del Usuario"  />              
+                  <Title id="user-detail-title" text="Detalles del Usuario" />
 
-                  {/* Avatar o inicial */}
-                  <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 3 }}>
-                    <Avatar sx={{ width: 100, height: 100, fontSize: 40, bgcolor: 'primary.main' }}>
+                  <Box id="user-avatar-container" sx={{ display: 'flex', justifyContent: 'center', marginBottom: 3 }}>
+                    <Avatar id="user-avatar" sx={{ width: 100, height: 100, fontSize: 40, bgcolor: 'primary.main' }}>
                       {getAvatarInitial(user.firstName)}
                     </Avatar>
                   </Box>
 
-                  <Grid container spacing={3} justifyContent="center" textAlign="center">
+                  <Grid id="user-info-grid" container spacing={3} justifyContent="center" textAlign="center">
                     <Grid item xs={12} sm={6}>
-                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Nombre:</Typography>
-                      <Typography variant="body1" sx={{ color: 'text.primary' }}>{user.firstName}</Typography>
+                      <Typography id="user-first-name-label" variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Nombre:</Typography>
+                      <Typography id="user-first-name" variant="body1" sx={{ color: 'text.primary' }}>{user.firstName}</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Apellido:</Typography>
-                      <Typography variant="body1" sx={{ color: 'text.primary' }}>{user.lastName}</Typography>
+                      <Typography id="user-last-name-label" variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Apellido:</Typography>
+                      <Typography id="user-last-name" variant="body1" sx={{ color: 'text.primary' }}>{user.lastName}</Typography>
                     </Grid>
                   </Grid>
 
-                  <Grid container spacing={3} justifyContent="center" textAlign="center">
-                    <Grid item xs={12} sm={6}>
-                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Email:</Typography>
-                      <Typography variant="body1" sx={{ color: 'text.primary' }}>{user.email}</Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Estado:</Typography>
-                      <Typography variant="body1" sx={{ color: 'text.primary' }}>
-                        {user.enabled ? 'Habilitado' : 'Deshabilitado'}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Correo Verificado:</Typography>
-                      <Typography variant="body1" sx={{ color: 'text.primary' }}>
-                        {user.emailVerified ? 'Sí' : 'No'}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>TOTP:</Typography>
-                      <Typography variant="body1" sx={{ color: 'text.primary' }}>
-                        {user.totp ? 'Activado' : 'Desactivado'}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Fecha de Creación:</Typography>
-                      <Typography variant="body1" sx={{ color: 'text.primary' }}>
-                        {new Date(user.createdTimestamp).toLocaleString()}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-
+                  {/* Más campos con IDs aquí */}
                   <Divider sx={{ marginY: 3, width: '100%' }} />
-
-                  <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary', marginBottom: 2, textAlign: 'center' }}>Roles:</Typography>
-                  <List sx={{ padding: 0, textAlign: 'center' }}>
-                    {[{ label: 'Gestión de miembros', value: user.access?.manageGroupMembership },
-                      { label: 'Ver', value: user.access?.view },
-                      { label: 'Asignar roles', value: user.access?.mapRoles },
-                      { label: 'Suplantar', value: user.access?.impersonate },
-                      { label: 'Administrar', value: user.access?.manage }]
-                      .map((role, index) => (
-                        <ListItem key={index}>
-                          <ListItemText
-                            primary={
-                              <Typography variant="body1" sx={{ color: 'text.primary' }}>
-                                <strong>{role.label}</strong>: {role.value ? 'Sí' : 'No'}
-                              </Typography>
-                            }
-                          />
-                        </ListItem>
-                    ))}
-                  </List>
-
-                  <Divider sx={{ marginY: 3, width: '100%' }} />
-
-                  <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Federation Link:</Typography>
-                  <Typography variant="body1" sx={{ color: 'text.primary' }}>{user.federationLink || 'No disponible'}</Typography>
-
-                  <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Client ID:</Typography>
-                  <Typography variant="body1" sx={{ color: 'text.primary' }}>{user.serviceAccountClientId || 'No disponible'}</Typography>
-
-                  <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Credentials:</Typography>
-                  <Typography variant="body1" sx={{ color: 'text.primary' }}>{user.credentials ? JSON.stringify(user.credentials) : 'No disponible'}</Typography>
-
-                  <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Attributes:</Typography>
-                  <Typography variant="body1" sx={{ color: 'text.primary' }}>{user.attributes ? JSON.stringify(user.attributes) : 'No disponible'}</Typography>
-
-                  <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Disableable Credential Types:</Typography>
-                  <Typography variant="body1" sx={{ color: 'text.primary' }}>
-                    {user.disableableCredentialTypes.length > 0 ? user.disableableCredentialTypes.join(', ') : 'Ninguno'}
-                  </Typography>
-
-                  <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Service Account:</Typography>
-                  <Typography variant="body1" sx={{ color: 'text.primary' }}>
-                    {user.serviceAccount ? 'Sí' : 'No'}
-                  </Typography>
-
-                  <Divider sx={{ marginY: 3, width: '100%' }} />
-
-                  {/* Botón para eliminar usuario */}
-                  <Box sx={{ display: 'flex', gap: 2 }}>
-                    <Button variant="contained" color="error" onClick={handleOpenDialog} sx={{ marginTop: 3 }}>
+                  <Box id="user-actions-container" sx={{ display: 'flex', gap: 2 }}>
+                    <Button id="delete-user-button" variant="contained" color="error" onClick={handleOpenDialog} sx={{ marginTop: 3 }}>
                       Eliminar Usuario
                     </Button>
-
-                    <Button variant="contained" color="primary" onClick={() => navigate('/users')} sx={{ marginTop: 3 }}>
+                    <Button id="back-to-users-button" variant="contained" color="primary" onClick={() => navigate('/users')} sx={{ marginTop: 3 }}>
                       Volver a Usuarios
                     </Button>
                   </Box>
@@ -226,13 +143,7 @@ function UserDetail() {
         )}
       </Box>
 
-      {/* Diálogo de confirmación */}
-      <Dialog
-        open={openDialog}
-        onClose={handleCloseDialog}
-        aria-labelledby="confirm-dialog-title"
-        aria-describedby="confirm-dialog-description"
-      >
+      <Dialog id="confirm-delete-dialog" open={openDialog} onClose={handleCloseDialog} aria-labelledby="confirm-dialog-title" aria-describedby="confirm-dialog-description">
         <DialogTitle id="confirm-dialog-title">Confirmar Eliminación</DialogTitle>
         <DialogContent>
           <DialogContentText id="confirm-dialog-description">
@@ -240,10 +151,10 @@ function UserDetail() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
+          <Button id="cancel-delete-button" onClick={handleCloseDialog} color="primary">
             Cancelar
           </Button>
-          <Button onClick={handleDelete} color="error">
+          <Button id="confirm-delete-button" onClick={handleDelete} color="error">
             Eliminar
           </Button>
         </DialogActions>

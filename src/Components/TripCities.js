@@ -145,50 +145,51 @@ const TripCities = () => {
   if (error) return <Typography color="error">{error}</Typography>;
 
   return (
-    <div style={{ padding: '20px' }}>
-      <Grid container justifyContent="space-between" alignItems="center" marginBottom={2}>
-        <Grid item>
-          <Typography variant="h4" gutterBottom>
+    <div style={{ padding: '20px' }} id="tripCities-container">
+      <Grid container justifyContent="space-between" alignItems="center" marginBottom={2} id="header-grid">
+        <Grid item id="title-grid">
+          <Typography variant="h4" gutterBottom id="title">
             Gestión de TripCities
           </Typography>
         </Grid>
-        <Grid item>
+        <Grid item id="button-grid">
           <Button 
             variant="contained" 
             color="primary" 
             onClick={handleOpen}
             startIcon={<AddIcon />}
+            id="new-tripCity-button"
           >
             Nuevo TripCity
           </Button>
         </Grid>
       </Grid>
 
-      <TableContainer component={Paper}>
-        <Table>
+      <TableContainer component={Paper} id="table-container">
+        <Table id="tripCities-table">
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Trip ID</TableCell>
-              <TableCell>City ID</TableCell>
-              <TableCell>Duración (días)</TableCell>
-              <TableCell>Orden</TableCell>
-              <TableCell>Acciones</TableCell>
+              <TableCell id="table-header-id">ID</TableCell>
+              <TableCell id="table-header-tripId">Trip ID</TableCell>
+              <TableCell id="table-header-cityId">City ID</TableCell>
+              <TableCell id="table-header-duration">Duración (días)</TableCell>
+              <TableCell id="table-header-order">Orden</TableCell>
+              <TableCell id="table-header-actions">Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {tripCities.map(trip => (
-              <TableRow key={trip.id}>
-                <TableCell>{trip.id}</TableCell>
-                <TableCell>{trip.tripId}</TableCell>
-                <TableCell>{trip.cityId}</TableCell>
-                <TableCell>{trip.duration}</TableCell>
-                <TableCell>{trip.order}</TableCell>
-                <TableCell>
-                  <IconButton color="primary" onClick={() => handleEdit(trip)}>
+              <TableRow key={trip.id} id={`table-row-${trip.id}`}>
+                <TableCell id={`table-cell-id-${trip.id}`}>{trip.id}</TableCell>
+                <TableCell id={`table-cell-tripId-${trip.id}`}>{trip.tripId}</TableCell>
+                <TableCell id={`table-cell-cityId-${trip.id}`}>{trip.cityId}</TableCell>
+                <TableCell id={`table-cell-duration-${trip.id}`}>{trip.duration}</TableCell>
+                <TableCell id={`table-cell-order-${trip.id}`}>{trip.order}</TableCell>
+                <TableCell id={`table-cell-actions-${trip.id}`}>
+                  <IconButton color="primary" onClick={() => handleEdit(trip)} id={`edit-button-${trip.id}`}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton color="error" onClick={() => handleDelete(trip.id)}>
+                  <IconButton color="error" onClick={() => handleDelete(trip.id)} id={`delete-button-${trip.id}`}>
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
@@ -199,17 +200,49 @@ const TripCities = () => {
       </TableContainer>
 
       {/* Diálogo para crear/editar TripCity */}
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{editMode ? 'Editar TripCity' : 'Nuevo TripCity'}</DialogTitle>
-        <DialogContent>
-          <TextField name="tripId" label="Trip ID" fullWidth value={currentTripCity.tripId} onChange={handleChange} margin="normal" />
-          <TextField name="cityId" label="City ID" fullWidth value={currentTripCity.cityId} onChange={handleChange} margin="normal" />
-          <TextField name="duration" label="Duración (días)" fullWidth value={currentTripCity.duration} onChange={handleChange} margin="normal" />
-          <TextField name="order" label="Orden" fullWidth value={currentTripCity.order} onChange={handleChange} margin="normal" />
+      <Dialog open={open} onClose={handleClose} id="tripCity-dialog">
+        <DialogTitle id="dialog-title">{editMode ? 'Editar TripCity' : 'Nuevo TripCity'}</DialogTitle>
+        <DialogContent id="dialog-content">
+          <TextField 
+            name="tripId" 
+            label="Trip ID" 
+            fullWidth 
+            value={currentTripCity.tripId} 
+            onChange={handleChange} 
+            margin="normal"
+            id="tripId-input"
+          />
+          <TextField 
+            name="cityId" 
+            label="City ID" 
+            fullWidth 
+            value={currentTripCity.cityId} 
+            onChange={handleChange} 
+            margin="normal"
+            id="cityId-input"
+          />
+          <TextField 
+            name="duration" 
+            label="Duración (días)" 
+            fullWidth 
+            value={currentTripCity.duration} 
+            onChange={handleChange} 
+            margin="normal"
+            id="duration-input"
+          />
+          <TextField 
+            name="order" 
+            label="Orden" 
+            fullWidth 
+            value={currentTripCity.order} 
+            onChange={handleChange} 
+            margin="normal"
+            id="order-input"
+          />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancelar</Button>
-          <Button onClick={editMode ? handleUpdate : handleCreate} variant="contained" color="primary">
+        <DialogActions id="dialog-actions">
+          <Button onClick={handleClose} id="cancel-button">Cancelar</Button>
+          <Button onClick={editMode ? handleUpdate : handleCreate} variant="contained" color="primary" id="submit-button">
             {editMode ? 'Actualizar' : 'Crear'}
           </Button>
         </DialogActions>

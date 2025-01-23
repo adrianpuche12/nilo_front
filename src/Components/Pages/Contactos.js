@@ -26,61 +26,70 @@ const Contactos = () => {
   };
 
   return (
-    <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
-      <Container maxWidth="md" sx={{ py: 4, flex: 1 }}>
+    <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }} id="contactos">
+      <Container maxWidth="md" sx={{ py: 4, flex: 1 }} id="contactos-container">
         {/* Título principal */}
-        <MainTitle text="Contáctanos" align='center' />
+        <MainTitle text="Contáctanos" align='center' id="main-title" />
 
         {/* Sección: Teléfonos */}
-        <section>
+        <section id="telefonos">
           <Subtitulo1
             text="Teléfonos"
             align="center"
             color="primary"
+            id="telefonos-subtitulo"
           />
           <Descripcion1 text="+123 456 789"
             align="center"
             color="primary"
+            id="telefono-1"
           />
           <Descripcion1 text="+987 654 321"
             align="center"
+            id="telefono-2"
           />
         </section>
 
         {/* Sección: Dirección */}
-        <section>
+        <section id="direccion">
           <Subtitulo1 text="Dirección"
             align="center"
             color="primary"
+            id="direccion-subtitulo"
           />
           <Descripcion1 text="Calle Ficticia 123, Ciudad, País"
             align="center"
+            id="direccion-texto"
           />
         </section>
 
         {/* Sección: Correo Electrónico */}
-        <section>
+        <section id="correo-electronico">
           <Subtitulo1 text="Correo Electrónico"
             align="center"
             color="primary"
+            id="correo-subtitulo"
           />
           <Descripcion1 text="contacto@empresa.com"
             align="center"
+            id="correo-texto"
           />
         </section>
 
         {/* Sección: Formulario de Contacto */}
-        <section>
+        <section id="formulario-contacto">
           <Subtitulo1 text="Formulario de Contacto"
             align="center"
             color="primary"
+            id="formulario-subtitulo"
           />
           <Descripcion1 text="Si prefieres, puedes dejarnos un mensaje a través de nuestro formulario de contacto."
             align="center"
+            id="formulario-descripcion"
           />
 
           {/* Formulario de contacto */}
-          <form onSubmit={handleSubmit} style={{ maxWidth: '500px', margin: 'auto' }}>
+          <form onSubmit={handleSubmit} style={{ maxWidth: '500px', margin: 'auto' }} id="formulario">
             <TextField
               label="Nombre"
               variant="outlined"
@@ -89,6 +98,7 @@ const Contactos = () => {
               name="name"
               value={formData.name}
               onChange={handleChange}
+              id="input-nombre"
             />
             <TextField
               label="Correo Electrónico"
@@ -98,6 +108,7 @@ const Contactos = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
+              id="input-email"
             />
             <TextField
               label="Mensaje"
@@ -109,6 +120,7 @@ const Contactos = () => {
               name="message"
               value={formData.message}
               onChange={handleChange}
+              id="input-mensaje"
             />
             <Button
               type="submit"
@@ -116,6 +128,7 @@ const Contactos = () => {
               color="primary"
               fullWidth
               sx={{ marginTop: 2 }}
+              id="submit-button"
             >
               Enviar
             </Button>

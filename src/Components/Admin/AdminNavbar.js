@@ -57,6 +57,7 @@ const AdminNavBar = () => {
         <IconButton
           color="inherit"
           onClick={toggleLanguage}
+          id="language-toggle-button"
           sx={{
             padding: '8px',
             '& svg': {
@@ -65,7 +66,7 @@ const AdminNavBar = () => {
             }
           }}
         >
-          {currentLanguage === 'en' ? <US title="US Flag" /> : <ES title="Spanish Flag" />}
+          {currentLanguage === 'en' ? <US title="US Flag" id="us-flag" /> : <ES title="Spanish Flag" id="es-flag" />}
         </IconButton>
       </Tooltip>
     );
@@ -76,21 +77,22 @@ const AdminNavBar = () => {
   };
 
   const drawer = (
-    <List>
+    <List id="drawer-list">
       {navLinks.map((link) => (
-        <ListItem key={link.to} onClick={() => setMobileOpen(false)}>
+        <ListItem key={link.to} onClick={() => setMobileOpen(false)} id={`drawer-item-${link.to}`}>
           <Button
             component={NavLink}
             to={link.to}
             color="inherit"
             fullWidth
             sx={{ justifyContent: 'flex-start' }}
+            id={`drawer-link-${link.to}`}
           >
-            <ListItemText primary={link.label} />
+            <ListItemText primary={link.label} id={`drawer-text-${link.to}`} />
           </Button>
         </ListItem>
       ))}
-      <ListItem>
+      <ListItem id="drawer-item-profile">
         <Button
           component={NavLink}
           to="/profile"
@@ -98,17 +100,19 @@ const AdminNavBar = () => {
           fullWidth
           sx={{ justifyContent: 'flex-start' }}
           startIcon={<User />}
+          id="drawer-profile-button"
         >
           {translations[currentLanguage].profile}
         </Button>
       </ListItem>
-      <ListItem>
+      <ListItem id="drawer-item-logout">
         <Button
           color="inherit"
           fullWidth
           onClick={handleLogout}
           sx={{ justifyContent: 'flex-start' }}
           startIcon={<LogOut />}
+          id="drawer-logout-button"
         >
           {translations[currentLanguage].logout}
         </Button>
@@ -117,7 +121,7 @@ const AdminNavBar = () => {
   );
 
   return (
-    <AppBar position="static" color="primary">
+    <AppBar position="static" color="primary" id="admin-navbar">
       <Toolbar>
         {isMobile && (
           <IconButton
@@ -126,6 +130,7 @@ const AdminNavBar = () => {
             edge="start"
             onClick={handleDrawerToggle}
             sx={{ mr: 2 }}
+            id="menu-button"
           >
             <Menu />
           </IconButton>
@@ -135,6 +140,7 @@ const AdminNavBar = () => {
           display={{ xs: 'none', md: 'flex' }}
           alignItems="center"
           flexGrow={1}
+          id="navbar-links"
         >
           {navLinks.map((link) => (
             <Button
@@ -143,31 +149,33 @@ const AdminNavBar = () => {
               to={link.to}
               color="inherit"
               sx={{ marginRight: theme.spacing(2) }}
+              id={`navbar-link-${link.to}`}
             >
               {link.label}
             </Button>
           ))}
         </Box>
 
-        <Box display="flex" alignItems="center" gap={1}>
+        <Box display="flex" alignItems="center" gap={1} id="navbar-icons">
           <IconButton
             color="inherit"
             onClick={() => navigate('/admin/adminhome', { replace: true })}
+            id="home-button"
           >
             <HomeIcon />
           </IconButton>
 
           <LanguageIcon />
 
-          <IconButton onClick={toggleTheme} color="inherit">
+          <IconButton onClick={toggleTheme} color="inherit" id="theme-toggle-button">
             {themeMode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
           </IconButton>
 
-          <IconButton color="inherit" component={NavLink} to="/profile">
+          <IconButton color="inherit" component={NavLink} to="/profile" id="profile-button">
             <User />
           </IconButton>
 
-          <IconButton color="inherit" onClick={handleLogout}>
+          <IconButton color="inherit" onClick={handleLogout} id="logout-button">
             <LogOut />
           </IconButton>
         </Box>
@@ -188,6 +196,7 @@ const AdminNavBar = () => {
             width: 240
           },
         }}
+        id="mobile-drawer"
       >
         {drawer}
       </Drawer>

@@ -98,19 +98,20 @@ function UserRegistrationCard() {
   };
 
   return (
-    <div>
+    <div id="user-registration-page">
       {/* Navbar Admin */}
-      <AdminNavbar />
+      <AdminNavbar id="admin-navbar" />
 
       {/* Contenido principal */}
-      <Grid container justifyContent="center" alignItems="center" style={{ minHeight: "80vh" }}>
-        <Card style={{ maxWidth: 400, padding: "20px 15px" }}>
-          <CardContent>     
-            <Title text="Registro de Usuario" align="left" />                              
-            <Box component="form" onSubmit={handleSubmit} noValidate>
+      <Grid container justifyContent="center" alignItems="center" style={{ minHeight: "80vh" }} id="registration-grid">
+        <Card style={{ maxWidth: 400, padding: "20px 15px" }} id="registration-card">
+          <CardContent id="registration-card-content">     
+            <Title text="Registro de Usuario" align="left" id="registration-title" />                              
+            <Box component="form" onSubmit={handleSubmit} noValidate id="registration-form">
               <TextField
                 label="Nombre"
                 name="firstName"
+                id="input-first-name"
                 value={formData.firstName}
                 onChange={handleChange}
                 error={errors.firstName}
@@ -121,6 +122,7 @@ function UserRegistrationCard() {
               <TextField
                 label="Apellido"
                 name="lastName"
+                id="input-last-name"
                 value={formData.lastName}
                 onChange={handleChange}
                 error={errors.lastName}
@@ -131,6 +133,7 @@ function UserRegistrationCard() {
               <TextField
                 label="Correo Electrónico"
                 name="email"
+                id="input-email"
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
@@ -143,6 +146,7 @@ function UserRegistrationCard() {
               <TextField
                 label="Username"
                 name="username"
+                id="input-username"
                 value={formData.username}
                 onChange={handleChange}
                 error={errors.username}
@@ -153,6 +157,7 @@ function UserRegistrationCard() {
               <TextField
                 label="Contraseña"
                 name="password"
+                id="input-password"
                 type="password"
                 value={formData.password}
                 onChange={handleChange}
@@ -164,6 +169,7 @@ function UserRegistrationCard() {
               <TextField
                 label="Fecha de Nacimiento"
                 name="birthDate"
+                id="input-birth-date"
                 type="date"
                 value={formData.birthDate}
                 onChange={handleChange}
@@ -175,11 +181,13 @@ function UserRegistrationCard() {
                   shrink: true,
                 }}
               />
-              <Box display="flex" justifyContent="space-between" marginTop="16px">
+              <Box display="flex" justifyContent="space-between" marginTop="16px" id="form-actions">
                 <CloseButton 
+                  id="button-go-back"
                   onClick={handleGoBack}    
                 />
                 <GenericButton 
+                  id="button-submit"
                   type="submit" 
                   variant="contained" 
                   color="primary" 
