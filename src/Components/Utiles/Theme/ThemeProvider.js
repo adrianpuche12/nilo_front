@@ -7,16 +7,8 @@ export const ThemeContext = createContext();
 
 const ThemeProvider = ({ children }) => {
   // lightTheme por defecto
-  const [themeMode, setThemeMode] = useState('light'); 
-
-  useEffect(() => {
-    // Si no hay tema en localStorage, guarda 'light' como predeterminado
-    if (!localStorage.getItem('theme')) {
-      localStorage.setItem('theme', 'light');
-    }
-    // Usa el valor de localStorage para establecer el tema (si está definido)
-    setThemeMode(localStorage.getItem('theme') || 'light');
-  }, []);
+  const initialTheme = localStorage.getItem('theme') || 'light';
+  const [themeMode, setThemeMode] = useState(initialTheme);
 
   // Persistir el tema en el localStorage cuando cambie
   useEffect(() => {
