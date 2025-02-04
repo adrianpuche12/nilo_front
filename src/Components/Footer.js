@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Grid, IconButton, Link, Box } from '@mui/material';
+import XIcon from '@mui/icons-material/X';
 import { Facebook, Twitter, Instagram } from 'lucide-react';
 
 const Footer = () => {
@@ -41,7 +42,7 @@ const Footer = () => {
               rel="noopener noreferrer"
               sx={{ '&:hover': { backgroundColor: 'action.hover' } }}
             >
-              <Twitter />
+              <XIcon />
             </IconButton>
             <IconButton
               id="instagram-link"
