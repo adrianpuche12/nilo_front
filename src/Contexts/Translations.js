@@ -13,10 +13,18 @@ export const translations = {
     profile: "Profile",
     logout: "Logout",
     promotions: "Promotions",
-    promoMountain: "Mountain Adventure",
-    promoCaribbean: "Caribbean Cruise",
-    promoCity: "Urban Tour",
-    services: "Services"
+    promoMountain: "Mountain Adventure",//No se usa
+    promoCaribbean: "Caribbean Cruise", //No se usa
+    promoCity: "Urban Tour",            //No se usa
+    services: "Services",
+    Dinner: "Dinner",
+    "City Tour": "City Tour",
+    "Weekend Getaway": "Weekend Getaway",
+    "Cultural Tour": "Cultural Tour",
+    "Aventura en la Montaña": "Mountain Adventure",
+    "Crucero por el Caribe": "Caribbean Cruise",
+    "Tour Urbano": "Urban Tour",
+
   },
   es: {
     countries: "Países",
@@ -32,9 +40,16 @@ export const translations = {
     profile: "Perfil",
     logout: "Cerrar Sesión",
     promotions: "Promociones",
-    promoMountain: "Aventura en la Montaña",
-    promoCaribbean: "Crucero por el Caribe",
-    promoCity: "Tour Urbano",
-    services: "Servicios"
+    promoMountain: "Aventura en la Montaña",  //No se usa
+    promoCaribbean: "Crucero por el Caribe",  //No se usa
+    promoCity: "Tour Urbano",                 //No se usa
+    services: "Servicios",
+    Dinner: "Cena",
+    "City Tour": "Tour por la Ciudad",
+    "Weekend Getaway": "Escapada de Fin de Semana",
+    "Cultural Tour": "Tour Cultural",
+    "Aventura en la Montaña": "Aventura en la Montaña",
+    "Crucero por el Caribe": "Crucero por el Caribe",
+    "Tour Urbano": "Tour Urbano",
     }
   };

@@ -162,7 +162,7 @@ const UserNavBar = () => {
                 },
               }}
             >
-              {item.name || item.title}
+              {translations[currentLanguage][item.name || item.title]}
             </MenuItem>
           ))}
         </Paper>
